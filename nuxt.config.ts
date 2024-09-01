@@ -2,15 +2,16 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
-    '@nuxtjs/tailwindcss',
-    'shadcn-nuxt',
-    '@nuxtjs/color-mode',
-    'nuxt-gtag',
-    'nuxt-vercel-analytics',
-    '@nuxtjs/robots',
-    '@nuxtjs/sitemap',
+    "@nuxtjs/tailwindcss",
+    "shadcn-nuxt",
+    "@nuxtjs/color-mode",
+    "nuxt-gtag",
+    "nuxt-vercel-analytics",
+    "@nuxtjs/robots",
+    "@nuxtjs/sitemap",
     "nuxt-og-image",
-    '@nuxt/image'
+    "@nuxt/image",
+    "@nuxtjs/supabase",
   ],
   plugins: [{ src: "@/plugins/aos", mode: "client" }],
   ssr: true,
@@ -18,25 +19,32 @@ export default defineNuxtConfig({
     /**
      * Prefix for all the imported component
      */
-    prefix: '',
+    prefix: "",
     /**
      * Directory that the component lives in.
      * @default "./components/ui"
      */
-    componentDir: './components/ui'
+    componentDir: "./components/ui",
   },
   colorMode: {
-    classSuffix: ''
+    classSuffix: "",
   },
   runtimeConfig: {
     // The private keys which are only available within server-side
-    apiSecret: '123',
+    apiSecret: "123",
     // Keys within public, will be also exposed to the client-side
     public: {
-      siteUrl: 'http://localhost:3000'
-    }
+      siteUrl: "http://localhost:3000",
+    },
   },
   gtag: {
-    id: 'G-XXXXXXXXXX'
-  }
-})
+    id: "G-XXXXXXXXXX",
+  },
+  supabase: {
+    redirect: false,
+    redirectOptions: {
+      login: "/signin",
+      callback: "/confirm",
+    },
+  },
+});
