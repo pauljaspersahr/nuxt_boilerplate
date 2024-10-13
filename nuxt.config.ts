@@ -30,11 +30,13 @@ export default defineNuxtConfig({
     classSuffix: "",
   },
   runtimeConfig: {
-    // The private keys which are only available within server-side
-    apiSecret: "123",
-    // Keys within public, will be also exposed to the client-side
+    databaseUrl:
+      process.env.NODE_ENV === "production"
+        ? process.env.DATABASE_URL
+        : "postgres://myuser:mypassword@localhost:5432/mydatabase",
+
     public: {
-      siteUrl: "http://localhost:3000",
+      siteUrl: process.env.SITE_URL || "http://localhost:3000",
     },
   },
   gtag: {

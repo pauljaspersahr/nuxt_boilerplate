@@ -1,0 +1,52 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id              String   @id @default(uuid())
+    auth_uid        String
+    email           String
+    email_confirmed Boolean  @default(false)
+    created_at      DateTime @default(now())
+    display_name    String?
+
+    membership Membership?
+}
+
+enum ACCOUNT_ACCESS {
+    READ_ONLY
+    READ_WRITE
+    ADMIN
+    OWNER
+}
+
+model Membership {
+    id      String @id @default(uuid())
+    user_id String @unique
+    user    User   @relation(fields: [user_id], references: [id])
+
+    name                   String
+    current_period_ends    DateTime       @default(now())
+    features               String[]
+    stripe_subscription_id String?
+    stripe_customer_id     String?
+    pending                Boolean        @default(false)
+    access                 ACCOUNT_ACCESS @default(READ_ONLY)
+
+    plan_id String
+    plan    Plan   @relation(fields: [plan_id], references: [id])
+}
+
+model Plan {
+    id                String   @id @default(uuid())
+    name              String   @unique
+    features          String[]
+    stripe_product_id String?
+
+    memberships Membership[]
+}
