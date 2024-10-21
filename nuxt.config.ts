@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+
   modules: [
     "@nuxtjs/tailwindcss",
     "shadcn-nuxt",
@@ -13,8 +14,10 @@ export default defineNuxtConfig({
     // "@nuxtjs/supabase",
     "@nuxt/image",
   ],
+
   plugins: [{ src: "@/plugins/aos", mode: "client" }],
   ssr: true,
+
   shadcn: {
     /**
      * Prefix for all the imported component
@@ -26,9 +29,11 @@ export default defineNuxtConfig({
      */
     componentDir: "./components/ui",
   },
+
   colorMode: {
     classSuffix: "",
   },
+
   runtimeConfig: {
     databaseUrl:
       process.env.NODE_ENV === "production"
@@ -39,9 +44,7 @@ export default defineNuxtConfig({
       siteUrl: process.env.SITE_URL || "http://localhost:3000",
     },
   },
-  gtag: {
-    id: "G-XXXXXXXXXX",
-  },
+
   // supabase: {
   //   redirect: false,
   //   redirectOptions: {
@@ -49,4 +52,9 @@ export default defineNuxtConfig({
   //     callback: "/confirm",
   //   },
   // },
+  gtag: {
+    id: "G-XXXXXXXXXX",
+  },
+
+  compatibilityDate: "2024-10-21",
 });
