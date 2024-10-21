@@ -7,22 +7,23 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model User {
-    id              String   @id @default(uuid())
-    auth_uid        String
-    email           String
-    email_confirmed Boolean  @default(false)
-    created_at      DateTime @default(now())
-    display_name    String?
-
-    membership Membership?
-}
-
 enum ACCOUNT_ACCESS {
     READ_ONLY
     READ_WRITE
     ADMIN
     OWNER
+}
+
+model User {
+    id              String         @id @default(uuid())
+    auth_id         String
+    email           String
+    email_confirmed Boolean        @default(false)
+    created_at      DateTime       @default(now())
+    display_name    String?
+    access          ACCOUNT_ACCESS @default(READ_ONLY)
+
+    membership Membership?
 }
 
 model Membership {
@@ -31,12 +32,11 @@ model Membership {
     user    User   @relation(fields: [user_id], references: [id])
 
     name                   String
-    current_period_ends    DateTime       @default(now())
+    current_period_ends    DateTime @default(now())
     features               String[]
     stripe_subscription_id String?
     stripe_customer_id     String?
-    pending                Boolean        @default(false)
-    access                 ACCOUNT_ACCESS @default(READ_ONLY)
+    pending                Boolean  @default(false)
 
     plan_id String
     plan    Plan   @relation(fields: [plan_id], references: [id])
