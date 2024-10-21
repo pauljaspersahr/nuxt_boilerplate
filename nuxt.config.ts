@@ -10,8 +10,8 @@ export default defineNuxtConfig({
     "@nuxtjs/robots",
     "@nuxtjs/sitemap",
     "nuxt-og-image",
+    // "@nuxtjs/supabase",
     "@nuxt/image",
-    "@nuxtjs/supabase",
   ],
   plugins: [{ src: "@/plugins/aos", mode: "client" }],
   ssr: true,
@@ -42,11 +42,11 @@ export default defineNuxtConfig({
   gtag: {
     id: "G-XXXXXXXXXX",
   },
-  supabase: {
-    redirect: false,
-    redirectOptions: {
-      login: "/signin",
-      callback: "/confirm",
-    },
-  },
+  // supabase: {
+  //   redirect: false,
+  //   redirectOptions: {
+  //     login: "/signin",
+  //     callback: "/confirm",
+  //   },
+  // },
 });
