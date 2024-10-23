@@ -35,6 +35,11 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    stripeEndpointSecret: process.env.STRIPE_ENDPOINT_SECRET,
+    subscriptionGraceDays: 3,
+    initialPlanName: "Free Trial",
+    initialPlanActiveMonths: 1,
     databaseUrl:
       process.env.NODE_ENV === "production"
         ? process.env.DATABASE_URL
@@ -44,7 +49,6 @@ export default defineNuxtConfig({
       siteUrl: process.env.SITE_URL || "http://localhost:3000",
     },
   },
-
   // supabase: {
   //   redirect: false,
   //   redirectOptions: {

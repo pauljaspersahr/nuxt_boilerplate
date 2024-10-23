@@ -13,7 +13,7 @@ export const basicUser = Prisma.validator<Prisma.UserDefaultArgs>()({
 });
 export type BasicUser = Prisma.UserGetPayload<typeof basicUser>;
 
-export const fullDBUser = Prisma.validator<Prisma.UserDefaultArgs>()({
+export const user = Prisma.validator<Prisma.UserDefaultArgs>()({
   include: {
     membership: {
       include: {
@@ -22,7 +22,7 @@ export const fullDBUser = Prisma.validator<Prisma.UserDefaultArgs>()({
     },
   },
 });
-export type FullDBUser = Prisma.UserGetPayload<typeof fullDBUser>;
+export type User = Prisma.UserGetPayload<typeof user>;
 
 export const basicMembership = Prisma.validator<Prisma.MembershipDefaultArgs>()(
   {
@@ -41,6 +41,13 @@ export type BasicMembership = Prisma.MembershipGetPayload<
   typeof basicMembership
 >;
 
+export const membership = Prisma.validator<Prisma.MembershipDefaultArgs>()({
+  include: {
+    plan: true,
+  },
+});
+export type Memebership = Prisma.MembershipGetPayload<typeof membership>;
+
 export const basicPlan = Prisma.validator<Prisma.PlanDefaultArgs>()({
   select: {
     id: true,
@@ -51,16 +58,9 @@ export const basicPlan = Prisma.validator<Prisma.PlanDefaultArgs>()({
 });
 export type BasicPlan = Prisma.PlanGetPayload<typeof basicPlan>;
 
-export const fullMembership = Prisma.validator<Prisma.MembershipDefaultArgs>()({
-  include: {
-    plan: true,
-  },
-});
-export type FullMembership = Prisma.MembershipGetPayload<typeof fullMembership>;
-
-export const fullPlan = Prisma.validator<Prisma.PlanDefaultArgs>()({
+export const plan = Prisma.validator<Prisma.PlanDefaultArgs>()({
   include: {
     memberships: true,
   },
 });
-export type FullPlan = Prisma.PlanGetPayload<typeof fullPlan>;
+export type Plan = Prisma.PlanGetPayload<typeof plan>;

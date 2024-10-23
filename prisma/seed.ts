@@ -1,69 +1,65 @@
 import { PrismaClient } from "@prisma/client";
-
 const prisma = new PrismaClient();
 
 async function main() {
-  // Create Plans
-  const basicPlan = await prisma.plan.create({
-    data: {
-      name: "Test Plan Basic",
-      features: ["Feature 1", "Feature 2"],
-      stripe_product_id: "prod_basic_123",
+  // Upsert "Free Trial" plan
+  const freeTrial = await prisma.plan.upsert({
+    where: { name: "Free Trial" },
+    update: {},
+    create: {
+      name: "Free Trial",
+      features: ["ADD_NOTES", "EDIT_NOTES", "VIEW_NOTES"],
+      stripe_product_id: null, // No Stripe product for free plan
     },
   });
 
-  const premiumPlan = await prisma.plan.create({
-    data: {
-      name: "Test Plan Premium",
-      features: ["Feature 1", "Feature 2", "Feature 3", "Feature 4"],
-      stripe_product_id: "prod_premium_456",
+  // Upsert "Individual Plan"
+  const individualPlan = await prisma.plan.upsert({
+    where: { name: "Individual Plan" },
+    update: {},
+    create: {
+      name: "Individual Plan",
+      features: ["ADD_NOTES", "EDIT_NOTES", "VIEW_NOTES", "SPECIAL_FEATURE"],
+      stripe_product_id: "prod_NQR7vwUulvIeqW",
     },
   });
 
-  // Create Users
-  const user1 = await prisma.user.create({
-    data: {
-      auth_uid: "auth123",
-      email: "user1@example.com",
-      email_confirmed: true,
-      display_name: "User One",
-      membership: {
-        create: {
-          name: "User One Membership",
-          features: ["Feature 1"],
-          stripe_subscription_id: "sub_001",
-          stripe_customer_id: "cus_001",
-          access: "ADMIN",
-          plan: {
-            connect: { id: basicPlan.id },
-          },
-        },
-      },
+  // Upsert "Team Plan"
+  const teamPlan = await prisma.plan.upsert({
+    where: { name: "Team Plan" },
+    update: {},
+    create: {
+      name: "Team Plan",
+      features: [
+        "ADD_NOTES",
+        "EDIT_NOTES",
+        "VIEW_NOTES",
+        "SPECIAL_FEATURE",
+        "SPECIAL_TEAM_FEATURE",
+      ],
+      stripe_product_id: "prod_NQR8IkkdhqBwu2",
     },
   });
 
-  const user2 = await prisma.user.create({
-    data: {
-      auth_uid: "auth456",
-      email: "user2@example.com",
-      email_confirmed: false,
-      display_name: "User Two",
-      membership: {
-        create: {
-          name: "User Two Membership",
-          features: ["Feature 1", "Feature 2", "Feature 3"],
-          stripe_subscription_id: "sub_002",
-          stripe_customer_id: "cus_002",
-          access: "OWNER",
-          plan: {
-            connect: { id: premiumPlan.id },
-          },
-        },
-      },
+  // Upsert "Enterprise Plan"
+  const enterprisePlan = await prisma.plan.upsert({
+    where: { name: "Enterprise Plan" },
+    update: {},
+    create: {
+      name: "Enterprise Plan",
+      features: [
+        "ADD_NOTES",
+        "EDIT_NOTES",
+        "VIEW_NOTES",
+        "SPECIAL_FEATURE",
+        "SPECIAL_TEAM_FEATURE",
+        "ENTERPRISE_SUPPORT",
+      ],
+      stripe_product_id: "prod_NQR9DklxvwYop3",
     },
   });
 
-  console.log({ user1, user2, basicPlan, premiumPlan });
+  console.log({ freeTrial, individualPlan, teamPlan, enterprisePlan });
 }
 
 main()
