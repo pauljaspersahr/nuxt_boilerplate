@@ -1,0 +1,26 @@
+{
+    "name": "Nuxt Boilerplate",
+    "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+    "workspaceMount": "source=${localWorkspaceFolder}/app,target=/app,type=bind",
+    "workspaceFolder": "/app",
+    "mounts": [
+        "source=global-pnpm-store,target=${containerWorkspaceFolder}/.pnpm-store,type=volume",
+        "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
+    ],
+    "postCreateCommand": "sudo chown -R node:node /app /app/node_modules /app/.pnpm-store",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "nuxtr.nuxt-vscode-extentions",
+                "ms-vscode.vscode-typescript-next",
+                "esbenp.prettier-vscode",
+                "bradlc.vscode-tailwindcss",
+                "rangav.vscode-thunder-client",
+                "dbaeumer.vscode-eslint",
+                "christian-kohler.npm-intellisense",
+                "aurum77.nerd-tree",
+                "prisma.prisma"
+            ]
+        }
+    },
+}
