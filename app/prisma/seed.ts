@@ -8,58 +8,33 @@ async function main() {
     update: {},
     create: {
       name: "Free Trial",
-      features: ["ADD_NOTES", "EDIT_NOTES", "VIEW_NOTES"],
-      stripe_product_id: null, // No Stripe product for free plan
+      duration_days: 3,
     },
   });
 
   // Upsert "Individual Plan"
   const individualPlan = await prisma.plan.upsert({
-    where: { name: "Individual Plan" },
+    where: { name: "Monthly Plan" },
     update: {},
     create: {
-      name: "Individual Plan",
-      features: ["ADD_NOTES", "EDIT_NOTES", "VIEW_NOTES", "SPECIAL_FEATURE"],
+      name: "Monthly Plan",
+      duration_days: 30,
       stripe_product_id: "prod_NQR7vwUulvIeqW",
     },
   });
 
   // Upsert "Team Plan"
   const teamPlan = await prisma.plan.upsert({
-    where: { name: "Team Plan" },
+    where: { name: "Lifetime Plan" },
     update: {},
     create: {
       name: "Team Plan",
-      features: [
-        "ADD_NOTES",
-        "EDIT_NOTES",
-        "VIEW_NOTES",
-        "SPECIAL_FEATURE",
-        "SPECIAL_TEAM_FEATURE",
-      ],
+      duration_days: -1,
       stripe_product_id: "prod_NQR8IkkdhqBwu2",
     },
   });
 
-  // Upsert "Enterprise Plan"
-  const enterprisePlan = await prisma.plan.upsert({
-    where: { name: "Enterprise Plan" },
-    update: {},
-    create: {
-      name: "Enterprise Plan",
-      features: [
-        "ADD_NOTES",
-        "EDIT_NOTES",
-        "VIEW_NOTES",
-        "SPECIAL_FEATURE",
-        "SPECIAL_TEAM_FEATURE",
-        "ENTERPRISE_SUPPORT",
-      ],
-      stripe_product_id: "prod_NQR9DklxvwYop3",
-    },
-  });
-
-  console.log({ freeTrial, individualPlan, teamPlan, enterprisePlan });
+  console.log({ freeTrial, individualPlan, teamPlan });
 }
 
 main()

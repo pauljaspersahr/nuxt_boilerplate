@@ -11,8 +11,8 @@ export default defineNuxtConfig({
     "@nuxtjs/robots",
     "@nuxtjs/sitemap",
     "nuxt-og-image",
-    // "@nuxtjs/supabase",
     "@nuxt/image",
+    "@nuxt/test-utils/module",
   ],
 
   plugins: [{ src: "@/plugins/aos", mode: "client" }],
@@ -29,11 +29,18 @@ export default defineNuxtConfig({
      */
     componentDir: "./components/ui",
   },
+  // fixes shadcn-vue cli problem: https://github.com/radix-vue/shadcn-vue/issues/560#issuecomment-2130900430
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        baseUrl: ".",
+      },
+    },
+  },
 
   colorMode: {
     classSuffix: "",
   },
-
   runtimeConfig: {
     stripeSecretKey: process.env.STRIPE_SECRET_KEY,
     stripeEndpointSecret: process.env.STRIPE_ENDPOINT_SECRET,
@@ -49,13 +56,7 @@ export default defineNuxtConfig({
       siteUrl: process.env.SITE_URL || "http://localhost:3000",
     },
   },
-  // supabase: {
-  //   redirect: false,
-  //   redirectOptions: {
-  //     login: "/signin",
-  //     callback: "/confirm",
-  //   },
-  // },
+
   gtag: {
     id: "G-XXXXXXXXXX",
   },

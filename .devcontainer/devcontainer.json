@@ -7,7 +7,10 @@
         "source=global-pnpm-store,target=${containerWorkspaceFolder}/.pnpm-store,type=volume",
         "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
     ],
-    "postCreateCommand": "sudo chown -R node:node /app /app/node_modules /app/.pnpm-store",
+    "postCreateCommand": "sudo chown -R node:node /app",
+    "runArgs": [
+        "--network=db-network"
+    ],
     "customizations": {
         "vscode": {
             "extensions": [

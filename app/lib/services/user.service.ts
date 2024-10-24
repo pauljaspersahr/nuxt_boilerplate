@@ -13,6 +13,7 @@ import {
   plan,
   type Plan,
 } from "./service.types";
+import { UtilService } from "./utils.service";
 
 const config = useRuntimeConfig();
 
@@ -41,10 +42,11 @@ export namespace UserService {
   export async function createUser(
     auth_id: string,
     display_name: string,
-    email: string
+    email: string,
+    plan_id: string
   ): Promise<User | null> {
-    const trialPlan = await prisma_client.plan.findFirstOrThrow({
-      where: { name: config.initialPlanName },
+    const plan = await prisma_client.plan.findFirstOrThrow({
+      where: { id: plan_id },
     });
 
     return prisma_client.user.create({
@@ -52,7 +54,17 @@ export namespace UserService {
         auth_id: auth_id,
         display_name: display_name,
         email: email,
+        membership: {
+          create: {
+            current_period_ends: UtilService.addDays(
+              new Date(),
+              plan.duration_days
+            ),
+            plan_id: plan.id,
+          },
+        },
       },
+      ...user,
     });
   }
 }
