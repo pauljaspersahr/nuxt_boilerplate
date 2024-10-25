@@ -19,6 +19,8 @@
     "@nuxt/image": "^1.8.1",
     "@nuxtjs/robots": "^3.0.0",
     "@nuxtjs/sitemap": "^5.3.5",
+    "@trpc/client": "^10.45.2",
+    "@trpc/server": "^10.45.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-vue-next": "^0.379.0",
@@ -28,10 +30,13 @@
     "nuxt-vercel-analytics": "^1.0.3",
     "radix-vue": "^1.9.7",
     "shadcn-nuxt": "^0.10.4",
+    "superjson": "^2.2.1",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
+    "trpc-nuxt": "^0.10.22",
     "vue": "^3.5.12",
-    "vue-router": "^4.4.5"
+    "vue-router": "^4.4.5",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",

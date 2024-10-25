@@ -60,6 +60,8 @@ export default defineNuxtConfig({
   gtag: {
     id: "G-XXXXXXXXXX",
   },
-
+  build: {
+    transpile: ["trpc-nuxt"],
+  },
   compatibilityDate: "2024-10-21",
 });
