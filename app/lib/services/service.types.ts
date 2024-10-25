@@ -29,9 +29,7 @@ export const basicMembership = Prisma.validator<Prisma.MembershipDefaultArgs>()(
     select: {
       id: true,
       user_id: true,
-      name: true,
       current_period_ends: true,
-      features: true,
       stripe_subscription_id: true,
       pending: true,
     },
@@ -46,13 +44,12 @@ export const membership = Prisma.validator<Prisma.MembershipDefaultArgs>()({
     plan: true,
   },
 });
-export type Memebership = Prisma.MembershipGetPayload<typeof membership>;
+export type Membership = Prisma.MembershipGetPayload<typeof membership>;
 
 export const basicPlan = Prisma.validator<Prisma.PlanDefaultArgs>()({
   select: {
     id: true,
     name: true,
-    features: true,
     stripe_product_id: true,
   },
 });

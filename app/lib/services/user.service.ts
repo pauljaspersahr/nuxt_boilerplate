@@ -1,21 +1,6 @@
 import prisma_client from "~/prisma/prisma.client";
-import {
-  basicUser,
-  type BasicUser,
-  user,
-  type User,
-  basicMembership,
-  type BasicMembership,
-  membership,
-  type Memebership,
-  basicPlan,
-  type BasicPlan,
-  plan,
-  type Plan,
-} from "./service.types";
+import { basicUser, type BasicUser, user, type User } from "./service.types";
 import { UtilService } from "./utils.service";
-
-const config = useRuntimeConfig();
 
 export namespace UserService {
   export async function getBasicUserById(user_id: string): Promise<BasicUser> {
@@ -66,5 +51,8 @@ export namespace UserService {
       },
       ...user,
     });
+  }
+  export async function deleteUser(user_id: string): Promise<User | null> {
+    return prisma_client.user.delete({ where: { id: user_id }, ...user });
   }
 }
