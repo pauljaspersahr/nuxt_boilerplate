@@ -7,19 +7,76 @@
  * @see https://trpc.io/docs/v10/router
  * @see https://trpc.io/docs/v10/procedures
  */
-import { initTRPC } from "@trpc/server";
-import { Context } from "~/server/trpc/context";
+import { initTRPC, TRPCError } from "@trpc/server";
+import type { Context } from "./context";
+import { USER_STATUS, PLAN_TIER } from "~/prisma/Enums";
 import superjson from "superjson";
 
 const t = initTRPC.context<Context>().create({
-  // recreates Data/Map/Set field after API serialization
-  // https://trpc.io/docs/server/data-transformers
   transformer: superjson,
+  // errorFormatter: (opts) => {
+  //   const { shape, error } = opts;
+  //   if (!(error.cause instanceof AccountLimitError)) {
+  //     return shape;
+  //   }
+  //   return {
+  //     ...shape,
+  //     data: {
+  //       ...shape.data,
+  //       httpStatus: 401,
+  //       code: "UNAUTHORIZED",
+  //     },
+  //   };
+  // },
 });
 
 /**
- * Unprotected procedure
- **/
+ * Base Procedures with Inline Middleware
+ */
 export const publicProcedure = t.procedure;
+
+// Authenticated users only
+export const authedProcedure = publicProcedure.use(({ next, ctx }) => {
+  if (!ctx.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  // Pass down ctx with user defined
+  return next({
+    ctx: {
+      user: ctx.user,
+    },
+  });
+});
+
+// Active members only
+export const memberProcedure = authedProcedure.use(({ next, ctx }) => {
+  if (USER_STATUS.ACTIVE !== ctx.user.status) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: `User status: ${ctx.user.status}`,
+    });
+  }
+  return next({ ctx });
+});
+
+// Premium members only
+export const premiumProcedure = memberProcedure.use(async ({ next, ctx }) => {
+  const membership = await ctx.membershipService.getMembershipByUserId(
+    ctx.user.id
+  );
+  if (PLAN_TIER.PREMIUM !== membership.plan.tier) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Premium access required",
+    });
+  }
+  return next({
+    ctx: {
+      ...ctx,
+      membership,
+    },
+  });
+});
+
 export const router = t.router;
 export const middleware = t.middleware;
