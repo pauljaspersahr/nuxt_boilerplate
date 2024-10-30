@@ -1,40 +1,69 @@
 import { PrismaClient } from "@prisma/client";
+import { PLAN_TIER } from "./Enums";
 const prisma = new PrismaClient();
 
 async function main() {
-  // Upsert "Free Trial" plan
   const freeTrial = await prisma.plan.upsert({
     where: { name: "Free Trial" },
     update: {},
     create: {
       name: "Free Trial",
       duration_days: 3,
+      tier: PLAN_TIER.BASIC,
     },
   });
 
-  // Upsert "Individual Plan"
-  const individualPlan = await prisma.plan.upsert({
-    where: { name: "Monthly Plan" },
+  const monthlyBasicPlan = await prisma.plan.upsert({
+    where: { name: "Monthly Basic Plan" },
     update: {},
     create: {
-      name: "Monthly Plan",
+      name: "Monthly Basic Plan",
       duration_days: 30,
       stripe_product_id: "prod_NQR7vwUulvIeqW",
+      tier: PLAN_TIER.BASIC,
     },
   });
 
-  // Upsert "Team Plan"
-  const teamPlan = await prisma.plan.upsert({
-    where: { name: "Lifetime Plan" },
+  const lifetimeBasicPlan = await prisma.plan.upsert({
+    where: { name: "Lifetime Basic Plan" },
     update: {},
     create: {
-      name: "Team Plan",
+      name: "Lifetime Basic Plan",
       duration_days: -1,
-      stripe_product_id: "prod_NQR8IkkdhqBwu2",
+      stripe_product_id: "prod_NQR7vwUulvIeqW",
+      tier: PLAN_TIER.PREMIUM,
     },
   });
 
-  console.log({ freeTrial, individualPlan, teamPlan });
+  const monthlyPremiumPlan = await prisma.plan.upsert({
+    where: { name: "Monthly Premium Plan" },
+    update: {},
+    create: {
+      name: "Monthly Premium Plan",
+      duration_days: -1,
+      stripe_product_id: "prod_NQkljahkkdhqBwu2",
+      tier: PLAN_TIER.PREMIUM,
+    },
+  });
+
+  const lifetimePremiumPlan = await prisma.plan.upsert({
+    where: { name: "Lifetime Basic Plan" },
+    update: {},
+    create: {
+      name: "Lifetime Basic Plan",
+      duration_days: -1,
+      stripe_product_id: "prod_ad09asdkjh",
+      tier: PLAN_TIER.PREMIUM,
+    },
+  });
+
+  console.log({
+    freeTrial,
+    monthlyBasicPlan,
+    monthlyPremiumPlan,
+    lifetimeBasicPlan,
+    lifetimePremiumPlan,
+  });
 }
 
 main()

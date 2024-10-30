@@ -7,21 +7,20 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-enum ACCOUNT_ACCESS {
-    READ_ONLY
-    READ_WRITE
-    ADMIN
-    OWNER
+enum USER_STATUS {
+    ACTIVE
+    PENDING
+    INACTIVE
 }
 
 model User {
-    id              String         @id @default(uuid())
-    auth_id         String         @unique
-    email           String         @unique
-    email_confirmed Boolean        @default(false)
-    created_at      DateTime       @default(now())
+    id              String      @id @default(uuid())
+    auth_id         String      @unique
+    email           String      @unique
+    email_confirmed Boolean     @default(false)
+    created_at      DateTime    @default(now())
     display_name    String?
-    access          ACCOUNT_ACCESS @default(READ_ONLY)
+    status          USER_STATUS @default(INACTIVE)
 
     membership Membership?
 }
@@ -34,17 +33,22 @@ model Membership {
     current_period_ends    DateTime @default(now())
     stripe_subscription_id String?
     stripe_customer_id     String?
-    pending                Boolean  @default(true)
 
     plan_id String
     plan    Plan   @relation(fields: [plan_id], references: [id])
 }
 
+enum PLAN_TIER {
+    BASIC
+    PREMIUM
+}
+
 model Plan {
-    id                String  @id @default(uuid())
-    name              String  @unique
+    id                String    @id @default(uuid())
+    name              String    @unique
     duration_days     Int
     stripe_product_id String?
+    tier              PLAN_TIER @default(BASIC)
 
     memberships Membership[]
 }

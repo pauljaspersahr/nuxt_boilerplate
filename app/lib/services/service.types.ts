@@ -8,7 +8,7 @@ export const basicUser = Prisma.validator<Prisma.UserDefaultArgs>()({
     email_confirmed: true,
     display_name: true,
     created_at: true,
-    access: true,
+    status: true,
   },
 });
 export type BasicUser = Prisma.UserGetPayload<typeof basicUser>;
@@ -31,7 +31,6 @@ export const basicMembership = Prisma.validator<Prisma.MembershipDefaultArgs>()(
       user_id: true,
       current_period_ends: true,
       stripe_subscription_id: true,
-      pending: true,
     },
   }
 );
@@ -51,6 +50,8 @@ export const basicPlan = Prisma.validator<Prisma.PlanDefaultArgs>()({
     id: true,
     name: true,
     stripe_product_id: true,
+    duration_days: true,
+    tier: true,
   },
 });
 export type BasicPlan = Prisma.PlanGetPayload<typeof basicPlan>;

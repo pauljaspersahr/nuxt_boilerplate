@@ -17,10 +17,34 @@ export namespace UserService {
     });
   }
 
+  export async function getBasicUserByAuthId(
+    auth_id: string
+  ): Promise<BasicUser> {
+    return prisma_client.user.findFirstOrThrow({
+      where: { auth_id: auth_id },
+      ...basicUser,
+    });
+  }
+
   export async function getUserByAuthId(auth_id: string): Promise<User> {
     return prisma_client.user.findFirstOrThrow({
       where: { auth_id: auth_id },
       ...user,
+    });
+  }
+
+  export async function createBasicUser(
+    auth_id: string,
+    display_name: string,
+    email: string
+  ): Promise<BasicUser> {
+    return prisma_client.user.create({
+      data: {
+        auth_id: auth_id,
+        display_name: display_name,
+        email: email,
+      },
+      ...basicUser,
     });
   }
 
@@ -29,7 +53,7 @@ export namespace UserService {
     display_name: string,
     email: string,
     plan_id: string
-  ): Promise<User | null> {
+  ): Promise<User> {
     const plan = await prisma_client.plan.findFirstOrThrow({
       where: { id: plan_id },
     });
