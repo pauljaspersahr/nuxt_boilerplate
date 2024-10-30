@@ -1,15 +1,18 @@
 {
     "name": "Nuxt Boilerplate",
-    "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+    "context": "..",
+    "dockerFile": "Dockerfile",
     "workspaceMount": "source=${localWorkspaceFolder}/app,target=/app,type=bind",
     "workspaceFolder": "/app",
     "mounts": [
         "source=global-pnpm-store,target=${containerWorkspaceFolder}/.pnpm-store,type=volume",
         "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
     ],
-    "postCreateCommand": "sudo chown -R node:node /app",
+    "postCreateCommand": "chown -R node:node /app && pnpm install",
     "runArgs": [
-        "--network=db-network"
+        "--network=db-network",
+        "--env-file",
+        "app/.env"
     ],
     "customizations": {
         "vscode": {
