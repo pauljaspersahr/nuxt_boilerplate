@@ -8,6 +8,7 @@ dist
 
 # Node dependencies
 node_modules
+.pnpm-store
 
 # Logs
 logs
@@ -23,5 +24,8 @@ logs
 .env.*
 !.env.example
 
+# sst
+.sst
+
+# local dev database
 .dev/data/*
-.pnpm-store

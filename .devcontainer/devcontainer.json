@@ -6,7 +6,9 @@
     "workspaceFolder": "/app",
     "mounts": [
         "source=global-pnpm-store,target=${containerWorkspaceFolder}/.pnpm-store,type=volume",
-        "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
+        "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/root/.aws,type=bind,consistency=cached",
+        // "source=/.aws,target=/home/vscode/.aws,type=bind,consistency=cached",
     ],
     "postCreateCommand": "chown -R node:node /app && pnpm install",
     "runArgs": [
