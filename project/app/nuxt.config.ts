@@ -1,7 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-
   modules: [
     "@nuxtjs/tailwindcss",
     "shadcn-nuxt",
@@ -14,10 +13,8 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxt/test-utils/module",
   ],
-
   plugins: [{ src: "@/plugins/aos", mode: "client" }],
   ssr: true,
-
   shadcn: {
     /**
      * Prefix for all the imported component
@@ -37,7 +34,6 @@ export default defineNuxtConfig({
       },
     },
   },
-
   colorMode: {
     classSuffix: "",
   },
@@ -47,21 +43,22 @@ export default defineNuxtConfig({
     subscriptionGraceDays: 3,
     initialPlanName: "Free Trial",
     initialPlanActiveMonths: 1,
-    databaseUrl:
-      process.env.NODE_ENV === "production"
-        ? process.env.DATABASE_URL
-        : "postgres://myuser:mypassword@localhost:5432/mydatabase",
-
+    // databaseUrl:
+    //   process.env.NODE_ENV === "production"
+    //     ? process.env.DATABASE_URL
+    //     : "postgres://myuser:mypassword@localhost:5432/mydatabase",
     public: {
       siteUrl: process.env.SITE_URL || "http://localhost:3000",
     },
   },
-
   gtag: {
     id: "G-XXXXXXXXXX",
   },
   build: {
     transpile: ["trpc-nuxt"],
+  },
+  nitro: {
+    preset: "aws-lambda",
   },
   compatibilityDate: "2024-10-21",
 });

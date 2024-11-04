@@ -36,20 +36,22 @@ export default defineEventHandler(async (event) => {
     if (authUser) {
       event.context.authUser = authUser;
 
-      let user = await UserService.getBasicUserByAuthId(authUser.id);
+      let user;
+      try {
+        user = await UserService.getBasicUserByAuthId(authUser.id);
+      } catch (error) {
+        console.error("Error retrieving user:", error);
+        user = null; // Set user to null if an error occurs
+      }
 
-      if (!user && authUser) {
+      if (!user) {
         user = await UserService.createBasicUser(
           authUser.id,
-          authUser.user_metadata.full_name
-            ? authUser.user_metadata.full_name
-            : "no name supplied",
-          authUser.email ? authUser.email : "no@email.supplied"
+          authUser.user_metadata.full_name || "no name supplied",
+          authUser.email || "no@email.supplied"
         );
         console.log(`\n Created DB User \n ${JSON.stringify(user)}\n`);
       }
-
-      event.context.user = user ? user : undefined;
     }
   }
 });
