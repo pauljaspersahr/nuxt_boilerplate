@@ -15,10 +15,26 @@ export default $config({
     };
   },
   async run() {
-    const vpc = new sst.aws.Vpc("MyVpc");
-    const rds = new sst.aws.Postgres("MyPostgres", { vpc });
+    let DATABASE_URL;
 
-    const DATABASE_URL = $interpolate`postgresql://${rds.username}:${rds.password}@${rds.host}:${rds.port}/${rds.database}`;
+    if ($dev) {
+      DATABASE_URL = process.env.DATABASE_URL;
+
+      console.log("DATABASE_URL ", DATABASE_URL);
+      new sst.x.DevCommand("Prisma", {
+        environment: { DATABASE_URL },
+        dev: {
+          autostart: false,
+          directory: "app",
+          command: "pnpm prisma studio",
+        },
+      });
+    } else {
+      const vpc = new sst.aws.Vpc("MyVpc");
+      const rds = new sst.aws.Postgres("MyPostgres", { vpc });
+      DATABASE_URL = $interpolate`postgresql://${rds.username}:${rds.password}@${rds.host}:${rds.port}/${rds.database}`;
+    }
+
     const app = new sst.aws.Nuxt("MyWeb", {
       path: "app",
       environment: { DATABASE_URL },
