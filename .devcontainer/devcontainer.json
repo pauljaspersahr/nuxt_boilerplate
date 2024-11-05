@@ -2,19 +2,18 @@
     "name": "Nuxt Boilerplate",
     "context": "..",
     "dockerFile": "Dockerfile",
-    "workspaceMount": "source=${localWorkspaceFolder}/app,target=/app,type=bind",
-    "workspaceFolder": "/app",
+    "workspaceMount": "source=${localWorkspaceFolder}/project,target=/project,type=bind",
+    "workspaceFolder": "/project",
     "mounts": [
         "source=global-pnpm-store,target=${containerWorkspaceFolder}/.pnpm-store,type=volume",
         "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
-        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/root/.aws,type=bind,consistency=cached",
-        // "source=/.aws,target=/home/vscode/.aws,type=bind,consistency=cached",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/root/.aws,type=bind,consistency=cached"
     ],
-    "postCreateCommand": "chown -R node:node /app && pnpm install",
+    "postCreateCommand": "chown -R node:node /project && pnpm install",
     "runArgs": [
         "--network=db-network",
         "--env-file",
-        "app/.env"
+        "project/app/.env"
     ],
     "customizations": {
         "vscode": {
@@ -30,5 +29,5 @@
                 "prisma.prisma"
             ]
         }
-    },
+    }
 }
