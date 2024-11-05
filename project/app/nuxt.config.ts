@@ -43,10 +43,6 @@ export default defineNuxtConfig({
     subscriptionGraceDays: 3,
     initialPlanName: "Free Trial",
     initialPlanActiveMonths: 1,
-    // databaseUrl:
-    //   process.env.NODE_ENV === "production"
-    //     ? process.env.DATABASE_URL
-    //     : "postgres://myuser:mypassword@localhost:5432/mydatabase",
     public: {
       siteUrl: process.env.SITE_URL || "http://localhost:3000",
     },

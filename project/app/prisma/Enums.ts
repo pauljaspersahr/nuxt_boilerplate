@@ -1,7 +1,7 @@
 import type {
   USER_STATUS as USER_STATUS_ORG,
   PLAN_TIER as PLAN_TIER_ORG,
-} from "@prisma/client";
+} from "@prisma-app/client";
 
 import { create } from "~~/lib/utils.prisma";
 

@@ -1,17 +1,17 @@
-import prisma_client from "~/prisma/prisma.client";
+import prisma_app_client from "~/prisma/app.client";
 import { basicUser, type BasicUser, user, type User } from "./service.types";
 import { UtilService } from "./utils.service";
 
 export namespace UserService {
   export async function getBasicUserById(user_id: string): Promise<BasicUser> {
-    return prisma_client.user.findFirstOrThrow({
+    return prisma_app_client.user.findFirstOrThrow({
       where: { id: user_id },
       ...basicUser,
     });
   }
 
   export async function getUserById(user_id: string): Promise<User> {
-    return prisma_client.user.findFirstOrThrow({
+    return prisma_app_client.user.findFirstOrThrow({
       where: { id: user_id },
       ...user,
     });
@@ -20,14 +20,14 @@ export namespace UserService {
   export async function getBasicUserByAuthId(
     auth_id: string
   ): Promise<BasicUser> {
-    return prisma_client.user.findFirstOrThrow({
+    return prisma_app_client.user.findFirstOrThrow({
       where: { auth_id: auth_id },
       ...basicUser,
     });
   }
 
   export async function getUserByAuthId(auth_id: string): Promise<User> {
-    return prisma_client.user.findFirstOrThrow({
+    return prisma_app_client.user.findFirstOrThrow({
       where: { auth_id: auth_id },
       ...user,
     });
@@ -38,7 +38,7 @@ export namespace UserService {
     display_name: string,
     email: string
   ): Promise<BasicUser> {
-    return prisma_client.user.create({
+    return prisma_app_client.user.create({
       data: {
         auth_id: auth_id,
         display_name: display_name,
@@ -54,11 +54,11 @@ export namespace UserService {
     email: string,
     plan_id: string
   ): Promise<User> {
-    const plan = await prisma_client.plan.findFirstOrThrow({
+    const plan = await prisma_app_client.plan.findFirstOrThrow({
       where: { id: plan_id },
     });
 
-    return prisma_client.user.create({
+    return prisma_app_client.user.create({
       data: {
         auth_id: auth_id,
         display_name: display_name,
@@ -77,6 +77,6 @@ export namespace UserService {
     });
   }
   export async function deleteUser(user_id: string): Promise<User | null> {
-    return prisma_client.user.delete({ where: { id: user_id }, ...user });
+    return prisma_app_client.user.delete({ where: { id: user_id }, ...user });
   }
 }

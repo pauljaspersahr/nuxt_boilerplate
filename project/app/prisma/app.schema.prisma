@@ -1,11 +1,12 @@
 generator client {
     provider      = "prisma-client-js"
     binaryTargets = ["native", "linux-arm64-openssl-3.0.x", "rhel-openssl-3.0.x"]
+    output        = "../node_modules/@prisma-app/client"
 }
 
 datasource db {
     provider = "postgresql"
-    url      = env("DATABASE_URL")
+    url      = env("APP_DATABASE_URL")
 }
 
 enum USER_STATUS {
@@ -22,8 +23,7 @@ model User {
     created_at      DateTime    @default(now())
     display_name    String?
     status          USER_STATUS @default(INACTIVE)
-
-    membership Membership?
+    membership      Membership?
 }
 
 model Membership {
