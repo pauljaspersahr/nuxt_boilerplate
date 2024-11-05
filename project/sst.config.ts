@@ -15,29 +15,34 @@ export default $config({
     };
   },
   async run() {
-    let DATABASE_URL;
+    let APP_DATABASE_URL;
+    let AUTH_DATABASE_URL;
 
     if ($dev) {
-      DATABASE_URL = process.env.DATABASE_URL;
+      APP_DATABASE_URL = process.env.APP_DATABASE_URL;
+      AUTH_DATABASE_URL = process.env.AUTH_DATABASE_URL;
 
-      console.log("DATABASE_URL ", DATABASE_URL);
       new sst.x.DevCommand("Prisma", {
-        environment: { DATABASE_URL },
+        environment: { APP_DATABASE_URL },
         dev: {
           autostart: false,
           directory: "app",
-          command: "pnpm prisma studio",
+          command: "pnpm prisma studio --schema=prisma/app.schema.prisma",
         },
       });
     } else {
       const vpc = new sst.aws.Vpc("MyVpc");
-      const rds = new sst.aws.Postgres("MyPostgres", { vpc });
-      DATABASE_URL = $interpolate`postgresql://${rds.username}:${rds.password}@${rds.host}:${rds.port}/${rds.database}`;
+
+      const rds_app = new sst.aws.Postgres("MyPostgres", { vpc });
+      APP_DATABASE_URL = $interpolate`postgresql://${rds_app.username}:${rds_app.password}@${rds_app.host}:${rds_app.port}/${rds_app.database}`;
+
+      const rds_auth = new sst.aws.Postgres("MyPostgres", { vpc });
+      AUTH_DATABASE_URL = $interpolate`postgresql://${rds_auth.username}:${rds_auth.password}@${rds_auth.host}:${rds_auth.port}/${rds_auth.database}`;
     }
 
     const app = new sst.aws.Nuxt("MyWeb", {
       path: "app",
-      environment: { DATABASE_URL },
+      environment: { APP_DATABASE_URL, AUTH_DATABASE_URL },
     });
   },
 });

@@ -1,17 +1,28 @@
 services:
-  postgres:
+  pg-app:
     image: postgres
-    container_name: postgres-dev
+    container_name: pg-app
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
       POSTGRES_DB: mydatabase
     volumes:
-      - ./data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+      - ./app-data:/var/lib/postgresql/data
     networks:
       - db-network
+
+  pg-auth:
+    image: postgres
+    container_name: pg-auth
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    volumes:
+      - ./auth-data:/var/lib/postgresql/data
+    networks:
+      - db-network
+
 
 networks:
   db-network:

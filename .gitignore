@@ -28,4 +28,4 @@ logs
 .sst
 
 # local dev database
-.dev/data/*
+.dev/*-data/*
