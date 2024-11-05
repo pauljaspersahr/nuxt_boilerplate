@@ -27,6 +27,7 @@
     "@nuxtjs/sitemap": "^5.3.5",
     "@trpc/client": "^10.45.2",
     "@trpc/server": "^10.45.2",
+    "@vueuse/core": "^11.2.0",
     "better-auth": "0.7.3-beta.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

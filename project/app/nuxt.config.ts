@@ -56,5 +56,6 @@ export default defineNuxtConfig({
   nitro: {
     preset: "aws-lambda",
   },
+  pages: true,
   compatibilityDate: "2024-10-21",
 });
