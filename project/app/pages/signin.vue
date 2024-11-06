@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import SignUp from "~/components/SignUp.vue";
+import SignIn from "~/components/SignIn.vue";
 
 definePageMeta({
   layout: "public-clean",
@@ -8,6 +8,6 @@ definePageMeta({
 
 <template>
   <div class="h-screen flex justify-center items-center">
-    <SignUp />
+    <SignIn />
   </div>
 </template>

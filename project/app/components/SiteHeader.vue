@@ -46,7 +46,7 @@ const props = defineProps({
   },
   signInLink: {
     type: String,
-    default: "/",
+    default: "/signin",
   },
   signUpLink: {
     type: String,
