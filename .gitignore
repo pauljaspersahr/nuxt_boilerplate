@@ -9,6 +9,7 @@ dist
 # Node dependencies
 node_modules
 .pnpm-store
+v8-compile-cache*
 
 # Logs
 logs

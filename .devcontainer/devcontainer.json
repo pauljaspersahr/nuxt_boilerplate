@@ -9,7 +9,7 @@
         "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
         "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/root/.aws,type=bind,consistency=cached"
     ],
-    "postCreateCommand": "chown -R node:node /project && pnpm install",
+    "postCreateCommand": "chown -R node:node /project && pnpm install && pnpm --prefix app run prisma:push",
     "runArgs": [
         "--network=db-network",
         "--env-file",

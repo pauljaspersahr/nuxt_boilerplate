@@ -10,14 +10,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { authClient } from "~/lib/auth/auth.client";
+import { credentialSignUp } from "~/lib/auth/credential.handlers";
 
 import { z } from "zod";
 import { Loader2 } from "lucide-vue-next";
 
 const loading = ref(false);
 const signUpOk = ref(false);
-const user = ref({});
 
 // Form validation
 const signupSchema = z.object({
@@ -43,30 +42,28 @@ const validateField = (field: keyof typeof formData.value) => {
 };
 
 const handleSignUp = async () => {
-  const result = signupSchema.safeParse(formData.value);
-  if (result.success) {
-    try {
+  let toastMessage = "";
+  try {
+    const result = signupSchema.safeParse(formData.value);
+    if (result.success) {
       loading.value = true;
-      const { data, error } = await authClient.signUp.email({
-        email: formData.value.email,
-        password: formData.value.password,
-        name: formData.value.name,
-      });
+      const { error } = await credentialSignUp(
+        formData.value.email,
+        formData.value.password,
+        formData.value.name
+      );
       if (error) throw error;
-      user.value = data;
       signUpOk.value = true;
-    } catch (err) {
-      // TODO: add toast for to inform user
-      console.log(err);
-    } finally {
-      // TODO: toast for success
-      loading.value = false;
+      toastMessage = `Success! Welcome ${formData.value.name}.`;
+    } else {
+      throw result.error;
     }
-  } else {
-    // Update all error messages
-    for (const field in formData.value) {
-      validateField(field as keyof typeof formData.value);
-    }
+  } catch (err) {
+    toastMessage = "An error occured. Please try again later.";
+    console.log(err);
+  } finally {
+    // TODO: add toast for to inform user
+    loading.value = false;
   }
 };
 
