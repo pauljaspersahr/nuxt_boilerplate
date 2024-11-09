@@ -12,16 +12,23 @@
       <MainNav />
       <div class="flex items-center space-x-2">
         <ModeToggle />
-        <NuxtLink :to="signInLink">
-          <div :class="buttonVariants({ variant: 'ghost' })">
-            {{ signInText }}
+        <div v-if="!session">
+          <NuxtLink :to="signInLink">
+            <div :class="buttonVariants({ variant: 'ghost' })">
+              {{ signInText }}
+            </div>
+          </NuxtLink>
+          <NuxtLink :to="signUpLink">
+            <div :class="buttonVariants({ variant: 'default' })">
+              {{ signUpText }}
+            </div>
+          </NuxtLink>
+        </div>
+        <div v-else>
+          <div :class="buttonVariants({ variant: 'default' })" @click="signOut">
+            {{ signOutText }}
           </div>
-        </NuxtLink>
-        <NuxtLink :to="signUpLink">
-          <div :class="buttonVariants({ variant: 'default' })">
-            {{ signUpText }}
-          </div>
-        </NuxtLink>
+        </div>
       </div>
     </div>
   </header>
@@ -35,6 +42,24 @@ import IconsLogo from "@/components/icons/Logo.vue";
 import ModeToggle from "~/components/shared/ModeToggle.vue";
 
 import { authClient } from "~/lib/auth/auth.client";
+
+const signOut = async () => {
+  await authClient.signOut({
+    fetchOptions: {
+      onSuccess: () => {
+        session.value = null;
+        navigateTo("/");
+      },
+    },
+  });
+};
+
+const { data: session } = await useAsyncData("auth-session", async () => {
+  const { data, error } = await authClient.useSession(useFetch);
+  if (!error.value) {
+    return data ?? null;
+  }
+});
 
 // Define props
 const props = defineProps({
@@ -61,6 +86,10 @@ const props = defineProps({
   signUpText: {
     type: String,
     default: "Sign Up",
+  },
+  signOutText: {
+    type: String,
+    default: "Sign Out",
   },
 });
 </script>
