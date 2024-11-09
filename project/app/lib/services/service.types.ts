@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma-app/client";
 
 export const basicUser = Prisma.validator<Prisma.UserDefaultArgs>()({
   select: {

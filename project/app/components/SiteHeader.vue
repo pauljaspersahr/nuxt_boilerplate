@@ -34,6 +34,8 @@ import { siteConfig } from "@/config/site";
 import IconsLogo from "@/components/icons/Logo.vue";
 import ModeToggle from "~/components/shared/ModeToggle.vue";
 
+import { authClient } from "~/lib/auth/auth.client";
+
 // Define props
 const props = defineProps({
   siteName: {

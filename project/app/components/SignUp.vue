@@ -10,68 +10,49 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { credentialSignUp } from "~/lib/auth/credential.handlers";
-
-import { z } from "zod";
 import { Loader2 } from "lucide-vue-next";
+import { z } from "zod";
+import { authClient } from "~/lib/auth/auth.client";
 
-const loading = ref(false);
-const signUpOk = ref(false);
-
-// Form validation
-const signupSchema = z.object({
+// Define schema in component or import from separate file
+const signUpSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
-const formData = ref({
-  name: "",
-  email: "",
-  password: "",
-});
-const formErrors = ref({
-  name: "",
-  email: "",
-  password: "",
-});
-const validateField = (field: keyof typeof formData.value) => {
-  const result = signupSchema.safeParse(formData.value);
-  formErrors.value[field] = result.success
-    ? ""
-    : result.error.formErrors.fieldErrors[field]?.[0] || "";
-};
+
+// Use the generic validation composable
+const { formData, formErrors, touched, validateField, validateForm } =
+  useFormValidation(signUpSchema);
+
+const loading = ref(false);
 
 const handleSignUp = async () => {
-  let toastMessage = "";
-  try {
-    const result = signupSchema.safeParse(formData.value);
-    if (result.success) {
-      loading.value = true;
-      const { error } = await credentialSignUp(
-        formData.value.email,
-        formData.value.password,
-        formData.value.name
-      );
-      if (error) throw error;
-      signUpOk.value = true;
-      toastMessage = `Success! Welcome ${formData.value.name}.`;
-    } else {
-      throw result.error;
-    }
-  } catch (err) {
-    toastMessage = "An error occured. Please try again later.";
-    console.log(err);
-  } finally {
-    // TODO: add toast for to inform user
-    loading.value = false;
+  const result = validateForm();
+  if (result.success) {
+    await authClient.signUp.email(
+      {
+        email: formData.value.email,
+        password: formData.value.password,
+        name: formData.value.name,
+      },
+      {
+        onSuccess: () => {
+          navigateTo("/", { replace: true });
+        },
+        onError: (ctx) => {
+          console.log(ctx.error.message);
+        },
+        onRequest: () => {
+          loading.value = true;
+        },
+        onResponse: () => {
+          loading.value = false;
+        },
+      }
+    );
   }
 };
-
-watchEffect(() => {
-  if (signUpOk.value) {
-    navigateTo("/", { replace: true });
-  }
-});
 </script>
 
 <template>

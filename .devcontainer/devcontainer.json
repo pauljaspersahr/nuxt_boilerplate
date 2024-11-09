@@ -26,7 +26,9 @@
                 "dbaeumer.vscode-eslint",
                 "christian-kohler.npm-intellisense",
                 "aurum77.nerd-tree",
-                "prisma.prisma"
+                "prisma.prisma",
+                "christian-kohler.path-intellisense",
+                "antfu.goto-alias"
             ]
         }
     }
