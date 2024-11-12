@@ -57,6 +57,9 @@ importers:
       nuxt:
         specifier: ^3.13.2
         version: 3.13.2(@parcel/watcher@2.4.1)(@types/node@22.8.7)(eslint@9.14.0(jiti@2.4.0))(ioredis@5.4.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.24.3)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)(vite@5.4.10(@types/node@22.8.7)(sass@1.80.6)(terser@5.36.0))(webpack-sources@3.2.3)
+      nuxt-aos:
+        specifier: ^1.2.5
+        version: 1.2.5(magicast@0.3.5)(rollup@4.24.3)(vite@5.4.10(@types/node@22.8.7)(sass@1.80.6)(terser@5.36.0))(webpack-sources@3.2.3)
       nuxt-gtag:
         specifier: ^2.1.0
         version: 2.1.0(magicast@0.3.5)(rollup@4.24.3)(webpack-sources@3.2.3)
@@ -4434,6 +4437,9 @@ packages:
     resolution: {integrity: sha512-ZVu45nuDrdb7nzKW2kLGY/N1vvFYLLbUVX6gUYw4BApKGGu4+GktTR5o48dGVgMYX9A8chaugl7TL9ZYmwC9Mg==}
     engines: {node: ^16.10.0 || >=18.0.0}
     hasBin: true
+
+  nuxt-aos@1.2.5:
+    resolution: {integrity: sha512-tNEXMOKijCg+SygLvjp2VbEy7yQcC6ertzI23bCa6DPlu134bfzSYUGOJRSFSKtYjnrqIW7MzLpqPTfTwd8A3Q==}
 
   nuxt-gtag@2.1.0:
     resolution: {integrity: sha512-06ES+hgMs5l98bHmsLyltbJXfVr1LAkm/5gwcncdNkz96+D0fVA+RhecIp06iDQXF+YPBE2xAgB4G5PnUn8drA==}
@@ -10987,6 +10993,18 @@ snapshots:
       boolbase: 1.0.0
 
   nuxi@3.15.0: {}
+
+  nuxt-aos@1.2.5(magicast@0.3.5)(rollup@4.24.3)(vite@5.4.10(@types/node@22.8.7)(sass@1.80.6)(terser@5.36.0))(webpack-sources@3.2.3):
+    dependencies:
+      '@nuxt/devtools-kit': 1.6.0(magicast@0.3.5)(rollup@4.24.3)(vite@5.4.10(@types/node@22.8.7)(sass@1.80.6)(terser@5.36.0))(webpack-sources@3.2.3)
+      '@nuxt/kit': 3.13.2(magicast@0.3.5)(rollup@4.24.3)(webpack-sources@3.2.3)
+      aos: 2.3.4
+    transitivePeerDependencies:
+      - magicast
+      - rollup
+      - supports-color
+      - vite
+      - webpack-sources
 
   nuxt-gtag@2.1.0(magicast@0.3.5)(rollup@4.24.3)(webpack-sources@3.2.3):
     dependencies:

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import SignUp from "~/components/SignUp.vue";
 
-definePageMeta({
-  layout: "public-clean",
-});
+// definePageMeta({
+//   layout: "public-clean",
+// });
 </script>
 
 <template>
