@@ -9,49 +9,59 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
 import { Loader2 } from "lucide-vue-next";
-import { z } from "zod";
-import { authClient } from "~/lib/auth/auth.client";
 
-// Define schema in component or import from separate file
+import { z } from "zod";
+
+const auth = useAuth();
+
+// Form validation
 const signUpSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-// Use the generic validation composable
 const { formData, formErrors, touched, validateField, validateForm } =
   useFormValidation(signUpSchema);
+
+const validForm = ref(false);
+
+watch(
+  () => formData.value,
+  () => {
+    const result = validateForm();
+    validForm.value = result.success;
+  },
+  { deep: true }
+);
 
 const loading = ref(false);
 
 const handleSignUp = async () => {
-  const result = validateForm();
-  if (result.success) {
-    await authClient.signUp.email(
-      {
-        email: formData.value.email,
-        password: formData.value.password,
-        name: formData.value.name,
+  if (loading.value) return;
+
+  await auth.signUp.email(
+    {
+      email: formData.value.email,
+      password: formData.value.password,
+      name: formData.value.name,
+    },
+    {
+      onSuccess: () => {
+        navigateTo("/dashboard");
       },
-      {
-        onSuccess: () => {
-          navigateTo("/", { replace: true });
-        },
-        onError: (ctx) => {
-          console.log(ctx.error.message);
-        },
-        onRequest: () => {
-          loading.value = true;
-        },
-        onResponse: () => {
-          loading.value = false;
-        },
-      }
-    );
-  }
+      onError: (ctx) => {
+        console.log(ctx.error.message);
+      },
+      onRequest: () => {
+        loading.value = true;
+      },
+      onResponse: () => {
+        loading.value = false;
+      },
+    }
+  );
 };
 </script>
 
@@ -110,6 +120,7 @@ const handleSignUp = async () => {
           @click="handleSignUp"
           type="button"
           class="w-full"
+          :disabled="!validForm"
           >Create an account</Button
         >
         <Button v-else disabled>

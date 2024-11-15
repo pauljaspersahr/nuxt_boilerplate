@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import { authClient } from "~/lib/auth/auth.client";
-const session = ref<any>(null);
+const auth = useAuth();
 
-onMounted(async () => {
-  const { data } = await authClient.useSession(useFetch);
-  session.value = data ?? null;
-  console.log(data);
-});
+const { sesstion } = auth;
 </script>
 
 <template>

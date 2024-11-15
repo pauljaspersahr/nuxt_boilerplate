@@ -23,9 +23,7 @@ services:
     networks:
       - db-network
 
-
 networks:
   db-network:
     name: db-network
     driver: bridge
-    external: true

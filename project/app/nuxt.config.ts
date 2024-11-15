@@ -15,6 +15,12 @@ export default defineNuxtConfig({
     "nuxt-aos",
   ],
   ssr: true,
+  routeRules: {
+    // Homepage pre-rendered at build time
+    "/": { prerender: true },
+    "/signup": { prerender: true },
+    "/signin": { prerender: true },
+  },
   shadcn: {
     /**
      * Prefix for all the imported component
@@ -64,6 +70,10 @@ export default defineNuxtConfig({
     initialPlanActiveMonths: 1,
     public: {
       siteUrl: process.env.SITE_URL || "http://localhost:3000",
+      auth: {
+        redirectUserTo: "/dashboard",
+        redirectGuestTo: "/",
+      },
     },
   },
   gtag: {

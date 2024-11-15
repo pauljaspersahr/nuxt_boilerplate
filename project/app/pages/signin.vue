@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import SignIn from "~/components/SignIn.vue";
-
-// definePageMeta({
-//   layout: "public-clean",
-// });
+definePageMeta({
+  auth: {
+    only: "guest",
+    redirectUserTo: "/dashboard",
+  },
+});
 </script>
 
 <template>

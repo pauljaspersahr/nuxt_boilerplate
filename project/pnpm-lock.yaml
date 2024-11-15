@@ -130,9 +130,6 @@ importers:
       '@vue/test-utils':
         specifier: ^2.4.6
         version: 2.4.6
-      aos:
-        specifier: ^2.3.4
-        version: 2.3.4
       eslint:
         specifier: ^9.13.0
         version: 9.14.0(jiti@2.4.0)

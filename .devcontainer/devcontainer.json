@@ -19,7 +19,6 @@
         "vscode": {
             "extensions": [
                 "nuxtr.nuxt-vscode-extentions",
-                "ms-vscode.vscode-typescript-next",
                 "esbenp.prettier-vscode",
                 "bradlc.vscode-tailwindcss",
                 "rangav.vscode-thunder-client",
