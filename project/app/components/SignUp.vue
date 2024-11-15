@@ -1,25 +1,27 @@
 <script setup lang="ts">
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Loader2 } from "lucide-vue-next";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Loader2 } from 'lucide-vue-next';
 
-import { z } from "zod";
+import { z } from 'zod';
 
 const auth = useAuth();
 
+const { toast } = useToast();
+
 // Form validation
 const signUpSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
 const { formData, formErrors, touched, validateField, validateForm } =
@@ -33,7 +35,7 @@ watch(
     const result = validateForm();
     validForm.value = result.success;
   },
-  { deep: true }
+  { deep: true },
 );
 
 const loading = ref(false);
@@ -49,10 +51,14 @@ const handleSignUp = async () => {
     },
     {
       onSuccess: () => {
-        navigateTo("/dashboard");
+        navigateTo('/dashboard');
       },
-      onError: (ctx) => {
-        console.log(ctx.error.message);
+      onError: () => {
+        toast({
+          title: 'Uh oh! Something went wrong.',
+          description: 'There was a problem with your request.',
+          variant: '',
+        });
       },
       onRequest: () => {
         loading.value = true;
@@ -60,7 +66,7 @@ const handleSignUp = async () => {
       onResponse: () => {
         loading.value = false;
       },
-    }
+    },
   );
 };
 </script>

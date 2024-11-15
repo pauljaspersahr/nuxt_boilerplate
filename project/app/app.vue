@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { siteConfig } from "~/config/site";
+import Toaster from '@/components/ui/toast/Toaster.vue';
+
+import { siteConfig } from '~/config/site';
 
 useSeoMeta({
   title: siteConfig.name,
   description: siteConfig.description,
-  twitterCard: "summary_large_image",
+  twitterCard: 'summary_large_image',
 });
 
 onMounted(() => {
@@ -16,6 +18,8 @@ onMounted(() => {
 </script>
 
 <template>
+  <Toaster />
+
   <SiteHeader />
 
   <main class="flex-1">

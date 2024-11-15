@@ -1,6 +1,6 @@
 // from:  https://github.com/atinux/nuxthub-better-auth
 
-import { defu } from "defu";
+import { defu } from 'defu';
 
 type MiddlewareOptions =
   | false
@@ -8,7 +8,7 @@ type MiddlewareOptions =
       /**
        * Only apply auth middleware to guest or user
        */
-      only?: "guest" | "user";
+      only?: 'guest' | 'user';
       /**
        * Redirect authenticated user to this route
        */
@@ -19,13 +19,13 @@ type MiddlewareOptions =
       redirectGuestTo?: string;
     };
 
-declare module "#app" {
+declare module '#app' {
   interface PageMeta {
     auth?: MiddlewareOptions;
   }
 }
 
-declare module "vue-router" {
+declare module 'vue-router' {
   interface RouteMeta {
     auth?: MiddlewareOptions;
   }
@@ -39,11 +39,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const { loggedIn, options, fetchSession } = useAuth();
   const { only, redirectUserTo, redirectGuestTo } = defu(
     to.meta?.auth,
-    options
+    options,
   );
 
   // If guest mode, redirect if authenticated
-  if (only === "guest" && loggedIn.value) {
+  if (only === 'guest' && loggedIn.value) {
     // Avoid infinite redirect
     if (to.path === redirectUserTo) {
       return;
@@ -54,6 +54,12 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // If client-side, fetch session between each navigation
   if (import.meta.client) {
     await fetchSession();
+  }
+  const { publicRoutes } = useAppConfig();
+
+  // Allow public routes for unauthenticated users
+  if (!loggedIn.value && publicRoutes.includes(to.path)) {
+    return;
   }
   // If not authenticated, redirect to home
   if (!loggedIn.value) {
