@@ -8,7 +8,7 @@
         "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
         "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/root/.aws,type=bind,consistency=cached"
     ],
-    "postCreateCommand": "chown -R node:node /project && docker-compose -f /project/.dev/docker-compose.yml up -d &&  cd /project && pnpm install --shamefully-hoist && pnpm --prefix app run prisma:push",
+    "postCreateCommand": "chown -R node:node /project && docker-compose --project-directory /project/.dev up -d &&  cd /project && pnpm install --shamefully-hoist && pnpm --prefix app run prisma:push",
     "runArgs": [
         "--env-file",
         "project/app/.env"

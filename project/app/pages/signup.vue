@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 definePageMeta({
+  layout: 'public',
   auth: {
-    only: "guest",
-    redirectUserTo: "/dashboard",
+    only: 'guest',
+    redirectUserTo: '/dashboard',
   },
 });
 </script>

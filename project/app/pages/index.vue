@@ -8,6 +8,9 @@ import CallToAction from '@/components/sections/CallToAction.vue';
 import Testimonials from '@/components/sections/Testimonials.vue';
 import Pricing from '@/components/sections/Pricing.vue';
 import FAQ from '@/components/sections/FAQ.vue';
+definePageMeta({
+  layout: 'public',
+});
 </script>
 
 <template>
