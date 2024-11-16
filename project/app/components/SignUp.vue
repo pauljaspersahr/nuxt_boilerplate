@@ -124,7 +124,7 @@ const handleSignUp = async () => {
           <Loader2 class="w-4 h-4 mr-2 animate-spin" />
           Signing you up...
         </Button>
-        <!-- <Button variant="outline" class="w-full">Sign up with GitHub</Button> -->
+        <!-- <Button variant="outline" class="w-full">Sign up with Google</Button> -->
       </div>
       <div class="mt-4 text-center text-sm">
         Already have an account?

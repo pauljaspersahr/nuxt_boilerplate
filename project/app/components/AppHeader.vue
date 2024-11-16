@@ -9,30 +9,27 @@
           {{ siteName }}
         </span>
       </NuxtLink>
-      <MainNav />
       <div class="flex items-center space-x-2">
         <ModeToggle />
-        <NuxtLink :to="signInLink">
-          <div :class="buttonVariants({ variant: 'ghost' })">
-            {{ signInText }}
-          </div>
-        </NuxtLink>
-        <NuxtLink :to="signUpLink">
-          <div :class="buttonVariants({ variant: 'default' })">
-            {{ signUpText }}
-          </div>
-        </NuxtLink>
+        <div
+          :class="buttonVariants({ variant: 'default' })"
+          @click="handleSignOut"
+          class="cursor-pointer"
+        >
+          {{ signOutText }}
+        </div>
       </div>
     </div>
   </header>
 </template>
 
 <script setup>
-import MainNav from '~/components/Navbar.vue';
 import { buttonVariants } from '@/components/ui/button';
 import { siteConfig } from '@/config/site';
 import IconsLogo from '@/components/icons/Logo.vue';
 import ModeToggle from '~/components/shared/ModeToggle.vue';
+
+const { signOut } = useAuth();
 
 // Define props
 const props = defineProps({
@@ -42,23 +39,19 @@ const props = defineProps({
   },
   homeLink: {
     type: String,
+    default: '/dashboard',
+  },
+  signOutText: {
+    type: String,
+    default: 'Sign Out',
+  },
+  signOutRedirect: {
+    type: String,
     default: '/',
   },
-  signInLink: {
-    type: String,
-    default: '/signin',
-  },
-  signUpLink: {
-    type: String,
-    default: '/signup',
-  },
-  signInText: {
-    type: String,
-    default: 'Sign In',
-  },
-  signUpText: {
-    type: String,
-    default: 'Sign Up',
-  },
 });
+
+const handleSignOut = async () => {
+  await signOut({ redirectTo: props.signOutRedirect });
+};
 </script>
