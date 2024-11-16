@@ -8,17 +8,10 @@ useSeoMeta({
   description: siteConfig.description,
   twitterCard: 'summary_large_image',
 });
-
-onMounted(() => {
-  const { $refreshAos } = useNuxtApp();
-  nextTick(() => {
-    $refreshAos();
-  });
-});
 </script>
 
 <template>
-  <!-- <Toaster /> -->
+  <Toaster />
 
   <SiteHeader />
 

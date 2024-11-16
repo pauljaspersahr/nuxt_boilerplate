@@ -1,7 +1,6 @@
 {
     "name": "Nuxt Boilerplate",
-    "context": "..",
-    "dockerFile": "Dockerfile",
+    "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bookworm",
     "workspaceMount": "source=${localWorkspaceFolder}/project,target=/project,type=bind",
     "workspaceFolder": "/project",
     "mounts": [
@@ -9,12 +8,22 @@
         "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
         "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/root/.aws,type=bind,consistency=cached"
     ],
-    "postCreateCommand": "chown -R node:node /project && pnpm install && pnpm --prefix app run prisma:push",
+    "postCreateCommand": "chown -R node:node /project && docker-compose -f /project/.dev/docker-compose.yml up -d &&  cd /project && pnpm install --shamefully-hoist && pnpm --prefix app run prisma:push",
     "runArgs": [
-        "--network=db-network",
         "--env-file",
         "project/app/.env"
     ],
+    "appPort": 3000,
+    "remoteEnv": {
+        "PNPM_HOME": "/pnpm",
+        "PATH": "/pnpm:${containerEnv:PATH}"
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        // "ghcr.io/devcontainers/features/node:1": {
+        //     "version": "none"
+        // }
+    },
     "customizations": {
         "vscode": {
             "extensions": [
