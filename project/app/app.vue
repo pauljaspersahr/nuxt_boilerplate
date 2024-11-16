@@ -18,7 +18,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <Toaster />
+  <!-- <Toaster /> -->
 
   <SiteHeader />
 

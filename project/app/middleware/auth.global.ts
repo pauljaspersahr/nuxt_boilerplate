@@ -55,8 +55,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (import.meta.client) {
     await fetchSession();
   }
-  const { publicRoutes } = useAppConfig();
 
+  const { publicRoutes } = useRuntimeConfig().public;
   // Allow public routes for unauthenticated users
   if (!loggedIn.value && publicRoutes.includes(to.path)) {
     return;

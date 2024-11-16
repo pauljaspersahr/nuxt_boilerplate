@@ -14,7 +14,6 @@ import { Loader2 } from 'lucide-vue-next';
 import { z } from 'zod';
 
 const auth = useAuth();
-
 const { toast } = useToast();
 
 // Form validation
@@ -24,19 +23,8 @@ const signUpSchema = z.object({
   password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
-const { formData, formErrors, touched, validateField, validateForm } =
+const { formData, formErrors, validateField, isValid } =
   useFormValidation(signUpSchema);
-
-const validForm = ref(false);
-
-watch(
-  () => formData.value,
-  () => {
-    const result = validateForm();
-    validForm.value = result.success;
-  },
-  { deep: true },
-);
 
 const loading = ref(false);
 
@@ -51,13 +39,16 @@ const handleSignUp = async () => {
     },
     {
       onSuccess: () => {
+        toast({
+          title: `Welcome, ${formData.value.name}!`,
+        });
         navigateTo('/dashboard');
       },
-      onError: () => {
+      onError: (ctx) => {
         toast({
           title: 'Uh oh! Something went wrong.',
-          description: 'There was a problem with your request.',
-          variant: '',
+          description: ctx.error.message,
+          variant: 'destructive',
         });
       },
       onRequest: () => {
@@ -126,7 +117,7 @@ const handleSignUp = async () => {
           @click="handleSignUp"
           type="button"
           class="w-full"
-          :disabled="!validForm"
+          :disabled="!isValid"
           >Create an account</Button
         >
         <Button v-else disabled>

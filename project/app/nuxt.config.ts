@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-const { publicRoutes } = useAppConfig();
+const publicRoutes = ['/', '/signup', '/signin'];
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -17,12 +17,15 @@ export default defineNuxtConfig({
     'nuxt-aos',
   ],
   ssr: true,
-  routeRules: {
-    // Homepage pre-rendered at build time
-    '/': { prerender: true },
-    '/signup': { prerender: true },
-    '/signin': { prerender: true },
-  },
+  // routeRules: {
+  //   ...publicRoutes.reduce(
+  //     (acc, route) => ({
+  //       ...acc,
+  //       [route]: { prerender: true },
+  //     }),
+  //     {},
+  //   ),
+  // },
   shadcn: {
     /**
      * Prefix for all the imported component
@@ -76,6 +79,7 @@ export default defineNuxtConfig({
         redirectUserTo: '/dashboard',
         redirectGuestTo: '/',
       },
+      publicRoutes: publicRoutes,
     },
   },
   gtag: {
@@ -86,9 +90,6 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: 'aws-lambda',
-    prerender: {
-      routes: publicRoutes,
-    },
   },
   pages: true,
   compatibilityDate: '2024-10-21',
