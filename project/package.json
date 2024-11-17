@@ -5,7 +5,10 @@
     "functions",
     "stacks"
   ],
-  "scripts": {},
+  "scripts": {
+    "database:up": "docker compose --project-directory .dev up -d",
+    "database:down": "docker compose --project-directory .dev down"
+  },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
     "@types/aws-lambda": "8.10.145",

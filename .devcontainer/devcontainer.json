@@ -6,9 +6,9 @@
     "mounts": [
         "source=global-pnpm-store,target=${containerWorkspaceFolder}/.pnpm-store,type=volume",
         "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
-        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/root/.aws,type=bind,consistency=cached"
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/home/node/.aws,type=bind,consistency=cached"
     ],
-    "postCreateCommand": "chown -R node:node /project && docker-compose --project-directory /project/.dev up -d &&  cd /project && pnpm install --shamefully-hoist && pnpm --prefix app run prisma:push",
+    "postCreateCommand": "chown -R node:node /project && pnpm database:up && cd /project && pnpm install --shamefully-hoist &&  pnpm --prefix app run prisma:push",
     "runArgs": [
         "--env-file",
         "project/app/.env"
@@ -19,7 +19,9 @@
         "PATH": "/pnpm:${containerEnv:PATH}"
     },
     "features": {
-        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {
+            "dockerDashComposeVersion": "none"
+        },
         // "ghcr.io/devcontainers/features/node:1": {
         //     "version": "none"
         // }

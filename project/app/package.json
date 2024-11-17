@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "pnpm --prefix .. database:up && nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "prisma:generate:auth": "npx prisma generate --schema=prisma/auth.schema.prisma",
