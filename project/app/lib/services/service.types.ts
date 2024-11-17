@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma-app/client";
+import { Prisma } from '@prisma-app/client';
 
 export const basicUser = Prisma.validator<Prisma.UserDefaultArgs>()({
   select: {
@@ -32,7 +32,7 @@ export const basicMembership = Prisma.validator<Prisma.MembershipDefaultArgs>()(
       current_period_ends: true,
       stripe_subscription_id: true,
     },
-  }
+  },
 );
 export type BasicMembership = Prisma.MembershipGetPayload<
   typeof basicMembership
@@ -49,12 +49,36 @@ export const basicPlan = Prisma.validator<Prisma.PlanDefaultArgs>()({
   select: {
     id: true,
     name: true,
-    stripe_product_id: true,
+    description: true,
     duration_days: true,
+    price: true,
+    old_price: true,
+    features: true,
+    not_features: true,
+    featured: true,
+    stripe_product_id: true,
     tier: true,
+    subtext: true,
   },
 });
 export type BasicPlan = Prisma.PlanGetPayload<typeof basicPlan>;
+
+export const basicPlanNoId = Prisma.validator<Prisma.PlanDefaultArgs>()({
+  select: {
+    name: true,
+    description: true,
+    duration_days: true,
+    price: true,
+    old_price: true,
+    features: true,
+    not_features: true,
+    featured: true,
+    stripe_product_id: true,
+    tier: true,
+    subtext: true,
+  },
+});
+export type BasicPlanNoId = Prisma.PlanGetPayload<typeof basicPlanNoId>;
 
 export const plan = Prisma.validator<Prisma.PlanDefaultArgs>()({
   include: {

@@ -1,77 +1,37 @@
-import { PrismaClient } from "@prisma/client";
-import { PLAN_TIER } from "./Enums";
-const prisma = new PrismaClient();
+import prisma_app_client from '@/prisma/app.client';
+import { PRICING_PLANS } from '@/config/pricing';
 
 async function main() {
-  const freeTrial = await prisma.plan.upsert({
-    where: { name: "Free Trial" },
-    update: {},
-    create: {
-      name: "Free Trial",
-      duration_days: 3,
-      tier: PLAN_TIER.BASIC,
-    },
-  });
-
-  const monthlyBasicPlan = await prisma.plan.upsert({
-    where: { name: "Monthly Basic Plan" },
-    update: {},
-    create: {
-      name: "Monthly Basic Plan",
-      duration_days: 30,
-      stripe_product_id: "prod_NQR7vwUulvIeqW",
-      tier: PLAN_TIER.BASIC,
-    },
-  });
-
-  const lifetimeBasicPlan = await prisma.plan.upsert({
-    where: { name: "Lifetime Basic Plan" },
-    update: {},
-    create: {
-      name: "Lifetime Basic Plan",
-      duration_days: -1,
-      stripe_product_id: "prod_NQR7vwUulvIeqW",
-      tier: PLAN_TIER.PREMIUM,
-    },
-  });
-
-  const monthlyPremiumPlan = await prisma.plan.upsert({
-    where: { name: "Monthly Premium Plan" },
-    update: {},
-    create: {
-      name: "Monthly Premium Plan",
-      duration_days: -1,
-      stripe_product_id: "prod_NQkljahkkdhqBwu2",
-      tier: PLAN_TIER.PREMIUM,
-    },
-  });
-
-  const lifetimePremiumPlan = await prisma.plan.upsert({
-    where: { name: "Lifetime Basic Plan" },
-    update: {},
-    create: {
-      name: "Lifetime Basic Plan",
-      duration_days: -1,
-      stripe_product_id: "prod_ad09asdkjh",
-      tier: PLAN_TIER.PREMIUM,
-    },
-  });
-
-  console.log({
-    freeTrial,
-    monthlyBasicPlan,
-    monthlyPremiumPlan,
-    lifetimeBasicPlan,
-    lifetimePremiumPlan,
-  });
+  // Upsert all plans from PRICING_PLANS
+  for (const [_, plan] of Object.entries(PRICING_PLANS)) {
+    await prisma_app_client.plan.upsert({
+      where: { name: plan.name },
+      update: {},
+      create: {
+        name: plan.name,
+        description: plan.description,
+        duration_days: plan.duration_days,
+        price: plan.price,
+        old_price: plan.old_price,
+        features: plan.features,
+        not_features: plan.not_features,
+        stripe_product_id: plan.stripe_product_id,
+        tier: plan.tier,
+        featured: plan.featured,
+        subtext: plan.subtext,
+      },
+    });
+    console.log(`Upserted plan: ${plan.name}`);
+    console.log(plan);
+  }
 }
 
 main()
   .then(async () => {
-    await prisma.$disconnect();
+    await prisma_app_client.$disconnect();
   })
   .catch(async (e) => {
     console.error(e);
-    await prisma.$disconnect();
+    await prisma_app_client.$disconnect();
     process.exit(1);
   });

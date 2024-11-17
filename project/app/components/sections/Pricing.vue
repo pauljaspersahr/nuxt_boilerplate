@@ -16,7 +16,7 @@
       </p>
     </div>
     <div
-      class="container flex flex-col max-w-4xl md:grid md:grid-cols-2 w-full justify-center items-center gap-8"
+      :class="`container flex flex-col max-w-4xl md:grid md:grid-cols-${PRICING_PLANS.length} w-full justify-center items-center gap-8`"
     >
       <PricingPlan
         v-for="(plan, index) in plans"
@@ -28,6 +28,7 @@
         :features="plan.features"
         :notFeatures="plan.notFeatures"
         :featured="plan.featured"
+        :subtext="plan.subtext"
       />
     </div>
   </section>
@@ -35,6 +36,7 @@
 
 <script setup lang="ts">
 import PricingPlan from '@/components/shared/PricingPlan.vue';
+import { PRICING_PLANS } from '@/config/pricing';
 
 const props = defineProps({
   sectionId: {
@@ -56,42 +58,17 @@ const props = defineProps({
   },
   plans: {
     type: Array,
-    default: () => [
-      {
-        title: 'Essential',
-        description: 'Deploy your new project in one-click.',
-        oldPrice: '$79',
-        newPrice: '$39',
-        features: [
-          'Full Nuxt 3 template',
-          'Shadcn UI components',
-          'TypeScript components',
-          'SEO & Analytics integrated',
-          'AOS animations',
-          'Ready-to-go configuration',
-          'One-click Vercel deploy',
-        ],
-        notFeatures: ['Lifetime updates'],
-        featured: false,
-      },
-      {
-        title: 'Pro',
-        description: 'Get the template and future updates.',
-        oldPrice: '$99',
-        newPrice: '$59',
-        features: [
-          'Full Nuxt 3 template',
-          'Shadcn UI components',
-          'TypeScript components',
-          'SEO & Analytics integrated',
-          'AOS animations',
-          'Ready-to-go configuration',
-          'One-click Vercel deploy',
-          'Lifetime updates',
-        ],
-        featured: true,
-      },
-    ],
+    default: () =>
+      PRICING_PLANS.map((plan) => ({
+        title: plan.name,
+        description: plan.description,
+        oldPrice: `${plan.old_price}€`,
+        newPrice: `${plan.price}€`,
+        features: plan.features,
+        notFeatures: plan.not_features,
+        featured: plan.featured,
+        subtext: plan.subtext,
+      })),
   },
 });
 </script>
