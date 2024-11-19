@@ -8,7 +8,7 @@
         "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
         "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/home/node/.aws,type=bind,consistency=cached"
     ],
-    "postCreateCommand": "chown -R node:node /project && pnpm database:up && cd /project && pnpm install --shamefully-hoist &&  pnpm --prefix app run prisma:push",
+    "postCreateCommand": "sudo chown -R node:node /project && pnpm database:up && pnpm install --shamefully-hoist &&  pnpm --prefix app run prisma:push",
     "runArgs": [
         "--env-file",
         "project/app/.env"
