@@ -1,6 +1,6 @@
 // from:  https://github.com/atinux/nuxthub-better-auth
 import { defu } from 'defu';
-import { createAuthClient } from 'better-auth/client';
+import { createAuthClient } from 'better-auth/vue';
 import type {
   InferSessionFromClient,
   InferUserFromClient,
