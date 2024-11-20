@@ -21,7 +21,6 @@
       </div>
     </div>
   </header>
-  <Sidebar />
 </template>
 
 <script setup>
@@ -29,7 +28,6 @@ import { buttonVariants } from '@/components/ui/button';
 import { siteConfig } from '@/config/site';
 import IconsLogo from '@/components/icons/Logo.vue';
 import ModeToggle from '@/components/shared/ModeToggle.vue';
-import Sidebar from '@/components/ui/sidebar/Sidebar.vue';
 
 const { signOut } = useAuth();
 

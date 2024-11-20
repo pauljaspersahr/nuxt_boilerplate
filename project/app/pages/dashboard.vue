@@ -1,7 +1,9 @@
 <script setup lang="ts">
-const auth = useAuth();
+const { $client } = useNuxtApp();
+
+const user = await $client.user.getUser.query();
 </script>
 
 <template>
-  <p>Dashboard</p>
+  <p>{{ user }}</p>
 </template>
