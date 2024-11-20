@@ -4,13 +4,13 @@
 
 ## server
 
-- [ ] finalize server middleware when attempting to fetch usedata. check for app user, create if not existing
+- [x] finalize server middleware when attempting to fetch usedata. check for app user, create if not existing
 - [ ] how to secure stripe endpoint? trpc routes are secured through trpc middleware on proteced procedures
 - [ ] finalize user procedures
 
 ## auth
 
-- [ ] server side auth client
+- [x] server side auth client
 - [ ] setup domain in resend and namecheap
 - [ ] use resend sdk and vue mail to send emails
 - [ ] add OTP support
