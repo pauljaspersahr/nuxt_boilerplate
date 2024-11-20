@@ -1,33 +1,35 @@
-import prisma_app_client from "~/prisma/app.client";
-import { basicUser, type BasicUser, user, type User } from "./service.types";
-import { UtilService } from "./utils.service";
+import prisma_app_client from '~/prisma/app.client';
+import { basicUser, type BasicUser, user, type User } from './service.types';
+import { UtilService } from './utils.service';
 
 export namespace UserService {
-  export async function getBasicUserById(user_id: string): Promise<BasicUser> {
-    return prisma_app_client.user.findFirstOrThrow({
+  export async function getBasicUserById(
+    user_id: string,
+  ): Promise<BasicUser | null> {
+    return prisma_app_client.user.findFirst({
       where: { id: user_id },
       ...basicUser,
     });
   }
 
-  export async function getUserById(user_id: string): Promise<User> {
-    return prisma_app_client.user.findFirstOrThrow({
+  export async function getUserById(user_id: string): Promise<User | null> {
+    return prisma_app_client.user.findFirst({
       where: { id: user_id },
       ...user,
     });
   }
 
   export async function getBasicUserByAuthId(
-    auth_id: string
-  ): Promise<BasicUser> {
-    return prisma_app_client.user.findFirstOrThrow({
+    auth_id: string,
+  ): Promise<BasicUser | null> {
+    return prisma_app_client.user.findFirst({
       where: { auth_id: auth_id },
       ...basicUser,
     });
   }
 
-  export async function getUserByAuthId(auth_id: string): Promise<User> {
-    return prisma_app_client.user.findFirstOrThrow({
+  export async function getUserByAuthId(auth_id: string): Promise<User | null> {
+    return prisma_app_client.user.findFirst({
       where: { auth_id: auth_id },
       ...user,
     });
@@ -36,7 +38,7 @@ export namespace UserService {
   export async function createBasicUser(
     auth_id: string,
     display_name: string,
-    email: string
+    email: string,
   ): Promise<BasicUser> {
     return prisma_app_client.user.create({
       data: {
@@ -52,7 +54,7 @@ export namespace UserService {
     auth_id: string,
     display_name: string,
     email: string,
-    plan_id: string
+    plan_id: string,
   ): Promise<User> {
     const plan = await prisma_app_client.plan.findFirstOrThrow({
       where: { id: plan_id },
@@ -67,7 +69,7 @@ export namespace UserService {
           create: {
             current_period_ends: UtilService.addDays(
               new Date(),
-              plan.duration_days
+              plan.duration_days,
             ),
             plan_id: plan.id,
           },

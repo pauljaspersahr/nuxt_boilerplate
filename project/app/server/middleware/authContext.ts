@@ -1,8 +1,8 @@
-import { defineEventHandler, parseCookies, setCookie, getCookie } from 'h3';
+import { defineEventHandler, parseCookies } from 'h3';
 import { UserService } from '~/lib/services/user.service';
 import type { BasicUser } from '~/lib/services/service.types';
 import type { User as AuthUser } from '~/server/auth/auth.types';
-import { serverAuth } from '../auth/serverAuth';
+import { serverAuth } from '~/server/auth/serverAuth';
 
 // Explicitly type our context by 'Merging' our custom types with the H3EventContext (https://stackoverflow.com/a/76349232/95242)
 declare module 'h3' {
@@ -13,10 +13,7 @@ declare module 'h3' {
 }
 
 export default defineEventHandler(async (event) => {
-  if (
-    // !(event.path.startsWith('/api/trpc') || event.path.startsWith('/api/my/outher/route'))
-    !event.path.startsWith('/api/trpc')
-  ) {
+  if (!event.path.startsWith('/api/trpc')) {
     return; // only apply middleware to working routes
   }
   const cookies = parseCookies(event);
@@ -29,19 +26,13 @@ export default defineEventHandler(async (event) => {
     if (authUser) {
       event.context.authUser = authUser;
 
-      let user;
-      try {
-        user = await UserService.getBasicUserByAuthId(authUser.id);
-      } catch (error) {
-        console.error('Error retrieving user:', error);
-        user = null; // Set user to null if an error occurs
-      }
+      let user = await UserService.getBasicUserByAuthId(authUser.id);
 
       if (!user) {
         user = await UserService.createBasicUser(
           authUser.id,
-          authUser.name || 'no name supplied',
-          authUser.email || 'no@email.supplied',
+          authUser.name,
+          authUser.email,
         );
         console.log(`\n Created DB User \n ${JSON.stringify(user)}\n`);
       }

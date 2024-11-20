@@ -61,6 +61,8 @@ export function useAuth() {
     });
   }
 
+  console.log('session', session.value);
+
   return {
     session,
     user,
