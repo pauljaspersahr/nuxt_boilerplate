@@ -1,11 +1,6 @@
 // from:  https://github.com/atinux/nuxthub-better-auth
 import { defu } from 'defu';
 import { createAuthClient } from 'better-auth/vue';
-import type {
-  InferSessionFromClient,
-  InferUserFromClient,
-  ClientOptions,
-} from 'better-auth/client';
 import type { RouteLocationRaw } from 'vue-router';
 
 interface RuntimeAuthConfig {
@@ -31,14 +26,13 @@ export function useAuth() {
       redirectGuestTo: '/',
     },
   );
-  const session = useState<InferSessionFromClient<ClientOptions> | null>(
-    'auth:session',
-    () => null,
-  );
-  const user = useState<InferUserFromClient<ClientOptions> | null>(
-    'auth:user',
-    () => null,
-  );
+
+  type Session = typeof client.$Infer.Session.session;
+  const session = useState<Session | null>('auth:session', () => null);
+
+  type User = typeof client.$Infer.Session.user;
+  const user = useState<User | null>('auth:user', () => null);
+
   const sessionFetching = import.meta.server
     ? ref(false)
     : useState('auth:sessionFetching', () => false);
