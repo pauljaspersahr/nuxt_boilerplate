@@ -16,16 +16,16 @@
       </p>
     </div>
     <div
-      :class="`container flex flex-col max-w-4xl md:grid md:grid-cols-${PRICING_PLANS.length} w-full justify-center items-center gap-8`"
+      :class="`container flex flex-col max-w-4xl md:grid md:grid-cols-3 w-full justify-center items-center gap-8`"
     >
       <PricingPlan
-        v-for="(plan, index) in plans"
+        v-for="(plan, index) in displayedPlans"
         :key="index"
         :title="plan.title"
         :description="plan.description"
         :oldPrice="plan.oldPrice"
         :newPrice="plan.newPrice"
-        :paymenrUrl="plan."
+        :paymentUrl="plan.paymentUrl"
         :features="plan.features"
         :notFeatures="plan.notFeatures"
         :featured="plan.featured"
@@ -38,6 +38,18 @@
 <script setup lang="ts">
 import PricingPlan from '@/components/shared/PricingPlan.vue';
 import { PRICING_PLANS } from '@/config/pricing';
+
+const displayedPlans = PRICING_PLANS.map((plan) => ({
+  title: plan.name,
+  description: plan.description,
+  oldPrice: `${plan.old_price}€`,
+  newPrice: `${plan.price}€`,
+  features: plan.features,
+  notFeatures: plan.not_features,
+  paymentUrl: plan.stripe_payment_url,
+  featured: plan.featured,
+  subtext: plan.subtext,
+}));
 
 const props = defineProps({
   sectionId: {
@@ -56,21 +68,6 @@ const props = defineProps({
     type: String,
     default:
       'We have two very generous options to suit projects for today and in the future.',
-  },
-  plans: {
-    type: Array,
-    default: () =>
-      PRICING_PLANS.map((plan) => ({
-        title: plan.name,
-        description: plan.description,
-        oldPrice: `${plan.old_price}€`,
-        newPrice: `${plan.price}€`,
-        features: plan.features,
-        notFeatures: plan.not_features,
-        paymentUrl: plan.stripe_payment_url,
-        featured: plan.featured,
-        subtext: plan.subtext,
-      })),
   },
 });
 </script>

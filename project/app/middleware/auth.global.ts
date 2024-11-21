@@ -34,6 +34,12 @@ declare module 'vue-router' {
 export default defineNuxtRouteMiddleware(async (to) => {
   console.log('🔒 Auth middleware running for path:', to.path);
 
+  // Skip middleware for the home page `/`
+  if (to.path === '/') {
+    console.log('🏠 Skipping auth middleware for home page');
+    return;
+  }
+
   // If auth is disabled, skip middleware
   if (to.meta?.auth === false) {
     console.log('🔓 Auth disabled for this route, skipping middleware');
