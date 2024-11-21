@@ -16,6 +16,7 @@ async function main() {
         features: plan.features,
         not_features: plan.not_features,
         stripe_product_id: plan.stripe_product_id,
+        stripe_payment_url: plan.stripe_payment_url,
         tier: plan.tier,
         featured: plan.featured,
         subtext: plan.subtext,
