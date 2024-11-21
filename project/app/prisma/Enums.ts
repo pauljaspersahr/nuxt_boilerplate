@@ -1,9 +1,9 @@
 import type {
   USER_STATUS as USER_STATUS_ORG,
   PLAN_TIER as PLAN_TIER_ORG,
-} from "@prisma-app/client";
+} from '@prisma-app/client';
 
-import { create } from "~~/lib/utils.prisma";
+import { create } from '~/lib/prisma.utils';
 
 export const USER_STATUS = create<USER_STATUS_ORG>();
 export type USER_STATUS = typeof USER_STATUS;
