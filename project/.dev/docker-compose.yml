@@ -7,9 +7,9 @@ services:
       POSTGRES_PASSWORD: mypassword
       POSTGRES_DB: mydatabase
     volumes:
-      - ./app-data:/var/lib/postgresql/data
+      - pg-app-data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - '5432:5432'
 
   pg-auth:
     image: postgres
@@ -19,6 +19,10 @@ services:
       POSTGRES_PASSWORD: mypassword
       POSTGRES_DB: mydatabase
     volumes:
-      - ./auth-data:/var/lib/postgresql/data
+      - pg-auth-data:/var/lib/postgresql/data
     ports:
-      - "5433:5432"
+      - '5433:5432'
+
+volumes:
+  pg-app-data:
+  pg-auth-data:
