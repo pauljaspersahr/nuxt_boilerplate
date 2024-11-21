@@ -81,61 +81,61 @@
 </template>
 
 <script setup lang="ts">
-import { cn } from "~/lib/utils";
-import { buttonVariants } from "~/components/ui/button";
-import { Icon } from "@iconify/vue";
+import { cn } from '@/lib/utils';
+import { buttonVariants } from '~/components/ui/button';
+import { Icon } from '@iconify/vue';
 
 const props = defineProps({
   sectionClass: {
     type: String,
-    default: "",
+    default: '',
   },
   headingClass: {
     type: String,
-    default: "",
+    default: '',
   },
   heading: {
     type: String,
-    default: "Launch in minutes with Nuxt 3 and Shadcn",
+    default: 'Launch in minutes with Nuxt 3 and Shadcn',
   },
   text: {
     type: String,
     default:
-      "Finally a landing page for Nuxt 3 featuring beautifully crafted Shadcn components. Save a full weekend and launch your next product.",
+      'Finally a landing page for Nuxt 3 featuring beautifully crafted Shadcn components. Save a full weekend and launch your next product.',
   },
   textClass: {
     type: String,
-    default: "",
+    default: '',
   },
   primaryButtonLink: {
     type: String,
-    default: "/",
+    default: '/',
   },
   primaryButtonText: {
     type: String,
-    default: "Get this template",
+    default: 'Get this template',
   },
   primaryButtonIcon: {
     type: String,
-    default: "radix-icons:arrow-right",
+    default: 'radix-icons:arrow-right',
   },
   secondaryButtonLink: {
     type: String,
-    default: "#features",
+    default: '#features',
   },
   secondaryButtonText: {
     type: String,
-    default: "Learn more",
+    default: 'Learn more',
   },
   customerImages: {
     type: Array,
     default: () => [
-      "https://i.pravatar.cc/150?img=1",
-      "https://i.pravatar.cc/150?img=2",
-      "https://i.pravatar.cc/150?img=3",
-      "https://i.pravatar.cc/150?img=4",
-      "https://i.pravatar.cc/150?img=5",
-      "https://i.pravatar.cc/150?img=6",
+      'https://i.pravatar.cc/150?img=1',
+      'https://i.pravatar.cc/150?img=2',
+      'https://i.pravatar.cc/150?img=3',
+      'https://i.pravatar.cc/150?img=4',
+      'https://i.pravatar.cc/150?img=5',
+      'https://i.pravatar.cc/150?img=6',
     ],
   },
   productsSold: {
@@ -145,16 +145,16 @@ const props = defineProps({
   stars: {
     type: Array,
     default: () => [
-      "radix-icons:star-filled",
-      "radix-icons:star-filled",
-      "radix-icons:star-filled",
-      "radix-icons:star-filled",
-      "radix-icons:star",
+      'radix-icons:star-filled',
+      'radix-icons:star-filled',
+      'radix-icons:star-filled',
+      'radix-icons:star-filled',
+      'radix-icons:star',
     ],
   },
   imageSrc: {
     type: String,
-    default: "images/hero.png",
+    default: 'images/hero.png',
   },
 });
 </script>

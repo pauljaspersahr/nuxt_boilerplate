@@ -68,7 +68,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { cn } from '~/lib/utils';
+import { cn } from '@/lib/utils';
 import { buttonVariants } from '~/components/ui/button';
 import { Icon } from '@iconify/vue';
 
