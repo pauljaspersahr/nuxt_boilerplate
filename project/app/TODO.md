@@ -21,3 +21,7 @@
 - [ ] create stripe account and create products
 - [ ] add checkout session for immediate client input handling, create webhook for stripe events and database updates
 - [ ] on checkout without account, create auth user, database user will be created when data is fetched for /dashboard
+
+## cookies
+
+- [ ] modal with cookie consent
