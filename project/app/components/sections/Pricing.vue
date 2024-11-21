@@ -25,6 +25,7 @@
         :description="plan.description"
         :oldPrice="plan.oldPrice"
         :newPrice="plan.newPrice"
+        :paymenrUrl="plan."
         :features="plan.features"
         :notFeatures="plan.notFeatures"
         :featured="plan.featured"
@@ -66,6 +67,7 @@ const props = defineProps({
         newPrice: `${plan.price}€`,
         features: plan.features,
         notFeatures: plan.not_features,
+        paymentUrl: plan.stripe_payment_url,
         featured: plan.featured,
         subtext: plan.subtext,
       })),

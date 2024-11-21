@@ -45,18 +45,19 @@ enum PLAN_TIER {
 }
 
 model Plan {
-    id                String    @id @default(uuid())
-    name              String    @unique
-    description       String
-    duration_days     Int
-    price             Float
-    old_price         Float
-    features          String[]
-    not_features      String[]
-    featured          Boolean   @default(false)
-    stripe_product_id String
-    tier              PLAN_TIER @default(BASIC)
-    subtext           String
+    id                 String    @id @default(uuid())
+    name               String    @unique
+    description        String
+    duration_days      Int
+    price              Float
+    old_price          Float
+    features           String[]
+    not_features       String[]
+    featured           Boolean   @default(false)
+    stripe_product_id  String
+    stripe_payment_url String
+    tier               PLAN_TIER @default(BASIC)
+    subtext            String
 
     memberships Membership[]
 }
