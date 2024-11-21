@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button';
+import LoadingButton from '~/components/shared/LoadingButton.vue';
 import {
   Card,
   CardContent,
@@ -101,14 +101,13 @@ const handleSignIn = async () => {
             {{ formErrors.password }}
           </p>
         </div>
-        <Button
-          v-if="!loading"
-          @click="handleSignIn"
-          type="button"
-          class="w-full"
-          :disabled="!isValid"
-          >Login</Button
-        >
+        <LoadingButton
+          :loading="loading"
+          :enableOn="isValid"
+          buttonText="Login"
+          loadingText="Signing you in..."
+          :onClick="handleSignIn"
+        />
         <!-- <Button variant="outline" class="w-full"> Login with Google </Button> -->
       </div>
       <div class="mt-4 text-center text-sm">

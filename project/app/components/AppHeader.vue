@@ -11,25 +11,29 @@
       </NuxtLink>
       <div class="flex items-center space-x-2">
         <ModeToggle />
-        <div
-          :class="buttonVariants({ variant: 'default' })"
-          @click="handleSignOut"
-          class="cursor-pointer"
-        >
-          {{ signOutText }}
-        </div>
+        <LoadingButton
+          :loading="loading"
+          :enableOn="true"
+          buttonText="Sing Out"
+          loadingText="Signing out..."
+          :onClick="handleSignOut"
+        />
       </div>
     </div>
   </header>
 </template>
 
 <script setup>
+import LoadingButton from '~/components/shared/LoadingButton.vue';
 import { buttonVariants } from '@/components/ui/button';
 import { siteConfig } from '@/config/site';
 import IconsLogo from '@/components/icons/Logo.vue';
 import ModeToggle from '@/components/shared/ModeToggle.vue';
 
 const { signOut } = useAuth();
+const { toast } = useToast();
+
+const loading = ref(false);
 
 // Define props
 const props = defineProps({
@@ -52,6 +56,26 @@ const props = defineProps({
 });
 
 const handleSignOut = async () => {
-  await signOut({ redirectTo: props.signOutRedirect });
+  if (loading.value) return;
+
+  await signOut(
+    { redirectTo: props.signOutRedirect },
+    {
+      onSuccess: () => {},
+      onError: (ctx) => {
+        toast({
+          title: 'Uh oh! Something went wrong.',
+          description: ctx.error.message,
+          variant: 'destructive',
+        });
+      },
+      onRequest: () => {
+        loading.value = true;
+      },
+      onResponse: () => {
+        loading.value = false;
+      },
+    },
+  );
 };
 </script>
