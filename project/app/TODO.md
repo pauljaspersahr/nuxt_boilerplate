@@ -24,4 +24,4 @@
 
 ## cookies
 
-- [ ] modal with cookie consent
+- [x] modal with cookie consent

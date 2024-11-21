@@ -43,6 +43,7 @@
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "trpc-nuxt": "^0.10.22",
+    "vanilla-cookieconsent": "3.0.1",
     "vue": "^3.5.13",
     "vue-router": "^4.4.5",
     "zod": "^3.23.8"

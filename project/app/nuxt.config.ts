@@ -84,6 +84,17 @@ export default defineNuxtConfig({
   },
   gtag: {
     id: 'G-XXXXXXXXXX',
+    initCommands: [
+      // Set default consent to denied
+      [
+        'consent',
+        'default',
+        {
+          analytics_storage: 'denied',
+          wait_for_update: 500,
+        },
+      ],
+    ],
   },
   build: {
     transpile: ['trpc-nuxt'],
