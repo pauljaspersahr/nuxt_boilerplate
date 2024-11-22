@@ -8,17 +8,11 @@ export default defineNuxtPlugin((nuxtApp) => {
    */
   const { gtag } = useGtag();
 
-  function allConsentGranted() {
+  const updateConsent = (granted: Boolean) =>
     gtag('consent', 'update', {
-      analytics_storage: 'granted',
+      analytics_storage: granted ? 'granted' : 'denied',
     });
-  }
 
-  function rejectAllConsent() {
-    gtag('consent', 'update', {
-      analytics_storage: 'denied',
-    });
-  }
   CookieConsent.run({
     categories: {
       necessary: {
@@ -37,13 +31,10 @@ export default defineNuxtPlugin((nuxtApp) => {
         },
       },
     },
-    onFirstConsent: ({ cookie }: { cookie: any }) => {
-      if (cookie.categories.includes('analytics')) {
-        allConsentGranted();
-      } else {
-        rejectAllConsent();
-      }
-    },
+
+    onFirstConsent: ({ cookie }: { cookie: any }) =>
+      updateConsent(cookie.categories.includes('analytics')),
+
     language: {
       default: 'en',
       translations: {
@@ -72,7 +63,6 @@ export default defineNuxtPlugin((nuxtApp) => {
                 description:
                   'These cookies are essential for the proper functioning of the website and cannot be disabled.',
 
-                //this field will generate a toggle linked to the 'necessary' category
                 linkedCategory: 'necessary',
               },
               {
