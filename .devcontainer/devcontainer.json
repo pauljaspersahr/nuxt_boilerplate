@@ -8,7 +8,7 @@
         "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
         "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/home/node/.aws,type=bind,consistency=cached"
     ],
-    "postCreateCommand": "docker volume create pg-app-data && docker volume create pg-auth-data && pnpm database:up && pnpm install --shamefully-hoist && pnpm --prefix app run prisma:push",
+    "postCreateCommand": "pnpm database:up && pnpm install --shamefully-hoist && pnpm --prefix app run prisma:push",
     "runArgs": [
         "--env-file",
         "project/app/.env"
