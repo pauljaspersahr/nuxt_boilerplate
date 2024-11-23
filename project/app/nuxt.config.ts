@@ -3,6 +3,7 @@ const publicRoutes = ['/', '/signup', '/signin'];
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  sourcemap: true,
   modules: [
     '@nuxtjs/tailwindcss',
     'shadcn-nuxt',
