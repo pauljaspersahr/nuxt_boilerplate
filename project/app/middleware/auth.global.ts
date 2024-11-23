@@ -47,6 +47,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   const { loggedIn, options, fetchSession } = useAuth();
+  console.log('🔄 Fetching session');
+  await fetchSession();
+
   const { only, redirectUserTo, redirectGuestTo } = defu(
     to.meta?.auth,
     options,
@@ -70,12 +73,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
     }
     console.log('➡️ Redirecting authenticated user to:', redirectUserTo);
     return navigateTo(redirectUserTo);
-  }
-
-  // If client-side, fetch session between each navigation
-  if (import.meta.client) {
-    console.log('🔄 Fetching session on client-side navigation');
-    await fetchSession();
   }
 
   const { publicRoutes } = useRuntimeConfig().public;
