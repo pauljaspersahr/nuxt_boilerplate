@@ -1,7 +1,7 @@
 services:
-  pg-app:
+  app-db:
     image: postgres
-    container_name: pg-app
+    container_name: app-db
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
@@ -11,9 +11,9 @@ services:
     ports:
       - '5432:5432'
 
-  pg-auth:
+  auth-db:
     image: postgres
-    container_name: pg-auth
+    container_name: auth-db
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
