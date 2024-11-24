@@ -25,3 +25,13 @@ pnpm sst remove
 ```
 
 remove infrastructure
+
+# Prisma
+
+## better-auth generate
+
+```bash
+cd /project/app && npx @better-auth/cli generate --config=lib/auth.config.ts
+```
+
+generates prisma schema from better-auth
