@@ -84,7 +84,7 @@ export default defineNuxtConfig({
     },
   },
   gtag: {
-    id: 'G-XXXXXXXXXX',
+    id: process.env.NUXT_PUBLIC_GTAG_ID,
     initCommands: [
       // Set default consent to denied
       [
