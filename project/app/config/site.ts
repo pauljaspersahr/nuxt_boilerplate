@@ -1,10 +1,11 @@
 export const siteConfig = {
-  name: 'Nuxt 3 Shadcn Landing Pro',
-  url: 'https://nuxt-shadcn-landing-pro.vercel.app',
+  name: 'Nuxt 3 Boilerplate',
+  url: 'https://boilerplate.pauljasper.dev',
   ogImage: 'https://nuxt-shadcn-landing-pro.vercel.app/og.jpg',
   description:
-    'Finally a landing page for Nuxt 3 featuring beautifully crafted Shadcn components. Save a full weekend and launch your next product.',
-  supportEmail: 'support@example.com',
+    'A boilerplate for Nuxt 3 with tRPC, Prisma, Shadcn, Resend, and more.',
+  supportEmail: 'support@pauljasper.dev',
+  noReplyEmail: 'no-reply@pauljasper.dev',
 };
 
 export type SiteConfig = typeof siteConfig;
