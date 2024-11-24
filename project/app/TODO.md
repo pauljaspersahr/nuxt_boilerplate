@@ -8,13 +8,18 @@
 - [ ] how to secure stripe endpoint? trpc routes are secured through trpc middleware on proteced procedures
 - [ ] finalize user procedures
 
+## email
+
+- [x] setup domain in resend and namecheap
+- [x] use resend sdk and vue mail to send emails
+
 ## auth
 
 - [x] server side auth client
-- [ ] setup domain in resend and namecheap
-- [ ] use resend sdk and vue mail to send emails
-- [ ] add OTP support
+- [ ] add OTP support (basic signup impl. done. bug in better-auth 0.8, signin missing)
 - [ ] remove password signup and login
+- [ ] add github signin
+- [ ] add email rate limit in auth client and timeout in ui
 
 ## stripe
 
@@ -25,3 +30,7 @@
 ## cookies
 
 - [x] modal with cookie consent
+
+## misc
+
+- [ ] clean up site config runtime config with site urls etc.
