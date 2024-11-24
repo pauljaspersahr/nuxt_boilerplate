@@ -1,6 +1,7 @@
 // from:  https://github.com/atinux/nuxthub-better-auth
 import { defu } from 'defu';
 import { createAuthClient } from 'better-auth/vue';
+// import { emailOTPClient } from 'better-auth/client/plugins';
 import type { RouteLocationRaw } from 'vue-router';
 
 interface RuntimeAuthConfig {
@@ -17,6 +18,7 @@ export function useAuth() {
     fetchOptions: {
       headers,
     },
+    // plugins: [emailOTPClient()],
   });
 
   const options = defu(
@@ -63,21 +65,25 @@ export function useAuth() {
 
   console.log('session', session.value);
 
+  async function signOut({
+    redirectTo,
+  }: { redirectTo?: RouteLocationRaw } = {}) {
+    const res = await client.signOut();
+    session.value = null;
+    user.value = null;
+    if (redirectTo) {
+      await navigateTo(redirectTo);
+    }
+    return res;
+  }
+
   return {
     session,
     user,
     loggedIn: computed(() => !!session.value),
     signIn: client.signIn,
     signUp: client.signUp,
-    async signOut({ redirectTo }: { redirectTo?: RouteLocationRaw } = {}) {
-      const res = await client.signOut();
-      session.value = null;
-      user.value = null;
-      if (redirectTo) {
-        await navigateTo(redirectTo);
-      }
-      return res;
-    },
+    signOut,
     options,
     fetchSession,
     client,
