@@ -25,12 +25,11 @@
 
 <script setup>
 import LoadingButton from '~/components/shared/LoadingButton.vue';
-import { buttonVariants } from '@/components/ui/button';
 import { siteConfig } from '@/config/site';
 import IconsLogo from '@/components/icons/Logo.vue';
 import ModeToggle from '@/components/shared/ModeToggle.vue';
+import { authClient } from '~/lib/auth.client';
 
-const { signOut } = useAuth();
 const { toast } = useToast();
 
 const loading = ref(false);
@@ -58,10 +57,12 @@ const props = defineProps({
 const handleSignOut = async () => {
   if (loading.value) return;
 
-  await signOut(
-    { redirectTo: props.signOutRedirect },
+  await authClient.signOut(
+    {},
     {
-      onSuccess: () => {},
+      onSuccess: () => {
+        navigateTo(props.signOutRedirect);
+      },
       onError: (ctx) => {
         toast({
           title: 'Uh oh! Something went wrong.',

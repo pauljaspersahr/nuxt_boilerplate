@@ -8,11 +8,4 @@
   </div>
 </template>
 
-<script setup lang="ts">
-definePageMeta({
-  auth: {
-    only: 'user',
-    redirectGuestTo: '/',
-  },
-});
-</script>
+<script setup lang="ts"></script>

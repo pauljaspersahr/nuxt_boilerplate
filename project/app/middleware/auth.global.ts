@@ -1,6 +1,7 @@
 // from:  https://github.com/atinux/nuxthub-better-auth
 
 import { defu } from 'defu';
+import { authClient } from '~/lib/auth.client';
 
 type MiddlewareOptions =
   | false
@@ -46,21 +47,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return;
   }
 
-  const { loggedIn, options, fetchSession } = useAuth();
-  console.log('🔄 Fetching session');
-  await fetchSession();
+  const { data: session } = await authClient.useSession(useFetch);
+  const loggedIn = computed(() => !!session.value);
 
-  const { only, redirectUserTo, redirectGuestTo } = defu(
-    to.meta?.auth,
-    options,
-  );
-
-  console.log('👤 Auth state:', {
-    loggedIn: loggedIn.value,
-    only,
-    redirectUserTo,
-    redirectGuestTo,
-  });
+  const { only, redirectUserTo, redirectGuestTo } = defu(to.meta?.auth);
 
   // If guest mode, redirect if authenticated
   if (only === 'guest' && loggedIn.value) {
@@ -76,6 +66,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   const { publicRoutes } = useRuntimeConfig().public;
+
   // Allow public routes for unauthenticated users
   if (!loggedIn.value && publicRoutes.includes(to.path)) {
     console.log('✅ Allowing access to public route');

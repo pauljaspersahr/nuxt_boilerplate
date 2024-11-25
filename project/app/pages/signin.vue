@@ -10,6 +10,6 @@ definePageMeta({
 
 <template>
   <div class="h-screen flex justify-center items-center">
-    <SignIn />
+    <SignInOTP />
   </div>
 </template>

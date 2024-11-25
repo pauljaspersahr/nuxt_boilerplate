@@ -10,8 +10,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { z } from 'zod';
+import { authClient } from '~/lib/auth.client';
 
-const auth = useAuth();
 const { toast } = useToast();
 
 // Form validation
@@ -29,7 +29,7 @@ const loading = ref(false);
 const handleSignUp = async () => {
   if (loading.value) return;
 
-  await auth.signUp.email(
+  await authClient.signUp.email(
     {
       email: formData.value.email,
       password: formData.value.password,

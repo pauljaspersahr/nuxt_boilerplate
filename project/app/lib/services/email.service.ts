@@ -1,9 +1,8 @@
 import { Resend } from 'resend';
-import { siteConfig } from '~/config/site';
+import { siteConfig } from '../../config/site';
+import type { EmailOTPType } from '../auth.types';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-
-export type EmailOTPType = 'sign-in' | 'email-verification';
 
 export namespace EmailService {
   export async function sendOTP(

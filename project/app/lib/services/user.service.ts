@@ -3,33 +3,44 @@ import { basicUser, type BasicUser, user, type User } from './service.types';
 import { UtilService } from './utils.service';
 
 export namespace UserService {
-  export async function getBasicUserById(
-    user_id: string,
-  ): Promise<BasicUser | null> {
-    return prisma_app_client.user.findFirst({
+  export async function getBasicUserById(user_id: string): Promise<BasicUser> {
+    return prisma_app_client.user.findFirstOrThrow({
       where: { id: user_id },
       ...basicUser,
     });
   }
 
-  export async function getUserById(user_id: string): Promise<User | null> {
-    return prisma_app_client.user.findFirst({
+  export async function getUserById(user_id: string): Promise<User> {
+    return prisma_app_client.user.findFirstOrThrow({
       where: { id: user_id },
       ...user,
     });
   }
 
+  export async function getBasicUserByEmail(email: string): Promise<BasicUser> {
+    return prisma_app_client.user.findFirstOrThrow({
+      where: { email: email },
+      ...basicUser,
+    });
+  }
+
+  export async function getUserByEmail(email: string): Promise<User> {
+    return prisma_app_client.user.findFirstOrThrow({
+      where: { email: email },
+      ...user,
+    });
+  }
   export async function getBasicUserByAuthId(
     auth_id: string,
-  ): Promise<BasicUser | null> {
-    return prisma_app_client.user.findFirst({
+  ): Promise<BasicUser> {
+    return prisma_app_client.user.findFirstOrThrow({
       where: { auth_id: auth_id },
       ...basicUser,
     });
   }
 
-  export async function getUserByAuthId(auth_id: string): Promise<User | null> {
-    return prisma_app_client.user.findFirst({
+  export async function getUserByAuthId(auth_id: string): Promise<User> {
+    return prisma_app_client.user.findFirstOrThrow({
       where: { auth_id: auth_id },
       ...user,
     });
@@ -78,7 +89,7 @@ export namespace UserService {
       ...user,
     });
   }
-  export async function deleteUser(user_id: string): Promise<User | null> {
+  export async function deleteUser(user_id: string): Promise<User> {
     return prisma_app_client.user.delete({ where: { id: user_id }, ...user });
   }
 }

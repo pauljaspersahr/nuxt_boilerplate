@@ -26,17 +26,31 @@ const otpSent = ref(false);
 const { toast } = useToast();
 
 // Form validation
-const signUpSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
+const signInSchema = z.object({
   email: z.string().email('Invalid email address'),
 });
 
 const { formData, formErrors, validateField, isValid } =
-  useFormValidation(signUpSchema);
+  useFormValidation(signInSchema);
 
 const handleSendVerificationOtp = async () => {
   if (loading.value) return;
 
+  loading.value = true;
+  try {
+    const { $client } = useNuxtApp();
+    await $client.user.getBasicUserByEmail.query({
+      email: formData.value.email,
+    });
+  } catch (error) {
+    toast({
+      title: 'Uh oh! Something went wrong.',
+      description: 'Email not found',
+      variant: 'destructive',
+    });
+    loading.value = false;
+    return;
+  }
   await authClient.emailOtp.sendVerificationOtp(
     {
       email: formData.value.email,
@@ -56,14 +70,9 @@ const handleSendVerificationOtp = async () => {
           variant: 'destructive',
         });
       },
-      onRequest: () => {
-        loading.value = true;
-      },
-      onResponse: () => {
-        loading.value = false;
-      },
     },
   );
+  loading.value = false;
 };
 
 const handleVerifyOtp = async () => {
@@ -75,33 +84,11 @@ const handleVerifyOtp = async () => {
       otp: otp.value,
     },
     {
-      onSuccess: async () => {
-        await authClient.updateUser(
-          {
-            name: formData.value.name,
-          },
-          {
-            onSuccess: () => {
-              toast({
-                title: `Welcome, ${formData.value.name}!`,
-              });
-              navigateTo('/dashboard');
-            },
-            onError: (ctx) => {
-              toast({
-                title: 'Uh oh! Something went wrong.',
-                description: ctx.error.message,
-                variant: 'destructive',
-              });
-            },
-            onRequest: () => {
-              loading.value = true;
-            },
-            onResponse: () => {
-              loading.value = false;
-            },
-          },
-        );
+      onSuccess: () => {
+        toast({
+          title: `Welcome!`,
+        });
+        navigateTo('/dashboard');
       },
       onError: (ctx) => {
         toast({
@@ -124,26 +111,13 @@ const handleVerifyOtp = async () => {
 <template>
   <Card class="mx-auto max-w-sm">
     <CardHeader>
-      <CardTitle class="text-xl">Sign Up</CardTitle>
+      <CardTitle class="text-xl">Sign In</CardTitle>
       <CardDescription>
-        Enter your information to create an account
+        Enter your email below to login to your account
       </CardDescription>
     </CardHeader>
     <CardContent>
       <div class="grid gap-4">
-        <div class="grid gap-2">
-          <Label for="first-name">What's your name?</Label>
-          <Input
-            id="first-name"
-            v-model="formData.name"
-            placeholder="Max"
-            @blur="validateField('name')"
-            required
-          />
-          <p v-if="formErrors.name" class="text-red-500 text-xs">
-            {{ formErrors.name }}
-          </p>
-        </div>
         <div class="grid gap-2">
           <Label for="email">Email</Label>
           <Input
@@ -189,8 +163,8 @@ const handleVerifyOtp = async () => {
         <!-- <Button variant="outline" class="w-full">Sign up with Google</Button> -->
       </div>
       <div class="mt-4 text-center text-sm">
-        Already have an account?
-        <a href="/signin" class="underline">Sign in</a>
+        Don't have an account?
+        <a href="/signup" class="underline">Sign up</a>
       </div>
     </CardContent>
   </Card>
