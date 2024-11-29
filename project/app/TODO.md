@@ -28,6 +28,11 @@
 - [ ] add checkout session for immediate client input handling, create webhook for stripe events and database updates
 - [ ] on checkout without account, create auth user, database user will be created when data is fetched for /dashboard
 
+### payment flow
+
+- [Get Access] -> [redirect to /checkout] -> [From with mail] -> [Send pin] -> [verify email] -> [next checkout page (animate to right)] -> [select plan (prefill with product from landingpage)] -> [redirect to stripe checkout] -> [ on webhook payment success] -> [set has_access to true] -> [redirect to /dashboard]
+- if signed in but !has_access -> [redirect to /checkout], show user management sidebar
+
 ## cookies
 
 - [x] modal with cookie consent
@@ -35,3 +40,4 @@
 ## misc
 
 - [ ] clean up site config runtime config with site urls etc.
+- [ ] SEO with [nuxt-seo](https://nuxtseo.com/)
