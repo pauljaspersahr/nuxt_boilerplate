@@ -41,3 +41,4 @@
 
 - [ ] clean up site config runtime config with site urls etc.
 - [ ] SEO with [nuxt-seo](https://nuxtseo.com/)
+- [ ] [nuxt-security](https://github.com/nuxt-modules/security)
