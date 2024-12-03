@@ -2,6 +2,7 @@
 
 import { defu } from 'defu';
 import { authClient } from '~/lib/auth.client';
+import log from '~/lib/logger';
 
 type MiddlewareOptions =
   | false
@@ -33,17 +34,17 @@ declare module 'vue-router' {
 }
 
 export default defineNuxtRouteMiddleware(async (to) => {
-  console.log('🔒 Auth middleware running for path:', to.path);
+  log.info('🔒 Auth middleware running for path:', to.path);
 
   // Skip middleware for the home page `/`
   if (to.path === '/') {
-    console.log('🏠 Skipping auth middleware for home page');
+    log.info('🏠 Skipping auth middleware for home page');
     return;
   }
 
   // If auth is disabled, skip middleware
   if (to.meta?.auth === false) {
-    console.log('🔓 Auth disabled for this route, skipping middleware');
+    log.info('🔓 Auth disabled for this route, skipping middleware');
     return;
   }
 
@@ -55,13 +56,13 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // If guest mode, redirect if authenticated
   if (only === 'guest' && loggedIn.value) {
     // Avoid infinite redirect
-    console.log('🚫 Guest-only route accessed while authenticated');
+    log.info('🚫 Guest-only route accessed while authenticated');
 
     if (to.path === redirectUserTo) {
-      console.log('↩️ Avoiding infinite redirect');
+      log.info('↩️ Avoiding infinite redirect');
       return;
     }
-    console.log('➡️ Redirecting authenticated user to:', redirectUserTo);
+    log.info('➡️ Redirecting authenticated user to:', redirectUserTo);
     return navigateTo(redirectUserTo);
   }
 
@@ -69,21 +70,21 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   // Allow public routes for unauthenticated users
   if (!loggedIn.value && publicRoutes.includes(to.path)) {
-    console.log('✅ Allowing access to public route');
+    log.info('✅ Allowing access to public route');
     return;
   }
 
   // If not authenticated, redirect to home
   if (!loggedIn.value) {
-    console.log('🚫 Unauthenticated user attempting to access protected route');
+    log.info('🚫 Unauthenticated user attempting to access protected route');
     // Avoid infinite redirect
     if (to.path === redirectGuestTo) {
-      console.log('↩️ Avoiding infinite redirect');
+      log.info('↩️ Avoiding infinite redirect');
       return;
     }
-    console.log('➡️ Redirecting guest to:', redirectGuestTo);
+    log.info('➡️ Redirecting guest to:', redirectGuestTo);
     return navigateTo(redirectGuestTo);
   }
 
-  console.log('✅ Auth check passed, continuing to route');
+  log.info('✅ Auth check passed, continuing to route');
 });

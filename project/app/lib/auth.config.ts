@@ -4,6 +4,7 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { PrismaClient } from '@prisma-auth/client';
 import { getRequestURL } from 'h3';
 import { EmailService } from './services/email.service';
+import log from '~/lib/logger';
 
 const prisma_auth_client = new PrismaClient();
 
@@ -18,7 +19,7 @@ export const auth = betterAuth({
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
         // await EmailService.sendOTP(email, otp, type);
-        console.log('Sending OTP to', email, 'with OTP', otp, 'and type', type);
+        log.warn('Sending OTP to', email, 'with OTP', otp, 'and type', type);
       },
       otpLength: 5,
       expiresIn: 5 * 60,

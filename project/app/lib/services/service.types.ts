@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma-app/client';
+export { PrismaClientKnownRequestError } from '@prisma-app/client/runtime/library';
 
 export const basicUser = Prisma.validator<Prisma.UserDefaultArgs>()({
   select: {

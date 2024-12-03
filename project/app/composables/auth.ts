@@ -3,6 +3,7 @@ import { defu } from 'defu';
 import { createAuthClient } from 'better-auth/vue';
 // import { emailOTPClient } from 'better-auth/client/plugins';
 import type { RouteLocationRaw } from 'vue-router';
+import log from '~/lib/logger';
 
 interface RuntimeAuthConfig {
   redirectUserTo: RouteLocationRaw | string;
@@ -41,7 +42,7 @@ export function useAuth() {
 
   const fetchSession = async () => {
     if (sessionFetching.value) {
-      console.log('already fetching session');
+      log.info('already fetching session');
       return;
     }
     sessionFetching.value = true;
@@ -62,8 +63,6 @@ export function useAuth() {
       await fetchSession();
     });
   }
-
-  console.log('session', session.value);
 
   async function signOut({
     redirectTo,
