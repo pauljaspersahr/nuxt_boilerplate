@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/test-utils/module',
     'nuxt-aos',
+    '@pinia/nuxt',
   ],
   ssr: true,
   // routeRules: {

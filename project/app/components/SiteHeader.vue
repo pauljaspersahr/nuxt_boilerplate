@@ -22,6 +22,7 @@
             {{ signUpText }}
           </div>
         </NuxtLink>
+        <Checkout />
       </div>
     </div>
   </header>

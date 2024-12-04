@@ -15,8 +15,9 @@ import {
   PinInputInput,
 } from '@/components/ui/pin-input';
 import { authClient } from '~/lib/auth.client';
-
 import { z } from 'zod';
+
+const props = defineProps<{ onSuccess?: () => void }>();
 
 const loading = ref(false);
 const otpArray = ref<string[]>([]);
@@ -85,7 +86,7 @@ const handleVerifyOtp = async () => {
               toast({
                 title: `Welcome, ${formData.value.name}!`,
               });
-              navigateTo('/dashboard');
+              props.onSuccess ? props.onSuccess() : {};
             },
             onError: (ctx) => {
               toast({

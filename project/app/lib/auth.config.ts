@@ -21,7 +21,7 @@ export const auth = betterAuth({
         if ('production' == process.env.NODE_ENV) {
           await EmailService.sendOTP(email, otp, type);
         } else {
-          log.warn('Sending OTP to', email, 'with OTP', otp, 'and type', type);
+          log.warn(`Sending OTP to ${email} with OTP ${otp} and type ${type}`);
         }
       },
       otpLength: 5,

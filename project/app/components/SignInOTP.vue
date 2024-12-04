@@ -135,7 +135,7 @@ const handleVerifyOtp = async () => {
         <LoadingButton
           :loading="loading"
           :enableOn="isValid"
-          buttonText="Create Account"
+          buttonText="Login"
           loadingText="Sending verification code..."
           :onClick="handleSendVerificationOtp"
         />
