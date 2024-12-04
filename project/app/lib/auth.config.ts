@@ -18,8 +18,11 @@ export const auth = betterAuth({
   plugins: [
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
-        // await EmailService.sendOTP(email, otp, type);
-        log.warn('Sending OTP to', email, 'with OTP', otp, 'and type', type);
+        if ('production' == process.env.NODE_ENV) {
+          await EmailService.sendOTP(email, otp, type);
+        } else {
+          log.warn('Sending OTP to', email, 'with OTP', otp, 'and type', type);
+        }
       },
       otpLength: 5,
       expiresIn: 5 * 60,
