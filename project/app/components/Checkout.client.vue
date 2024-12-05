@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { VisuallyHidden } from 'radix-vue';
 import BreadcumbSteps from '~/components/shared/BreadcrumbSteps.vue';
 
 const store = useCheckoutStore();
@@ -14,6 +15,10 @@ const { goToStep } = store;
     </DialogTrigger>
     <DialogContent class="sm:max-w-md sm:h-[600px] h-full">
       <DialogHeader class="flex items-center">
+        <VisuallyHidden>
+          <DialogTitle> Enter Your Information</DialogTitle>
+          <DialogDescription> Signup and Checkout Form</DialogDescription>
+        </VisuallyHidden>
         <BreadcumbSteps
           :steps="steps.map((step) => step.breadcrumb)"
           :currentIndex="index"

@@ -12,10 +12,10 @@ export const useCheckoutStore = defineStore('checkout', () => {
   const steps: Ref<Step[]> = ref([
     {
       breadcrumb: 'Your details',
-      comp: SignUpOTP,
+      comp: markRaw(SignUpOTP),
       props: { onSuccess: () => incrementStep() },
     },
-    { breadcrumb: 'Checkout', comp: StripeEmbed },
+    { breadcrumb: 'Checkout', comp: markRaw(StripeEmbed) },
   ]);
 
   const index_ = ref(0);
