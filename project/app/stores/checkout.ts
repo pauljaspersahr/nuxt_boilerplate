@@ -1,10 +1,14 @@
-import type { DefineComponent } from 'vue';
+import type { DefineComponent, FunctionalComponent } from 'vue';
 import SignUpOTP from '~/components/SignUpOTP.vue';
 import StripeEmbed from '~/components/StripeEmbed.vue';
 import { z } from 'zod';
+import { BookUser, Check, CreditCard, Truck } from 'lucide-vue-next';
 
 type Step = {
-  breadcrumb: string;
+  step: number;
+  title: string;
+  description: string;
+  icon: FunctionalComponent<any, any, any>;
   comp: DefineComponent<any, any, any>;
   props?: Record<string, any>;
 };
@@ -12,14 +16,30 @@ type Step = {
 export const useCheckoutStore = defineStore('checkout', () => {
   const steps: Ref<Step[]> = ref([
     {
-      breadcrumb: 'Your details',
+      step: 1,
+      title: 'Your details',
+      description: 'Add your details here',
+      icon: markRaw(BookUser),
       comp: markRaw(SignUpOTP),
       props: { onSuccess: () => incrementStep() },
     },
-    { breadcrumb: 'Checkout', comp: markRaw(StripeEmbed) },
+    {
+      step: 2,
+      title: 'Pick Plan',
+      description: 'Choose your plan',
+      icon: markRaw(Truck),
+      comp: markRaw(StripeEmbed),
+    },
+    {
+      step: 3,
+      title: 'Checkout',
+      description: 'Confirm your order',
+      icon: markRaw(Check),
+      comp: markRaw(StripeEmbed),
+    },
   ]);
 
-  const index_ = ref(0);
+  const currentStep = ref(1);
   const completed = ref(false);
 
   const signUpSchema = z.object({
@@ -31,31 +51,42 @@ export const useCheckoutStore = defineStore('checkout', () => {
     useFormValidation(signUpSchema);
 
   const component = computed(() => {
-    const step = steps.value[index_.value];
+    const step = steps.value[currentStep.value];
     return {
       component: step.comp,
       props: step.props || {},
     };
   });
+
+  const stepperSteps = computed(() =>
+    steps.value.map((step) => ({
+      step: step.step,
+      title: step.title,
+      description: step.description,
+      icon: step.icon,
+    })),
+  );
+
   function incrementStep() {
-    if (index_.value < steps.value.length - 1) {
-      index_.value++;
+    if (currentStep.value < steps.value.length) {
+      currentStep.value++;
     }
   }
 
-  function goToStep(index: number) {
-    if (index >= 0 && index < steps.value.length) {
-      index_.value = index;
+  function goToStep(step: number | undefined) {
+    if (step && step >= 1 && step <= steps.value.length) {
+      currentStep.value = step;
     }
   }
 
   return {
     steps,
-    index: index_,
+    currentStep,
     component,
     completed,
     incrementStep,
     goToStep,
+    stepperSteps,
     userData: formData,
     userDataErrors: formErrors,
     validateField,
