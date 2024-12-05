@@ -15,7 +15,6 @@ import {
   PinInputInput,
 } from '@/components/ui/pin-input';
 import { authClient } from '~/lib/auth.client';
-import { z } from 'zod';
 
 const props = defineProps<{ onSuccess?: () => void }>();
 
@@ -26,21 +25,39 @@ const otpSent = ref(false);
 
 const { toast } = useToast();
 
-// Form validation
-const signUpSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email address'),
-});
+const store = useCheckoutStore();
 
-const { formData, formErrors, validateField, isValid } =
-  useFormValidation(signUpSchema);
+const { userData, userDataErrors, isValid } = storeToRefs(store);
+const { validateField } = store;
 
 const handleSendVerificationOtp = async () => {
   if (loading.value) return;
 
+  const { $client } = useNuxtApp();
+
+  try {
+    loading.value = true;
+    const user = await $client.user.getBasicUserByEmail.query({
+      email: userData.value.email,
+    });
+    if (user) {
+      const msg = 'Email already exists.';
+      userDataErrors.value.email = msg;
+      toast({
+        title: 'Uh oh! Something went wrong.',
+        description: msg,
+        variant: 'destructive',
+      });
+      loading.value = false;
+      return;
+    }
+  } catch (err) {
+    loading.value = false;
+  }
+
   await authClient.emailOtp.sendVerificationOtp(
     {
-      email: formData.value.email,
+      email: userData.value.email,
       type: 'sign-in',
     },
     {
@@ -72,19 +89,19 @@ const handleVerifyOtp = async () => {
 
   await authClient.signIn.emailOtp(
     {
-      email: formData.value.email,
+      email: userData.value.email,
       otp: otp.value,
     },
     {
       onSuccess: async () => {
         await authClient.updateUser(
           {
-            name: formData.value.name,
+            name: userData.value.name,
           },
           {
             onSuccess: () => {
               toast({
-                title: `Welcome, ${formData.value.name}!`,
+                title: `Welcome, ${userData.value.name}!`,
               });
               props.onSuccess ? props.onSuccess() : {};
             },
@@ -136,13 +153,13 @@ const handleVerifyOtp = async () => {
           <Label for="first-name">What's your name?</Label>
           <Input
             id="first-name"
-            v-model="formData.name"
+            v-model="userData.name"
             placeholder="Max"
             @blur="validateField('name')"
             required
           />
-          <p v-if="formErrors.name" class="text-red-500 text-xs">
-            {{ formErrors.name }}
+          <p v-if="userDataErrors.name" class="text-red-500 text-xs">
+            {{ userDataErrors.name }}
           </p>
         </div>
         <div class="grid gap-2">
@@ -150,13 +167,13 @@ const handleVerifyOtp = async () => {
           <Input
             id="email"
             type="email"
-            v-model="formData.email"
+            v-model="userData.email"
             placeholder="m@example.com"
             @blur="validateField('email')"
             required
           />
-          <p v-if="formErrors.email" class="text-red-500 text-xs">
-            {{ formErrors.email }}
+          <p v-if="userDataErrors.email" class="text-red-500 text-xs">
+            {{ userDataErrors.email }}
           </p>
         </div>
         <LoadingButton

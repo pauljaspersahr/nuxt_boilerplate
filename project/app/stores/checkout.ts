@@ -1,6 +1,7 @@
 import type { DefineComponent } from 'vue';
 import SignUpOTP from '~/components/SignUpOTP.vue';
 import StripeEmbed from '~/components/StripeEmbed.vue';
+import { z } from 'zod';
 
 type Step = {
   breadcrumb: string;
@@ -20,6 +21,14 @@ export const useCheckoutStore = defineStore('checkout', () => {
 
   const index_ = ref(0);
   const completed = ref(false);
+
+  const signUpSchema = z.object({
+    name: z.string().min(1, 'Name is required'),
+    email: z.string().email('Invalid email address'),
+  });
+
+  const { formData, formErrors, validateField, isValid } =
+    useFormValidation(signUpSchema);
 
   const component = computed(() => {
     const step = steps.value[index_.value];
@@ -47,5 +56,9 @@ export const useCheckoutStore = defineStore('checkout', () => {
     completed,
     incrementStep,
     goToStep,
+    userData: formData,
+    userDataErrors: formErrors,
+    validateField,
+    isValid,
   };
 });

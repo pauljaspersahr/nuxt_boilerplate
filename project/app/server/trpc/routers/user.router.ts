@@ -10,6 +10,6 @@ export const userRouter = router({
   getBasicUserByEmail: publicProcedure
     .input(z.object({ email: z.string().email() }))
     .query(async ({ input }) => {
-      return UserService.getBasicUserByEmail(input.email);
+      return await UserService.getBasicUserByEmail(input.email);
     }),
 });
