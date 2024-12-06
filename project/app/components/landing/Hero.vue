@@ -109,11 +109,11 @@ const props = defineProps({
   },
   primaryButtonLink: {
     type: String,
-    default: '/',
+    default: '#pricing',
   },
   primaryButtonText: {
     type: String,
-    default: 'Get this template',
+    default: 'Get this access',
   },
   primaryButtonIcon: {
     type: String,

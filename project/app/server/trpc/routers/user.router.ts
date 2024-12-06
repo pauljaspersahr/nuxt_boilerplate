@@ -12,4 +12,14 @@ export const userRouter = router({
     .query(async ({ input }) => {
       return await UserService.getBasicUserByEmail(input.email);
     }),
+  isUserByEmail: publicProcedure
+    .input(z.object({ email: z.string().email() }))
+    .query(async ({ input }) => {
+      try {
+        await UserService.getBasicUserByEmail(input.email);
+        return true;
+      } catch (err) {
+        return false;
+      }
+    }),
 });

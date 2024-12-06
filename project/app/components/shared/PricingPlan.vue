@@ -6,7 +6,7 @@
     ]"
   >
     <CardHeader>
-      <CardTitle>{{ title }}</CardTitle>
+      <CardTitle>{{ name }}</CardTitle>
       <CardDescription>{{ description }}</CardDescription>
     </CardHeader>
     <CardContent>
@@ -39,20 +39,11 @@
       </div>
     </CardContent>
     <CardFooter class="flex flex-col justify-between px-6 pb-6 gap-2">
-      <Checkout :planName="props.title" />
-      <!-- <NuxtLink
-        :to="props.paymentUrl"
-        :class="[
-          cn(
-            buttonVariants({
-              variant: featured ? 'default' : 'secondary',
-              size: 'lg',
-            }),
-          ),
-          'w-full cursor-pointer',
-        ]"
-        >Get this template</NuxtLink
-      > -->
+      <Checkout
+        v-if="props.showButton"
+        :planName="props.name"
+        :featured="props.featured"
+      />
       <p class="text-sm text-center text-muted-foreground">
         {{ subtext }}
       </p>
@@ -69,12 +60,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { buttonVariants } from '~/components/ui/button';
 import { Icon } from '@iconify/vue';
 
 const props = defineProps({
-  title: {
+  name: {
     type: String,
     required: true,
   },
@@ -109,6 +98,10 @@ const props = defineProps({
   subtext: {
     type: String,
     required: true,
+  },
+  showButton: {
+    type: Boolean,
+    default: true,
   },
 });
 </script>

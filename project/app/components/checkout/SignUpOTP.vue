@@ -37,10 +37,10 @@ const handleSendVerificationOtp = async () => {
 
   try {
     loading.value = true;
-    const user = await $client.user.getBasicUserByEmail.query({
+    const isUser = await $client.user.isUserByEmail.query({
       email: userData.value.email,
     });
-    if (user) {
+    if (isUser) {
       const msg = 'Email already exists.';
       userDataErrors.value.email = msg;
       toast({

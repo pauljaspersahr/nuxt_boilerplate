@@ -21,7 +21,7 @@
       <PricingPlan
         v-for="(plan, index) in displayedPlans"
         :key="index"
-        :title="plan.title"
+        :name="plan.name"
         :description="plan.description"
         :oldPrice="plan.oldPrice"
         :newPrice="plan.newPrice"
@@ -40,7 +40,7 @@ import PricingPlan from '@/components/shared/PricingPlan.vue';
 import { PRICING_PLANS } from '@/config/pricing';
 
 const displayedPlans = PRICING_PLANS.map((plan) => ({
-  title: plan.name,
+  name: plan.name,
   description: plan.description,
   oldPrice: `${plan.old_price}€`,
   newPrice: `${plan.price}€`,

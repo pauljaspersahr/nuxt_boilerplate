@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import { VisuallyHidden } from 'radix-vue';
 import BreadcumbSteps from '~/components/shared/BreadcrumbSteps.vue';
+import StripeEmbed from '~/components/checkout/StripeEmbed.vue';
+import SignUp from '~/components/checkout/SignUp.vue';
+
+const props = defineProps<{ planName: string; featured?: boolean }>();
 
 const store = useCheckoutStore();
-
-const props = defineProps<{ planName: string }>();
-
 const { nStep, steps, step, selectedPlan } = storeToRefs(store);
 const { goToStep, incrementStep } = store;
 
-selectedPlan.value = props.planName;
-
-import SignUpOTP from '~/components/SignUpOTP.vue';
-import StripeEmbed from '~/components/StripeEmbed.vue';
+const onSelect = () => {
+  selectedPlan.value = props.planName;
+};
 
 const component = computed(() => {
   if ('signup' === step.value.name) {
     return {
-      component: markRaw(SignUpOTP),
-      props: { onSuccess: () => incrementStep() },
+      component: markRaw(SignUp),
     };
   }
   if ('checkout' === step.value.name) {
@@ -31,7 +30,13 @@ const component = computed(() => {
 <template>
   <Dialog>
     <DialogTrigger as-child>
-      <Button variant="default"> Share </Button>
+      <Button
+        @click="onSelect"
+        :variant="props.featured ? 'default' : 'secondary'"
+        size="lg"
+      >
+        Share
+      </Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-4xl sm:h-[700px] h-full">
       <DialogHeader class="flex items-center">
@@ -45,12 +50,9 @@ const component = computed(() => {
           @step-click="goToStep"
         />
       </DialogHeader>
-
-      <component
-        :is="component.component"
-        v-bind="component.props"
-        class="w-full"
-      />
+      <div class="grid py-4 overflow-y-auto px-6">
+        <component :is="component.component" class="w-full" />
+      </div>
 
       <DialogFooter>
         <Button

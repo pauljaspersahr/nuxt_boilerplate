@@ -5,10 +5,10 @@ async function main() {
   // Upsert all plans from PRICING_PLANS
   for (const [_, plan] of Object.entries(PRICING_PLANS)) {
     await prisma_app_client.plan.upsert({
-      where: { name: plan.name },
+      where: { name: plan.title },
       update: {},
       create: {
-        name: plan.name,
+        name: plan.title,
         description: plan.description,
         duration_days: plan.duration_days,
         price: plan.price,
@@ -22,7 +22,7 @@ async function main() {
         subtext: plan.subtext,
       },
     });
-    console.log(`Upserted plan: ${plan.name}`);
+    console.log(`Upserted plan: ${plan.title}`);
     console.log(plan);
   }
 }
