@@ -22,7 +22,7 @@
             {{ signUpText }}
           </div>
         </NuxtLink>
-        <Checkout />
+        <Checkout planName="Free Trial" />
       </div>
     </div>
   </header>

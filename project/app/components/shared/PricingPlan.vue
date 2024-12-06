@@ -1,7 +1,7 @@
 <template>
   <Card
     :class="[
-      featured ? 'scale-[1.1] border-black dark:border-white' : '',
+      featured ? 'scale-[1.0] border-black dark:border-white' : '',
       'rounded-xl',
     ]"
   >
@@ -39,7 +39,8 @@
       </div>
     </CardContent>
     <CardFooter class="flex flex-col justify-between px-6 pb-6 gap-2">
-      <NuxtLink
+      <Checkout :planName="props.title" />
+      <!-- <NuxtLink
         :to="props.paymentUrl"
         :class="[
           cn(
@@ -51,7 +52,7 @@
           'w-full cursor-pointer',
         ]"
         >Get this template</NuxtLink
-      >
+      > -->
       <p class="text-sm text-center text-muted-foreground">
         {{ subtext }}
       </p>

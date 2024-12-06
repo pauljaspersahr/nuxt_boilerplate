@@ -1,26 +1,28 @@
 import type { DefineComponent } from 'vue';
-import SignUpOTP from '~/components/SignUpOTP.vue';
-import StripeEmbed from '~/components/StripeEmbed.vue';
+import { defineStore } from 'pinia';
+import { markRaw, ref, computed, type Ref } from 'vue';
 import { z } from 'zod';
 
 type Step = {
-  breadcrumb: string;
-  comp: DefineComponent<any, any, any>;
-  props?: Record<string, any>;
+  name: string;
+  description: string;
 };
 
 export const useCheckoutStore = defineStore('checkout', () => {
   const steps: Ref<Step[]> = ref([
     {
-      breadcrumb: 'Your details',
-      comp: markRaw(SignUpOTP),
-      props: { onSuccess: () => incrementStep() },
+      name: 'signup',
+      description: 'Your details',
     },
-    { breadcrumb: 'Checkout', comp: markRaw(StripeEmbed) },
+    {
+      name: 'checkout',
+      description: 'Checkout',
+    },
   ]);
 
-  const index_ = ref(0);
+  const nStep = ref(0);
   const completed = ref(false);
+  const selectedPlan = ref('');
 
   const signUpSchema = z.object({
     name: z.string().min(1, 'Name is required'),
@@ -30,29 +32,26 @@ export const useCheckoutStore = defineStore('checkout', () => {
   const { formData, formErrors, validateField, isValid } =
     useFormValidation(signUpSchema);
 
-  const component = computed(() => {
-    const step = steps.value[index_.value];
-    return {
-      component: step.comp,
-      props: step.props || {},
-    };
+  const step = computed(() => {
+    return steps.value[nStep.value];
   });
+
   function incrementStep() {
-    if (index_.value < steps.value.length - 1) {
-      index_.value++;
+    if (nStep.value < steps.value.length - 1) {
+      nStep.value++;
     }
   }
 
   function goToStep(index: number) {
     if (index >= 0 && index < steps.value.length) {
-      index_.value = index;
+      nStep.value = index;
     }
   }
 
   return {
     steps,
-    index: index_,
-    component,
+    nStep,
+    step,
     completed,
     incrementStep,
     goToStep,
@@ -60,5 +59,6 @@ export const useCheckoutStore = defineStore('checkout', () => {
     userDataErrors: formErrors,
     validateField,
     isValid,
+    selectedPlan,
   };
 });

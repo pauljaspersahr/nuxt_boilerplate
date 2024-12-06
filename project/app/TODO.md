@@ -18,7 +18,7 @@
 - [x] server side auth client
 - [x] update to better-auth 1.0
 - [x] add OTP support (basic signup impl. done. bug in better-auth 0.8, signin missing)
-- [ ] remove password signup and login
+- [x] remove password signup and login
 - [ ] add github signin
 - [ ] add email rate limit in auth client and timeout in ui
 

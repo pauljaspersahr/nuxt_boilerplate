@@ -4,8 +4,28 @@ import BreadcumbSteps from '~/components/shared/BreadcrumbSteps.vue';
 
 const store = useCheckoutStore();
 
-const { index, steps, component } = storeToRefs(store);
-const { goToStep } = store;
+const props = defineProps<{ planName: string }>();
+
+const { nStep, steps, step, selectedPlan } = storeToRefs(store);
+const { goToStep, incrementStep } = store;
+
+selectedPlan.value = props.planName;
+
+import SignUpOTP from '~/components/SignUpOTP.vue';
+import StripeEmbed from '~/components/StripeEmbed.vue';
+
+const component = computed(() => {
+  if ('signup' === step.value.name) {
+    return {
+      component: markRaw(SignUpOTP),
+      props: { onSuccess: () => incrementStep() },
+    };
+  }
+  if ('checkout' === step.value.name) {
+    return { component: markRaw(StripeEmbed) };
+  }
+  return {};
+});
 </script>
 
 <template>
@@ -13,15 +33,15 @@ const { goToStep } = store;
     <DialogTrigger as-child>
       <Button variant="default"> Share </Button>
     </DialogTrigger>
-    <DialogContent class="sm:max-w-md sm:h-[600px] h-full">
+    <DialogContent class="sm:max-w-4xl sm:h-[700px] h-full">
       <DialogHeader class="flex items-center">
         <VisuallyHidden>
           <DialogTitle> Enter Your Information</DialogTitle>
           <DialogDescription> Signup and Checkout Form</DialogDescription>
         </VisuallyHidden>
         <BreadcumbSteps
-          :steps="steps.map((step) => step.breadcrumb)"
-          :currentIndex="index"
+          :steps="steps.map((step) => step.description)"
+          :currentIndex="nStep"
           @step-click="goToStep"
         />
       </DialogHeader>
@@ -34,15 +54,15 @@ const { goToStep } = store;
 
       <DialogFooter>
         <Button
-          v-if="index > 0"
-          @click="goToStep(index - 1)"
+          v-if="nStep > 0"
+          @click="goToStep(nStep - 1)"
           variant="secondary"
         >
           Previous
         </Button>
         <Button
-          v-if="index < steps.length - 1"
-          @click="goToStep(index + 1)"
+          v-if="nStep < steps.length - 1"
+          @click="goToStep(nStep + 1)"
           variant="default"
         >
           Next
