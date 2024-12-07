@@ -25,8 +25,7 @@ const { toast } = useToast();
 
 const checkoutStore = useCheckoutStore();
 
-const { userData, userDataErrors, isValid, loggedIn } =
-  storeToRefs(checkoutStore);
+const { userData, userDataErrors, isValid } = storeToRefs(checkoutStore);
 const { validateField } = checkoutStore;
 
 const handleSendVerificationOtp = async () => {
@@ -102,7 +101,6 @@ const handleVerifyOtp = async () => {
               toast({
                 title: `Welcome, ${userData.value.name}!`,
               });
-              loggedIn.value = true;
             },
             onError: (ctx) => {
               toast({
@@ -183,7 +181,7 @@ const handleVerifyOtp = async () => {
           :onClick="handleSendVerificationOtp"
         />
         <div v-if="otpSent" class="grid gap-2 text-center">
-          <Label for="pin-input">Enter the code</Label>
+          <Label for="pin-input">Code sent to your email</Label>
           <div class="flex justify-center">
             <PinInput
               id="pin-input"

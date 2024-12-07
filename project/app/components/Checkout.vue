@@ -34,8 +34,9 @@ const component = computed(() => {
         @click="onSelect"
         :variant="props.featured ? 'default' : 'secondary'"
         size="lg"
+        class="w-full"
       >
-        Share
+        Get Access
       </Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-4xl sm:h-[700px] h-full">
