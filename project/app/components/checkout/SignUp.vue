@@ -5,24 +5,29 @@ import SignUpOTP from '@/components/checkout/SignUpOTP.vue';
 import Details from '@/components/checkout/Details.vue';
 import { Separator } from '@/components/ui/separator';
 
-import { authClient } from '~/lib/auth.client';
+const checkoutStore = useCheckoutStore();
+const { selectedPlan } = storeToRefs(checkoutStore);
 
-const { data: session } = await authClient.useSession(useFetch);
-const loggedIn = computed(() => !!session.value);
-
-const store = useCheckoutStore();
-const { incrementStep } = store;
-
-const { selectedPlan } = storeToRefs(store);
+const userStore = useUserStore();
+const { init } = userStore;
+const { user } = storeToRefs(userStore);
 
 const plan =
   PRICING_PLANS.find((item) => item.name === selectedPlan.value) ||
   PRICING_PLANS[1];
+
+onMounted(async () => {
+  await init();
+});
+const loggedIn = computed(() => !!user.value);
 </script>
 
 <template>
+  <div v-if="loggedIn" class="flex items-center justify-center">
+    <Details />
+  </div>
   <div
-    v-if="!loggedIn"
+    v-else
     class="flex flex-col sm:flex-row items-center w-full align-middle justify-center"
   >
     <PricingPlan
@@ -40,12 +45,6 @@ const plan =
     />
 
     <Separator orientation="vertical" class="hidden sm:block" />
-    <SignUpOTP
-      :onSuccess="incrementStep"
-      class="sm:ml-8 m-0 p-0 w-full border-none"
-    />
-  </div>
-  <div v-else class="flex items-center justify-center">
-    <Details />
+    <SignUpOTP class="sm:ml-8 m-0 p-0 w-full border-none" />
   </div>
 </template>

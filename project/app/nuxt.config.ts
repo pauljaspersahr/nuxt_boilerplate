@@ -105,5 +105,8 @@ export default defineNuxtConfig({
     preset: 'aws-lambda',
   },
   pages: true,
+  vue: {
+    propsDestructure: true,
+  },
   compatibilityDate: '2024-10-21',
 });

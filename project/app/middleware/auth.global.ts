@@ -36,13 +36,11 @@ declare module 'vue-router' {
 export default defineNuxtRouteMiddleware(async (to) => {
   log.info('🔒 Auth middleware running for path:', to.path);
 
-  // Skip middleware for the home page `/`
   if (to.path === '/') {
     log.info('🏠 Skipping auth middleware for home page');
     return;
   }
 
-  // If auth is disabled, skip middleware
   if (to.meta?.auth === false) {
     log.info('🔓 Auth disabled for this route, skipping middleware');
     return;
@@ -53,9 +51,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   const { only, redirectUserTo, redirectGuestTo } = defu(to.meta?.auth);
 
-  // If guest mode, redirect if authenticated
   if (only === 'guest' && loggedIn.value) {
-    // Avoid infinite redirect
     log.info('🚫 Guest-only route accessed while authenticated');
 
     if (to.path === redirectUserTo) {
@@ -68,16 +64,13 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   const { publicRoutes } = useRuntimeConfig().public;
 
-  // Allow public routes for unauthenticated users
   if (!loggedIn.value && publicRoutes.includes(to.path)) {
     log.info('✅ Allowing access to public route');
     return;
   }
 
-  // If not authenticated, redirect to home
   if (!loggedIn.value) {
     log.info('🚫 Unauthenticated user attempting to access protected route');
-    // Avoid infinite redirect
     if (to.path === redirectGuestTo) {
       log.info('↩️ Avoiding infinite redirect');
       return;

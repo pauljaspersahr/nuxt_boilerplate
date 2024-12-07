@@ -16,8 +16,6 @@ import {
 } from '@/components/ui/pin-input';
 import { authClient } from '~/lib/auth.client';
 
-const props = defineProps<{ onSuccess?: () => void }>();
-
 const loading = ref(false);
 const otpArray = ref<string[]>([]);
 const otp = computed(() => otpArray.value.join(''));
@@ -25,10 +23,11 @@ const otpSent = ref(false);
 
 const { toast } = useToast();
 
-const store = useCheckoutStore();
+const checkoutStore = useCheckoutStore();
 
-const { userData, userDataErrors, isValid } = storeToRefs(store);
-const { validateField } = store;
+const { userData, userDataErrors, isValid, loggedIn } =
+  storeToRefs(checkoutStore);
+const { validateField } = checkoutStore;
 
 const handleSendVerificationOtp = async () => {
   if (loading.value) return;
@@ -103,7 +102,7 @@ const handleVerifyOtp = async () => {
               toast({
                 title: `Welcome, ${userData.value.name}!`,
               });
-              props.onSuccess ? props.onSuccess() : {};
+              loggedIn.value = true;
             },
             onError: (ctx) => {
               toast({

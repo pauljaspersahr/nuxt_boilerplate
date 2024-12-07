@@ -17,12 +17,6 @@
             {{ signInText }}
           </div>
         </NuxtLink>
-        <NuxtLink :to="signUpLink">
-          <div :class="buttonVariants({ variant: 'default' })">
-            {{ signUpText }}
-          </div>
-        </NuxtLink>
-        <Checkout planName="Free Trial" />
       </div>
     </div>
   </header>

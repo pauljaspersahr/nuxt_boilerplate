@@ -1,7 +1,7 @@
-import type { DefineComponent } from 'vue';
 import { defineStore } from 'pinia';
-import { markRaw, ref, computed, type Ref } from 'vue';
+import { ref, computed, type Ref } from 'vue';
 import { z } from 'zod';
+import { authClient } from '~/lib/auth.client';
 
 type Step = {
   name: string;
@@ -21,16 +21,16 @@ export const useCheckoutStore = defineStore('checkout', () => {
   ]);
 
   const nStep = ref(0);
+  const maxStep = ref(0);
   const completed = ref(false);
   const selectedPlan = ref('');
 
-  const signUpSchema = z.object({
-    name: z.string().min(1, 'Name is required'),
-    email: z.string().email('Invalid email address'),
-  });
-
-  const { formData, formErrors, validateField, isValid } =
-    useFormValidation(signUpSchema);
+  const { formData, formErrors, validateField, isValid } = useFormValidation(
+    z.object({
+      name: z.string().min(1, 'Name is required'),
+      email: z.string().email('Invalid email address'),
+    }),
+  );
 
   const step = computed(() => {
     return steps.value[nStep.value];
@@ -48,9 +48,25 @@ export const useCheckoutStore = defineStore('checkout', () => {
     }
   }
 
+  const userStore = useUserStore();
+  const { user } = storeToRefs(userStore);
+  watch(
+    user,
+    (newValue) => {
+      if (newValue !== null) {
+        nStep.value = 1;
+        maxStep.value = 1;
+      } else {
+        nStep.value = 0;
+        maxStep.value = 0;
+      }
+    },
+    { immediate: true },
+  );
   return {
     steps,
     nStep,
+    maxStep,
     step,
     completed,
     incrementStep,

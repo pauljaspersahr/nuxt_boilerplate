@@ -7,8 +7,8 @@ import SignUp from '~/components/checkout/SignUp.vue';
 const props = defineProps<{ planName: string; featured?: boolean }>();
 
 const store = useCheckoutStore();
-const { nStep, steps, step, selectedPlan } = storeToRefs(store);
-const { goToStep, incrementStep } = store;
+const { nStep, steps, step, selectedPlan, maxStep } = storeToRefs(store);
+const { goToStep } = store;
 
 const onSelect = () => {
   selectedPlan.value = props.planName;
@@ -46,7 +46,8 @@ const component = computed(() => {
         </VisuallyHidden>
         <BreadcumbSteps
           :steps="steps.map((step) => step.description)"
-          :currentIndex="nStep"
+          :currentStep="nStep"
+          :maxClickableStep="maxStep"
           @step-click="goToStep"
         />
       </DialogHeader>
@@ -54,22 +55,7 @@ const component = computed(() => {
         <component :is="component.component" class="w-full" />
       </div>
 
-      <DialogFooter>
-        <Button
-          v-if="nStep > 0"
-          @click="goToStep(nStep - 1)"
-          variant="secondary"
-        >
-          Previous
-        </Button>
-        <Button
-          v-if="nStep < steps.length - 1"
-          @click="goToStep(nStep + 1)"
-          variant="default"
-        >
-          Next
-        </Button>
-      </DialogFooter>
+      <DialogFooter> </DialogFooter>
     </DialogContent>
   </Dialog>
 </template>

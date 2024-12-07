@@ -3,19 +3,20 @@
     <BreadcrumbList>
       <BreadcrumbItem v-for="(step, index) in steps" :key="index">
         <BreadcrumbSeparator v-if="index > 0" />
-        <BreadcrumbPage v-if="index === currentIndex">
+        <BreadcrumbPage v-if="index === currentStep">
           {{ step }}
         </BreadcrumbPage>
         <BreadcrumbLink
-          v-else-if="index < currentIndex"
-          @click.prevent="index < currentIndex && $emit('step-click', index)"
+          v-else
+          @click.prevent="$emit('step-click', index)"
           class="cursor-pointer"
         >
           {{ step }}
         </BreadcrumbLink>
-        <BreadcrumbLink v-else>
+        <!-- <BreadcrumbLink v-else>
+          v-else-if="index <= currentStep"
           {{ step }}
-        </BreadcrumbLink>
+        </BreadcrumbLink> -->
       </BreadcrumbItem>
     </BreadcrumbList>
   </Breadcrumb>
@@ -33,8 +34,10 @@ import {
 
 const props = defineProps<{
   steps: Array<string>;
-  currentIndex: number;
+  currentStep: number;
+  maxClickableStep: number;
 }>();
+console.log('props.maxClickableStep', props.maxClickableStep);
 
 const emits = defineEmits(['step-click']);
 </script>
