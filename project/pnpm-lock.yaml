@@ -36,6 +36,9 @@ importers:
       '@pinia/nuxt':
         specifier: 0.8.0
         version: 0.8.0(magicast@0.3.5)(pinia@2.2.8(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)))(rollup@4.27.2)
+      '@stripe/stripe-js':
+        specifier: ^5.2.0
+        version: 5.2.0
       '@trpc/client':
         specifier: ^10.45.2
         version: 10.45.2(@trpc/server@10.45.2)
@@ -1749,6 +1752,10 @@ packages:
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
+
+  '@stripe/stripe-js@5.2.0':
+    resolution: {integrity: sha512-2ZpEaezx3S0QPtnske175NDaLvUvaVKd4ePHpUN0QF/uV4BBBBRUy5BvQONDym+utbbW0QhSJoiRPnp4FS+4Vg==}
+    engines: {node: '>=12.16'}
 
   '@stylistic/eslint-plugin@2.10.1':
     resolution: {integrity: sha512-U+4yzNXElTf9q0kEfnloI9XbOyD4cnEQCxjUI94q0+W++0GAEQvJ/slwEj9lwjDHfGADRSr+Tco/z0XJvmDfCQ==}
@@ -7700,6 +7707,8 @@ snapshots:
   '@sindresorhus/merge-streams@2.3.0': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
+
+  '@stripe/stripe-js@5.2.0': {}
 
   '@stylistic/eslint-plugin@2.10.1(eslint@9.15.0(jiti@2.4.0))(typescript@5.6.3)':
     dependencies:

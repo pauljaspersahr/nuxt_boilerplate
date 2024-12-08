@@ -12,6 +12,7 @@
 
 - [x] setup domain in resend and namecheap
 - [x] use resend sdk and vue mail to send emails
+- [ ] go trough nuxt config for api key
 
 ## auth
 

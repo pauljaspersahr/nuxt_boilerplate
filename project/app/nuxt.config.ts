@@ -76,12 +76,13 @@ export default defineNuxtConfig({
     initialPlanName: 'Free Trial',
     initialPlanActiveMonths: 1,
     public: {
-      siteUrl: process.env.SITE_URL || 'http://localhost:3000',
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
       auth: {
         redirectUserTo: '/dashboard',
         redirectGuestTo: '/',
       },
       publicRoutes: publicRoutes,
+      stripeKey: process.env.NUXT_PUBLIC_STRIPE_KEY,
     },
   },
   gtag: {

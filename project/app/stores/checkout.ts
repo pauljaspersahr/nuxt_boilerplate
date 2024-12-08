@@ -1,15 +1,13 @@
 import { defineStore } from 'pinia';
-import { ref, computed, type Ref } from 'vue';
 import { z } from 'zod';
-import { authClient } from '~/lib/auth.client';
 
-type Step = {
+export type Step = {
   name: string;
   description: string;
 };
 
 export const useCheckoutStore = defineStore('checkout', () => {
-  const steps: Ref<Step[]> = ref([
+  const steps = ref<Step[]>([
     {
       name: 'signup',
       description: 'Your details',

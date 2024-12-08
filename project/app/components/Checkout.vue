@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { VisuallyHidden } from 'radix-vue';
 import BreadcumbSteps from '~/components/shared/BreadcrumbSteps.vue';
-import StripeEmbed from '~/components/checkout/StripeEmbed.vue';
+import StripeEmbed from '~/components/checkout/Stripe.vue';
 import SignUp from '~/components/checkout/SignUp.vue';
+import type { Step } from '~/stores/checkout';
 
 const props = defineProps<{ planName: string; featured?: boolean }>();
 
@@ -46,7 +47,7 @@ const component = computed(() => {
           <DialogDescription> Signup and Checkout Form</DialogDescription>
         </VisuallyHidden>
         <BreadcumbSteps
-          :steps="steps.map((step) => step.description)"
+          :steps="steps.map((step: Step) => step.description)"
           :currentStep="nStep"
           :maxClickableStep="maxStep"
           @step-click="goToStep"
