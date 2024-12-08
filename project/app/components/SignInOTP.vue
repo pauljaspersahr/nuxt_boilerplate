@@ -7,6 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -15,32 +22,34 @@ import {
   PinInputInput,
 } from '@/components/ui/pin-input';
 import { authClient } from '~/lib/auth.client';
+import { toTypedSchema } from '@vee-validate/zod';
+import { useForm } from 'vee-validate';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
+import * as z from 'zod';
 
-import { z } from 'zod';
+const { toast } = useToast();
 
 const loading = ref(false);
 const otpArray = ref<string[]>([]);
 const otp = computed(() => otpArray.value.join(''));
 const otpSent = ref(false);
 
-const { toast } = useToast();
-
-// Form validation
-const signInSchema = z.object({
-  email: z.string().email('Invalid email address'),
+const { handleSubmit, values, meta } = useForm({
+  validationSchema: toTypedSchema(
+    z.object({
+      email: z.string().email('Invalid email address'),
+    }),
+  ),
 });
 
-const { formData, formErrors, validateField, isValid } =
-  useFormValidation(signInSchema);
-
-const handleSendVerificationOtp = async () => {
+const onSubmit = handleSubmit(async (values) => {
   if (loading.value) return;
 
-  loading.value = true;
   try {
+    loading.value = true;
     const { $client } = useNuxtApp();
     await $client.user.getBasicUserByEmail.query({
-      email: formData.value.email,
+      email: values.email,
     });
   } catch (error) {
     toast({
@@ -51,9 +60,10 @@ const handleSendVerificationOtp = async () => {
     loading.value = false;
     return;
   }
+
   await authClient.emailOtp.sendVerificationOtp(
     {
-      email: formData.value.email,
+      email: values.email,
       type: 'sign-in',
     },
     {
@@ -70,17 +80,22 @@ const handleSendVerificationOtp = async () => {
           variant: 'destructive',
         });
       },
+      onRequest: () => {
+        loading.value = true;
+      },
+      onResponse: () => {
+        loading.value = false;
+      },
     },
   );
-  loading.value = false;
-};
+});
 
 const handleVerifyOtp = async () => {
   if (loading.value) return;
 
   await authClient.signIn.emailOtp(
     {
-      email: formData.value.email,
+      email: values.email,
       otp: otp.value,
     },
     {
@@ -117,51 +132,52 @@ const handleVerifyOtp = async () => {
       </CardDescription>
     </CardHeader>
     <CardContent>
-      <div class="grid gap-4">
-        <div class="grid gap-2">
-          <Label for="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            v-model="formData.email"
-            placeholder="m@example.com"
-            @blur="validateField('email')"
-            required
-          />
-          <p v-if="formErrors.email" class="text-red-500 text-xs">
-            {{ formErrors.email }}
-          </p>
-        </div>
-        <LoadingButton
-          :loading="loading"
-          :enableOn="isValid"
-          buttonText="Login"
-          loadingText="Sending verification code..."
-          :onClick="handleSendVerificationOtp"
-        />
-        <div v-if="otpSent" class="grid gap-2 text-center">
-          <Label for="pin-input">Enter the code</Label>
-          <div class="flex justify-center">
-            <PinInput
-              id="pin-input"
-              v-model="otpArray"
-              placeholder="○"
-              @complete="handleVerifyOtp"
-              class="text-black"
-            >
-              <PinInputGroup>
-                <PinInputInput
-                  v-for="(id, index) in 5"
-                  :key="id"
-                  :index="index"
-                />
-              </PinInputGroup>
-            </PinInput>
-          </div>
-        </div>
+      <form @submit="onSubmit" class="space-y-4">
+        <FormField v-slot="{ componentField }" name="email">
+          <FormItem v-auto-animate>
+            <FormLabel>Email</FormLabel>
+            <FormControl>
+              <Input
+                type="email"
+                placeholder="m@example.com"
+                v-bind="componentField"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
 
-        <!-- <Button variant="outline" class="w-full">Sign up with Google</Button> -->
+        <LoadingButton
+          type="submit"
+          :loading="loading"
+          :enableOn="meta.valid"
+          :onClick="onSubmit"
+          :buttonText="otpSent ? 'Send code again' : 'Send Login Code'"
+          loadingText="Sending login code..."
+        />
+      </form>
+
+      <div v-if="otpSent" class="grid gap-2 mt-4 text-center">
+        <Label for="pin-input">Code sent to your email</Label>
+        <div class="flex justify-center">
+          <PinInput
+            id="pin-input"
+            v-model="otpArray"
+            placeholder="○"
+            @complete="handleVerifyOtp"
+            class="text-black"
+          >
+            <PinInputGroup>
+              <PinInputInput
+                v-for="(id, index) in 5"
+                :key="id"
+                :index="index"
+              />
+            </PinInputGroup>
+          </PinInput>
+        </div>
       </div>
+
       <div class="mt-4 text-center text-sm">
         Don't have an account?
         <a href="/#pricing" class="underline">Sign up</a>

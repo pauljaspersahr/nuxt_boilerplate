@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 import { z } from 'zod';
+import { toTypedSchema } from '@vee-validate/zod';
+import { useForm } from 'vee-validate';
 
 export type Step = {
   name: string;
@@ -18,18 +20,19 @@ export const useCheckoutStore = defineStore('checkout', () => {
     },
   ]);
 
+  const formValues = ref({
+    name: '',
+    email: '',
+  });
   const nStep = ref(0);
   const maxStep = ref(0);
   const completed = ref(false);
   const selectedPlan = ref('');
 
-  const { formData, formErrors, validateField, isValid } = useFormValidation(
-    z.object({
-      name: z.string().min(1, 'Name is required'),
-      email: z.string().email('Invalid email address'),
-    }),
-  );
-
+  const setFormValues = (values: typeof formValues.value) => {
+    console.log(values);
+    Object.assign(formValues.value, values);
+  };
   const step = computed(() => {
     return steps.value[nStep.value];
   });
@@ -69,10 +72,8 @@ export const useCheckoutStore = defineStore('checkout', () => {
     completed,
     incrementStep,
     goToStep,
-    userData: formData,
-    userDataErrors: formErrors,
-    validateField,
-    isValid,
     selectedPlan,
+    formValues,
+    setFormValues,
   };
 });

@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     '@nuxt/test-utils/module',
     'nuxt-aos',
     '@pinia/nuxt',
+    '@formkit/auto-animate/nuxt',
   ],
   ssr: true,
   // routeRules: {
