@@ -4,6 +4,10 @@ import {
   type StripeElements,
   loadStripe,
 } from '@stripe/stripe-js';
+import { useForm } from 'vee-validate';
+import { toTypedSchema } from '@vee-validate/zod';
+import * as z from 'zod';
+import { vAutoAnimate } from '@formkit/auto-animate/vue';
 
 const router = useRouter();
 
@@ -12,6 +16,17 @@ const config = useRuntimeConfig();
 let stripe: Stripe | null;
 let loading = ref(true);
 let elements: StripeElements;
+
+const checkoutStore = useCheckoutStore();
+const { formValues } = storeToRefs(checkoutStore);
+const { handleSubmit, values, meta } = useForm({
+  validationSchema: toTypedSchema(
+    z.object({
+      email: z.string().email(),
+    }),
+  ),
+  initialValues: formValues.value.email,
+});
 
 onMounted(async () => {
   console.log('loading stripe');
@@ -31,16 +46,13 @@ onMounted(async () => {
   loading.value = false;
 });
 
-const handleSubmit = async (e: Event) => {
+const onSubmit = handleSubmit(async (values) => {
   if (loading.value) return;
   if (!stripe || !elements) {
     // Stripe.js hasn't yet loaded.
     return;
   }
   loading.value = true;
-  const { name, email, address, city, state, zip } = Object.fromEntries(
-    new FormData(e.target as HTMLFormElement),
-  );
 
   // Create payment intents first and grab secret
   try {
@@ -62,16 +74,16 @@ const handleSubmit = async (e: Event) => {
       elements,
       clientSecret,
       confirmParams: {
-        receipt_email: email as string,
+        receipt_email: values.email,
         shipping: {
           address: {
-            city: city as string,
-            line1: address as string,
-            state: state as string,
-            postal_code: zip as string,
+            city: 'Reno',
+            line1: '1234 Sycamore Street',
+            state: 'Nevada',
+            postal_code: '89523',
             country: 'US',
           },
-          name: name as string,
+          name: 'John Doe',
         },
         return_url: 'https://main.d2wvufylq5bmja.amplifyapp.com/success',
       },
@@ -90,40 +102,30 @@ const handleSubmit = async (e: Event) => {
     router.push('/error');
     loading.value = false;
   }
-};
+});
 </script>
 <template>
-  <form @submit.prevent="handleSubmit">
-    <fieldset :class="{ dis: loading }" class="fields">
-      <Label for="name_field">Name</Label>
-      <Input placeholder="Jane Doe" type="text" name="name" id="name_field" />
-      <Label for="email_field">Email</Label>
-      <Input
-        placeholder="jane.doe@example.com "
-        type="email"
-        name="email"
-        id="email_field"
-      />
-      <Label for="address_field">Address</Label>
-      <Input
-        placeholder="1234 Sycamore Street"
-        type="text"
-        name="address"
-        id="address_field"
-      />
-      <Label for="city_field">City</Label>
-      <Input placeholder="Reno" type="text" name="city" id="city_field" />
-      <Label for="state_field">State</Label>
-      <Input placeholder="Nevada" type="text" name="state" id="state_field" />
-      <Label for="zip_field">Zip</Label>
-      <Input placeholder="89523" type="text" name="zip" id="zip_field" />
-      <Label for="email_field">Credit Card</Label>
-      <div id="payment-element" />
-    </fieldset>
-    <div class="">
-      <button type="submit" :class="{ dis: loading }">
-        {{ loading ? 'Loading...' : 'Pay $19.99' }}
-      </button>
-    </div>
+  <form @submit="onSubmit" class="space-y-4">
+    <FormField v-slot="{ componentField }" name="email">
+      <FormItem v-auto-animate>
+        <FormLabel>Email</FormLabel>
+        <FormControl>
+          <Input
+            type="email"
+            placeholder="Enter your email"
+            v-bind="componentField"
+          />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    </FormField>
+    <div id="payment-element" />
+    <LoadingButton
+      :loading="loading"
+      :enableOn="meta.valid"
+      :onClick="onSubmit"
+      buttonText="Pay now"
+      loadingText="Processing payment..."
+    />
   </form>
 </template>
