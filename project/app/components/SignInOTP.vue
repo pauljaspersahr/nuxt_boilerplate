@@ -148,7 +148,6 @@ const handleVerifyOtp = async () => {
         </FormField>
 
         <LoadingButton
-          type="submit"
           :loading="loading"
           :enableOn="meta.valid"
           :onClick="onSubmit"

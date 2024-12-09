@@ -34,6 +34,9 @@ const checkoutStore = useCheckoutStore();
 const { formValues } = storeToRefs(checkoutStore);
 const { setFormValues } = checkoutStore;
 
+const userStore = useUserStore();
+const { init } = userStore;
+
 const { handleSubmit, values, meta } = useForm({
   validationSchema: toTypedSchema(
     z.object({
@@ -114,23 +117,26 @@ const onSubmit = handleSubmit(async (values) => {
 
 const handleVerifyOtp = async () => {
   if (loading.value) return;
+  console.log('otp', otp.value);
+  console.log('values', formValues.value);
 
   await authClient.signIn.emailOtp(
     {
-      email: values.email,
+      email: formValues.value.email,
       otp: otp.value,
     },
     {
       onSuccess: async () => {
         await authClient.updateUser(
           {
-            name: values.name,
+            name: formValues.value.name,
           },
           {
             onSuccess: () => {
               toast({
-                title: `Welcome, ${values.name}!`,
+                title: `Welcome, ${formValues.value.name}!`,
               });
+              init();
             },
             onError: (ctx) => {
               toast({
@@ -175,46 +181,43 @@ const handleVerifyOtp = async () => {
       </CardDescription>
     </CardHeader>
     <CardContent>
-      <div v-if="!otpSent">
-        <form @submit="onSubmit" class="space-y-4">
-          <FormField v-slot="{ componentField }" name="name">
-            <FormItem v-auto-animate>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input
-                  type="text"
-                  placeholder="Enter your name"
-                  v-bind="componentField"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          </FormField>
+      <form @submit="onSubmit" class="space-y-4">
+        <FormField v-slot="{ componentField }" name="name">
+          <FormItem v-auto-animate>
+            <FormLabel>Name</FormLabel>
+            <FormControl>
+              <Input
+                type="text"
+                placeholder="Enter your name"
+                v-bind="componentField"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
 
-          <FormField v-slot="{ componentField }" name="email">
-            <FormItem v-auto-animate>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  v-bind="componentField"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          </FormField>
+        <FormField v-slot="{ componentField }" name="email">
+          <FormItem v-auto-animate>
+            <FormLabel>Email</FormLabel>
+            <FormControl>
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                v-bind="componentField"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
 
-          <LoadingButton
-            type="submit"
-            :loading="loading"
-            :enableOn="meta.valid"
-            :onClick="onSubmit"
-            :buttonText="otpSent ? 'Send code again' : 'Send Verification Code'"
-            loadingText="Sending verification code..."
-          />
-        </form>
-      </div>
+        <LoadingButton
+          :loading="loading"
+          :enableOn="meta.valid"
+          :onClick="onSubmit"
+          :buttonText="otpSent ? 'Send code again' : 'Send Verification Code'"
+          loadingText="Sending verification code..."
+        />
+      </form>
 
       <div v-if="otpSent" class="grid gap-2 mt-4 text-center">
         <Label for="pin-input">Code sent to your email</Label>

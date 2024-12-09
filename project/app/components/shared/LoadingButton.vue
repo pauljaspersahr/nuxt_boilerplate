@@ -31,7 +31,7 @@ const {
   enableOn?: boolean;
   buttonText?: string;
   loadingText?: string;
-  onClick: () => void;
+  onClick?: () => void;
   class?: HTMLAttributes['class'];
 }>();
 </script>

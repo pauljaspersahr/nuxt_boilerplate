@@ -32,9 +32,9 @@ const { incrementStep } = checkoutStore;
       <Separator class="mb-8" />
 
       <div class="grid items-center justify-center w-full gap-4">
-        <p class="text-lg text-center">{{ user?.email }}</p>
         <CheckCircle2 :size="74" color="green" />
       </div>
+      <p class="text-lg m-4 text-center">{{ user?.email }}</p>
 
       <Separator class="mt-8" />
     </CardContent>

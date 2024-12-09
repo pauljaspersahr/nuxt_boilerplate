@@ -1,7 +1,4 @@
 import { defineStore } from 'pinia';
-import { z } from 'zod';
-import { toTypedSchema } from '@vee-validate/zod';
-import { useForm } from 'vee-validate';
 
 export type Step = {
   name: string;
