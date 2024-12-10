@@ -41,7 +41,9 @@ const component = computed(() => {
         Get Access
       </Button>
     </DialogTrigger>
-    <DialogContent class="sm:max-w-6xl sm:h-[700px] h-full">
+    <DialogContent
+      class="sm:max-w-[95%] sm:w-[1000px] sm:max-h-[95hv] sm:h-[min(1000px,95vh)] h-full"
+    >
       <DialogHeader class="flex items-center">
         <VisuallyHidden>
           <DialogTitle> Enter Your Information</DialogTitle>

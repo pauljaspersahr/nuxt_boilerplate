@@ -122,17 +122,17 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 <template>
   <div
-    class="flex flex-col sm:flex-row items-center w-full align-middle justify-center"
+    class="flex flex-col sm:grid sm:grid-cols-[1fr_00px_1fr] items-center w-full sm:content-center sm:gap-4"
   >
-    <div class="flex flex-col items-center sm:items-end sm:mr-4">
-      <SelectedPlan />
+    <div class="flex flex-col items-center sm:items-end">
+      <SelectedPlan class="sm:mr-8 max-w-sm mb-8" />
     </div>
     <Separator
       orientation="vertical"
-      class="hidden sm:block h-full self-stretch mx-8"
+      class="hidden sm:block h-full self-stretch mx-auto"
     />
-    <div class="flex flex-col sm:ml-4">
-      <Card class="mx-auto max-w-sm">
+    <div class="flex flex-col">
+      <Card class="sm:ml-8 max-w-sm">
         <CardHeader>
           <CardTitle class="text-xl">Payment</CardTitle>
           <VisuallyHidden>
