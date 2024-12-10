@@ -19,17 +19,9 @@
       :class="`container flex flex-col max-w-4xl md:grid md:grid-cols-3 w-full justify-center items-center gap-8`"
     >
       <PricingPlan
-        v-for="(plan, index) in displayedPlans"
+        v-for="(plan, index) in PRICING_PLANS"
         :key="index"
-        :name="plan.name"
-        :description="plan.description"
-        :oldPrice="plan.oldPrice"
-        :newPrice="plan.newPrice"
-        :paymentUrl="plan.paymentUrl"
-        :features="plan.features"
-        :notFeatures="plan.notFeatures"
-        :featured="plan.featured"
-        :subtext="plan.subtext"
+        :plan="plan"
       />
     </div>
   </section>
@@ -38,18 +30,6 @@
 <script setup lang="ts">
 import PricingPlan from '@/components/shared/PricingPlan.vue';
 import { PRICING_PLANS } from '@/config/pricing';
-
-const displayedPlans = PRICING_PLANS.map((plan) => ({
-  name: plan.name,
-  description: plan.description,
-  oldPrice: `${plan.old_price}€`,
-  newPrice: `${plan.price}€`,
-  features: plan.features,
-  notFeatures: plan.not_features,
-  paymentUrl: plan.stripe_payment_url,
-  featured: plan.featured,
-  subtext: plan.subtext,
-}));
 
 const props = defineProps({
   sectionId: {

@@ -31,7 +31,7 @@ import { vAutoAnimate } from '@formkit/auto-animate/vue';
 const { toast } = useToast();
 
 const checkoutStore = useCheckoutStore();
-const { formValues, selectedPlan } = storeToRefs(checkoutStore);
+const { formValues } = storeToRefs(checkoutStore);
 const { setFormValues } = checkoutStore;
 
 const userStore = useUserStore();

@@ -1,24 +1,24 @@
 <template>
   <Card
     :class="[
-      featured ? 'scale-[1.0] border-black dark:border-white' : '',
+      plan.featured ? 'scale-[1.0] border-black dark:border-white' : '',
       'rounded-xl',
     ]"
   >
     <CardHeader>
-      <CardTitle>{{ name }}</CardTitle>
-      <CardDescription>{{ description }}</CardDescription>
+      <CardTitle>{{ plan.name }}</CardTitle>
+      <CardDescription>{{ plan.description }}</CardDescription>
     </CardHeader>
     <CardContent>
       <div class="flex text-left font-semibold leading-6 items-end mb-6">
         <span class="mr-2 text-muted-foreground/80 line-through text-xl">{{
-          oldPrice
+          `${plan.old_price}€`
         }}</span>
-        <span class="text-4xl">{{ newPrice }}</span>
+        <span class="text-4xl">{{ `${plan.price}€` }}</span>
       </div>
       <div class="flex flex-col gap-3">
         <div
-          v-for="(feature, index) in features"
+          v-for="(feature, index) in plan.features"
           :key="index"
           class="flex text-muted-foreground text-sm"
         >
@@ -26,7 +26,7 @@
           <span class="truncate">{{ feature }}</span>
         </div>
         <div
-          v-for="(feature, index) in notFeatures"
+          v-for="(feature, index) in plan.not_features"
           :key="index"
           class="flex text-muted-foreground text-sm"
         >
@@ -39,13 +39,9 @@
       </div>
     </CardContent>
     <CardFooter class="flex flex-col justify-between px-6 pb-6 gap-2">
-      <Checkout
-        v-if="props.showButton"
-        :planName="props.name"
-        :featured="props.featured"
-      />
+      <Checkout v-if="showButton" :plan="plan" />
       <p class="text-sm text-center text-muted-foreground">
-        {{ subtext }}
+        {{ plan.subtext }}
       </p>
     </CardFooter>
   </Card>
@@ -61,47 +57,10 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Icon } from '@iconify/vue';
+import { type BasicPlanNoId } from '~/lib/services/service.types';
 
-const props = defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  oldPrice: {
-    type: String,
-    required: true,
-  },
-  newPrice: {
-    type: String,
-    required: true,
-  },
-  paymentUrl: {
-    type: String,
-    required: true,
-  },
-  features: {
-    type: Array,
-    required: true,
-  },
-  notFeatures: {
-    type: Array,
-    required: false,
-  },
-  featured: {
-    type: Boolean,
-    default: false,
-  },
-  subtext: {
-    type: String,
-    required: true,
-  },
-  showButton: {
-    type: Boolean,
-    default: true,
-  },
-});
+const { plan, showButton = true } = defineProps<{
+  plan: BasicPlanNoId;
+  showButton?: Boolean;
+}>();
 </script>

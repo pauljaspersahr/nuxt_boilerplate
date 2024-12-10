@@ -26,12 +26,24 @@ pnpm sst remove
 
 remove infrastructure
 
-# Prisma
+# App
 
-## better-auth generate
+## Prisma
+
+### better-auth generate
 
 ```bash
 cd /project/app && npx @better-auth/cli generate --config=lib/auth.config.ts
 ```
 
 generates prisma schema from better-auth
+
+## Stripe
+
+### setup webhook for testing
+
+```bash
+stripe login
+
+stripe listen --forward-to localhost:3000/api/stripe/webhook
+```

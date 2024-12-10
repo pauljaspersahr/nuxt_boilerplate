@@ -4,15 +4,16 @@ import BreadcumbSteps from '~/components/shared/BreadcrumbSteps.vue';
 import StripeEmbed from '~/components/checkout/Stripe.vue';
 import SignUp from '~/components/checkout/SignUp.vue';
 import type { Step } from '~/stores/checkout';
+import type { BasicPlanNoId } from '@/lib/services/service.types';
 
-const props = defineProps<{ planName: string; featured?: boolean }>();
+const props = defineProps<{ plan: BasicPlanNoId }>();
 
 const store = useCheckoutStore();
 const { nStep, steps, step, selectedPlan, maxStep } = storeToRefs(store);
 const { goToStep } = store;
 
 const onSelect = () => {
-  selectedPlan.value = props.planName;
+  selectedPlan.value = props.plan;
 };
 
 const component = computed(() => {
@@ -33,14 +34,14 @@ const component = computed(() => {
     <DialogTrigger as-child>
       <Button
         @click="onSelect"
-        :variant="props.featured ? 'default' : 'secondary'"
+        :variant="props.plan.featured ? 'default' : 'secondary'"
         size="lg"
         class="w-full"
       >
         Get Access
       </Button>
     </DialogTrigger>
-    <DialogContent class="sm:max-w-4xl sm:h-[700px] h-full">
+    <DialogContent class="sm:max-w-6xl sm:h-[700px] h-full">
       <DialogHeader class="flex items-center">
         <VisuallyHidden>
           <DialogTitle> Enter Your Information</DialogTitle>

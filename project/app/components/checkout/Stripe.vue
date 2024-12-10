@@ -6,12 +6,20 @@ import {
   type StripeElements,
   loadStripe,
 } from '@stripe/stripe-js';
+import LoadingButton from '~/components/shared/LoadingButton.vue';
+import { toTypedSchema } from '@vee-validate/zod';
+import { useForm } from 'vee-validate';
 import { vAutoAnimate } from '@formkit/auto-animate/vue';
+import * as z from 'zod';
+import { VisuallyHidden } from 'radix-vue';
 
 const router = useRouter();
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
 const { init } = userStore;
+
+const checkoutStore = useCheckoutStore();
+const { selectedPlan } = storeToRefs(checkoutStore);
 
 const config = useRuntimeConfig();
 
@@ -20,6 +28,19 @@ let loading = ref(true);
 let elements: StripeElements;
 
 const colorMode = useColorMode();
+
+const { handleSubmit, values, meta, setFieldError } = useForm({
+  validationSchema: toTypedSchema(
+    z.object({
+      name: z.string().min(2).max(50),
+      email: z.string().email(),
+    }),
+  ),
+  initialValues: {
+    name: user.value?.display_name || '',
+    email: user.value?.email || '',
+  },
+});
 
 onMounted(async () => {
   init();
@@ -32,18 +53,26 @@ onMounted(async () => {
   elements = stripe!.elements({
     mode: 'payment',
     amount: 1999,
-    currency: 'usd',
+    currency: 'eur',
     appearance: {
       theme: colorMode.value === 'dark' ? 'night' : 'stripe',
     },
   });
-  const paymentElement = elements.create('payment');
+
+  const paymentElement = elements.create('payment', {
+    // defaultValues: {
+    //   billingDetails: {
+    //     email: user.value?.email || '',
+    //     name: user.value?.display_name || '',
+    //   },
+    // },
+  });
   paymentElement.mount('#payment-element');
 
   loading.value = false;
 });
 
-const handleSubmit = async () => {
+const onSubmit = handleSubmit(async (values) => {
   if (loading.value) return;
   if (!stripe || !elements) {
     // Stripe.js hasn't yet loaded.
@@ -53,9 +82,9 @@ const handleSubmit = async () => {
 
   // Create payment intents first and grab secret
   try {
-    const { data: response } = await useFetch('/stripePurchase', {
+    const { data: response } = await useFetch('/api/stripe/payment', {
       method: 'POST',
-      body: { productID: 'prod_JfGkdfBBEv5KCi' },
+      body: { productID: selectedPlan.value?.stripe_product_id },
     });
     console.log('response', response);
     const { secret: clientSecret } = response.value;
@@ -71,18 +100,8 @@ const handleSubmit = async () => {
       elements,
       clientSecret,
       confirmParams: {
-        receipt_email: user.value?.email,
-        shipping: {
-          address: {
-            city: 'Reno',
-            line1: '1234 Sycamore Street',
-            state: 'Nevada',
-            postal_code: '89523',
-            country: 'US',
-          },
-          name: 'John Doe',
-        },
-        return_url: 'https://main.d2wvufylq5bmja.amplifyapp.com/success',
+        receipt_email: values.email,
+        return_url: `${config.public.siteUrl}/dashboard`,
       },
       // Uncomment below if you only want redirect for redirect-based payments
       // redirect: "if_required",
@@ -99,7 +118,7 @@ const handleSubmit = async () => {
     router.push('/error');
     loading.value = false;
   }
-};
+});
 </script>
 <template>
   <div
@@ -116,30 +135,57 @@ const handleSubmit = async () => {
       <Card class="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle class="text-xl">Payment</CardTitle>
-          <CardDescription>
-            Enter your information to finish checkout
-          </CardDescription>
+          <VisuallyHidden>
+            <CardDescription>
+              Enter your information to finish checkout
+            </CardDescription>
+          </VisuallyHidden>
         </CardHeader>
         <CardContent>
           <div class="grid w-full max-w-sm items-center gap-1.5">
-            <Label for="email">Email</Label>
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              :defaultValue="user?.email"
-              disabled
-            />
+            <FormField v-slot="{ componentField }" name="email">
+              <FormItem v-auto-animate>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    v-bind="componentField"
+                    disabled
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
+
+            <form @submit="onSubmit" class="space-y-4">
+              <FormField v-slot="{ componentField }" name="name">
+                <FormItem v-auto-animate>
+                  <FormLabel>Name on Card</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="Enter your name"
+                      v-bind="componentField"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              </FormField>
+            </form>
           </div>
 
           <div class="mt-4" id="payment-element" />
+        </CardContent>
+        <CardFooter>
           <LoadingButton
             :loading="loading"
-            :enableOn="true"
-            :onClick="handleSubmit"
+            :enableOn="!loading"
+            :onClick="onSubmit"
             buttonText="Pay now"
             loadingText="Processing payment..."
           />
-        </CardContent>
+        </CardFooter>
       </Card>
     </div>
   </div>

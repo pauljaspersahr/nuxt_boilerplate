@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import type { BasicPlanNoId } from '@/lib/services/service.types';
 
 export type Step = {
   name: string;
@@ -24,7 +25,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
   const nStep = ref(0);
   const maxStep = ref(0);
   const completed = ref(false);
-  const selectedPlan = ref('');
+  const selectedPlan = ref<BasicPlanNoId | null>(null);
 
   const setFormValues = ({
     email,
