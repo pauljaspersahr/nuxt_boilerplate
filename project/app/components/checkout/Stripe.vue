@@ -1,15 +1,17 @@
 <script setup lang="ts">
+import SelectedPlan from '@/components/checkout/SelectedPlan.vue';
+import { Separator } from '@/components/ui/separator';
 import {
   type Stripe,
   type StripeElements,
   loadStripe,
 } from '@stripe/stripe-js';
-import { useForm } from 'vee-validate';
-import { toTypedSchema } from '@vee-validate/zod';
-import * as z from 'zod';
 import { vAutoAnimate } from '@formkit/auto-animate/vue';
 
 const router = useRouter();
+const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
+const { init } = userStore;
 
 const config = useRuntimeConfig();
 
@@ -17,18 +19,10 @@ let stripe: Stripe | null;
 let loading = ref(true);
 let elements: StripeElements;
 
-const checkoutStore = useCheckoutStore();
-const { formValues } = storeToRefs(checkoutStore);
-const { handleSubmit, values, meta } = useForm({
-  validationSchema: toTypedSchema(
-    z.object({
-      email: z.string().email(),
-    }),
-  ),
-  initialValues: { email: formValues.value.email },
-});
+const colorMode = useColorMode();
 
 onMounted(async () => {
+  init();
   console.log('loading stripe');
   console.log('config', config.public.stripeKey);
   stripe = await loadStripe(config.public.stripeKey as string);
@@ -39,6 +33,9 @@ onMounted(async () => {
     mode: 'payment',
     amount: 1999,
     currency: 'usd',
+    appearance: {
+      theme: colorMode.value === 'dark' ? 'night' : 'stripe',
+    },
   });
   const paymentElement = elements.create('payment');
   paymentElement.mount('#payment-element');
@@ -46,7 +43,7 @@ onMounted(async () => {
   loading.value = false;
 });
 
-const onSubmit = handleSubmit(async (values) => {
+const handleSubmit = async () => {
   if (loading.value) return;
   if (!stripe || !elements) {
     // Stripe.js hasn't yet loaded.
@@ -74,7 +71,7 @@ const onSubmit = handleSubmit(async (values) => {
       elements,
       clientSecret,
       confirmParams: {
-        receipt_email: values.email,
+        receipt_email: user.value?.email,
         shipping: {
           address: {
             city: 'Reno',
@@ -102,30 +99,48 @@ const onSubmit = handleSubmit(async (values) => {
     router.push('/error');
     loading.value = false;
   }
-});
+};
 </script>
 <template>
-  <form @submit="onSubmit" class="space-y-4">
-    <FormField v-slot="{ componentField }" name="email">
-      <FormItem v-auto-animate>
-        <FormLabel>Email</FormLabel>
-        <FormControl>
-          <Input
-            type="email"
-            placeholder="Enter your email"
-            v-bind="componentField"
-          />
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    </FormField>
-    <div id="payment-element" />
-    <LoadingButton
-      :loading="loading"
-      :enableOn="meta.valid"
-      :onClick="onSubmit"
-      buttonText="Pay now"
-      loadingText="Processing payment..."
+  <div
+    class="flex flex-col sm:flex-row items-center w-full align-middle justify-center"
+  >
+    <div class="flex flex-col items-center sm:items-end sm:mr-4">
+      <SelectedPlan />
+    </div>
+    <Separator
+      orientation="vertical"
+      class="hidden sm:block h-full self-stretch mx-8"
     />
-  </form>
+    <div class="flex flex-col sm:ml-4">
+      <Card class="mx-auto max-w-sm">
+        <CardHeader>
+          <CardTitle class="text-xl">Payment</CardTitle>
+          <CardDescription>
+            Enter your information to finish checkout
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div class="grid w-full max-w-sm items-center gap-1.5">
+            <Label for="email">Email</Label>
+            <Input
+              type="email"
+              placeholder="Enter your email"
+              :defaultValue="user?.email"
+              disabled
+            />
+          </div>
+
+          <div class="mt-4" id="payment-element" />
+          <LoadingButton
+            :loading="loading"
+            :enableOn="true"
+            :onClick="handleSubmit"
+            buttonText="Pay now"
+            loadingText="Processing payment..."
+          />
+        </CardContent>
+      </Card>
+    </div>
+  </div>
 </template>
