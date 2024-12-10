@@ -25,7 +25,7 @@ const { handleSubmit, values, meta } = useForm({
       email: z.string().email(),
     }),
   ),
-  initialValues: formValues.value.email,
+  initialValues: { email: formValues.value.email },
 });
 
 onMounted(async () => {

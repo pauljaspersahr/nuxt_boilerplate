@@ -37,7 +37,7 @@ const { setFormValues } = checkoutStore;
 const userStore = useUserStore();
 const { init } = userStore;
 
-const { handleSubmit, values, meta } = useForm({
+const { handleSubmit, values, meta, setFieldError } = useForm({
   validationSchema: toTypedSchema(
     z.object({
       name: z.string().min(2).max(50),
@@ -55,8 +55,7 @@ const otpSent = ref(false);
 watch(
   values,
   (newValues) => {
-    const plainValues = { ...newValues };
-    setFormValues(plainValues);
+    setFormValues(newValues);
   },
   { deep: true },
 );
@@ -73,7 +72,7 @@ const onSubmit = handleSubmit(async (values) => {
     });
     if (isUser) {
       const msg = 'Email already exists.';
-      form.setFieldError('email', msg);
+      setFieldError('email', msg);
       toast({
         title: 'Uh oh! Something went wrong.',
         description: msg,

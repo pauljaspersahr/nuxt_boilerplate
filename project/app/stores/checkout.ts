@@ -26,9 +26,15 @@ export const useCheckoutStore = defineStore('checkout', () => {
   const completed = ref(false);
   const selectedPlan = ref('');
 
-  const setFormValues = (values: typeof formValues.value) => {
-    console.log(values);
-    Object.assign(formValues.value, values);
+  const setFormValues = ({
+    email,
+    name,
+  }: {
+    email?: string;
+    name?: string;
+  }) => {
+    if (email) formValues.value.email = email;
+    if (name) formValues.value.name = name;
   };
   const step = computed(() => {
     return steps.value[nStep.value];
