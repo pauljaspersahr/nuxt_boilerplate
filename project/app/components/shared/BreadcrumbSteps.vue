@@ -6,6 +6,9 @@
         <BreadcrumbPage v-if="index === currentStep">
           {{ step }}
         </BreadcrumbPage>
+        <BreadcrumbLink v-else-if="index > maxClickableStep">
+          {{ step }}
+        </BreadcrumbLink>
         <BreadcrumbLink
           v-else
           @click.prevent="$emit('step-click', index)"
@@ -13,10 +16,6 @@
         >
           {{ step }}
         </BreadcrumbLink>
-        <!-- <BreadcrumbLink v-else>
-          v-else-if="index <= currentStep"
-          {{ step }}
-        </BreadcrumbLink> -->
       </BreadcrumbItem>
     </BreadcrumbList>
   </Breadcrumb>
@@ -37,7 +36,6 @@ const props = defineProps<{
   currentStep: number;
   maxClickableStep: number;
 }>();
-console.log('props.maxClickableStep', props.maxClickableStep);
 
 const emits = defineEmits(['step-click']);
 </script>
