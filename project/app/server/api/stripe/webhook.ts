@@ -1,7 +1,9 @@
 import Stripe from 'stripe';
 //https://github.com/vercel/next.js/blob/canary/examples/with-stripe-typescript/pages/api/webhooks/index.ts
+import log from '~/lib/logger';
 
 export default defineEventHandler(async (event) => {
+  log.info('stripe webhook');
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
     // https://github.com/stripe/stripe-node#configuration
     // apiVersion: "2022-11-15"
@@ -24,18 +26,18 @@ export default defineEventHandler(async (event) => {
 
   switch (hookEvent.type) {
     case 'payment_intent.created':
-      console.log('payment_intent.created');
+      log.info('payment_intent.created');
       break;
     case 'payment_intent.succeeded':
       const intentSucceeded = hookEvent.data.object;
-      console.log('payment_intent.succeeded', intentSucceeded);
+      log.info('payment_intent.succeeded', intentSucceeded);
       break;
     case 'charge.succeeded':
       const chargeSucceeded = hookEvent.data.object;
-      console.log('charge was successful!', chargeSucceeded);
+      log.info('charge was successful!', chargeSucceeded);
       break;
     //   // ... handle other event types
     default:
-      console.log(`Unhandled event type ${hookEvent.type}`);
+      log.trace(`Unhandled event type ${hookEvent.type}`);
   }
 });

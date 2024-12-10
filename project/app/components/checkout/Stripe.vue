@@ -12,6 +12,7 @@ import { useForm } from 'vee-validate';
 import { vAutoAnimate } from '@formkit/auto-animate/vue';
 import * as z from 'zod';
 import { VisuallyHidden } from 'radix-vue';
+import log from '~/lib/logger';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -22,6 +23,8 @@ const checkoutStore = useCheckoutStore();
 const { selectedPlan } = storeToRefs(checkoutStore);
 
 const config = useRuntimeConfig();
+
+const { toast } = useToast();
 
 let stripe: Stripe | null;
 let loading = ref(true);
@@ -44,11 +47,11 @@ const { handleSubmit, values, meta, setFieldError } = useForm({
 
 onMounted(async () => {
   init();
-  console.log('loading stripe');
-  console.log('config', config.public.stripeKey);
+  log.info('loading stripe');
+  log.info('config', config.public.stripeKey);
   stripe = await loadStripe(config.public.stripeKey as string);
   // elements
-  console.log('stripe', stripe);
+  log.info('stripe', stripe);
 
   elements = stripe!.elements({
     mode: 'payment',
@@ -86,13 +89,18 @@ const onSubmit = handleSubmit(async (values) => {
       method: 'POST',
       body: { productID: selectedPlan.value?.stripe_product_id },
     });
-    console.log('response', response);
+    log.info('response', response);
     const { secret: clientSecret } = response.value;
 
     const { error: submitError } = await elements.submit();
     if (submitError) {
-      console.log('error submit');
+      log.error('error submit');
       loading.value = false;
+      toast({
+        title: 'Uh oh! Something went wrong.',
+        description: submitError.message,
+        variant: 'destructive',
+      });
       return;
     }
 
@@ -111,10 +119,10 @@ const onSubmit = handleSubmit(async (values) => {
     if (error.type === 'card_error' || error.type === 'validation_error') {
       router.push('/error');
     } else {
-      console.log('great');
+      log.info('great');
     }
   } catch (error) {
-    console.log('error', error);
+    log.error('error', error);
     router.push('/error');
     loading.value = false;
   }

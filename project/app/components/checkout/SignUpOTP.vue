@@ -24,9 +24,9 @@ import {
 } from '@/components/ui/form';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
-import { computed, ref } from 'vue';
 import * as z from 'zod';
 import { vAutoAnimate } from '@formkit/auto-animate/vue';
+import log from '~/lib/logger';
 
 const { toast } = useToast();
 
