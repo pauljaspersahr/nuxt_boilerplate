@@ -19,16 +19,16 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@formkit/auto-animate/nuxt',
   ],
-  ssr: true,
-  // routeRules: {
-  //   ...publicRoutes.reduce(
-  //     (acc, route) => ({
-  //       ...acc,
-  //       [route]: { prerender: true },
-  //     }),
-  //     {},
-  //   ),
-  // },
+  ssr: false,
+  routeRules: {
+    ...publicRoutes.reduce(
+      (acc, route) => ({
+        ...acc,
+        [route]: { prerender: true },
+      }),
+      {},
+    ),
+  },
   shadcn: {
     /**
      * Prefix for all the imported component

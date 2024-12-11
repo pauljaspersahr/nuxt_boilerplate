@@ -1,12 +1,6 @@
 <script setup lang="ts">
-definePageMeta({
-  auth: {
-    only: 'user',
-    redirectGuestTo: '/',
-  },
-});
 const { $client } = useNuxtApp();
-const { user } = await $client.user.getUser.query();
+const { data: user } = await $client.user.getUser.useQuery();
 </script>
 
 <template>

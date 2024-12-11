@@ -33,14 +33,23 @@ declare module 'vue-router' {
   }
 }
 
+const defaultAuthConfig: MiddlewareOptions = {
+  only: 'user',
+  redirectGuestTo: '/',
+  redirectUserTo: '/dashboard',
+};
+
 export default defineNuxtRouteMiddleware(async (to) => {
   log.info('🔒 Auth middleware running for path:', to.path);
 
-  if (to.path === '/') {
-    log.info('🏠 Skipping auth middleware for home page');
+  // Skip auth check for public routes
+  const { publicRoutes } = useRuntimeConfig().public;
+  if (publicRoutes.includes(to.path)) {
+    log.info('✅ Allowing access to public route');
     return;
   }
 
+  // Explicitly disabled auth
   if (to.meta?.auth === false) {
     log.info('🔓 Auth disabled for this route, skipping middleware');
     return;
@@ -49,7 +58,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const { data: session } = await authClient.useSession(useFetch);
   const loggedIn = computed(() => !!session.value);
 
-  const { only, redirectUserTo, redirectGuestTo } = defu(to.meta?.auth);
+  // Merge route's auth config with defaults
+  const authConfig = defu(to.meta?.auth || {}, defaultAuthConfig);
+  const { only, redirectUserTo, redirectGuestTo } = authConfig;
 
   if (only === 'guest' && loggedIn.value) {
     log.info('🚫 Guest-only route accessed while authenticated');
@@ -60,13 +71,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
     }
     log.info('➡️ Redirecting authenticated user to:', redirectUserTo);
     return navigateTo(redirectUserTo);
-  }
-
-  const { publicRoutes } = useRuntimeConfig().public;
-
-  if (!loggedIn.value && publicRoutes.includes(to.path)) {
-    log.info('✅ Allowing access to public route');
-    return;
   }
 
   if (!loggedIn.value) {
