@@ -7,7 +7,7 @@ export const useUserStore = defineStore('user', () => {
   const init = async () => {
     if (user.value) return;
     const { $client } = useNuxtApp();
-    const { user: user_ } = await $client.user.getUser.query();
+    const { user: user_ } = await $client.user.getBasicUser.query();
     if (user_) user.value = user_;
   };
 

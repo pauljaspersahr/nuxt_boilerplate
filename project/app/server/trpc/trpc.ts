@@ -59,24 +59,5 @@ export const memberProcedure = authedProcedure.use(({ next, ctx }) => {
   return next({ ctx });
 });
 
-// Premium members only
-export const premiumProcedure = memberProcedure.use(async ({ next, ctx }) => {
-  const membership = await ctx.membershipService.getMembershipByUserId(
-    ctx.user.id,
-  );
-  if (PLAN_TIER.PREMIUM !== membership.plan.tier) {
-    throw new TRPCError({
-      code: 'FORBIDDEN',
-      message: 'Premium access required',
-    });
-  }
-  return next({
-    ctx: {
-      ...ctx,
-      membership,
-    },
-  });
-});
-
 export const router = t.router;
 export const middleware = t.middleware;

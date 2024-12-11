@@ -69,22 +69,35 @@ export namespace MembershipService {
     return prisma_app_client.plan.findMany();
   }
 
-  export async function upsertMembership(
+  export async function createMembership(
     user_id: string,
     stripe_customer_id: string,
     plan_id: string,
   ): Promise<BasicMembership> {
-    return await prisma_app_client.membership.upsert({
-      where: {
-        user_id: user_id,
-      },
-      create: {
+    const plan = await getPlanById(plan_id);
+
+    return await prisma_app_client.membership.create({
+      data: {
         user_id: user_id,
         stripe_customer_id: stripe_customer_id,
         plan_id: plan_id,
+        max_project_token: plan.project_token,
       },
-      update: {
+    });
+  }
+
+  export async function updateMembership(
+    user_id: string,
+    plan_id: string,
+  ): Promise<BasicMembership> {
+    const membership = await getMembershipByUserId(user_id);
+    const plan = await getPlanById(plan_id);
+
+    return await prisma_app_client.membership.update({
+      where: { user_id: user_id },
+      data: {
         plan_id: plan_id,
+        max_project_token: membership.max_project_token + plan.project_token,
       },
     });
   }

@@ -82,18 +82,14 @@ const onSubmit = handleSubmit(async (values) => {
     return;
   }
   loading.value = true;
+  const { $client } = useNuxtApp();
 
   // Create payment intents first and grab secret
   try {
-    const { data: response } = await useFetch('/api/stripe/payment', {
-      method: 'POST',
-      body: {
-        product_id: selectedPlan.value?.stripe_product_id,
-        mail: user.value?.email,
-      },
+    const { secret } = await $client.stripe.createPaymentIntent.mutate({
+      product_id: selectedPlan.value?.stripe_product_id,
+      mail: user.value?.email,
     });
-    log.info('response', response);
-    const { secret: clientSecret } = response.value;
 
     const { error: submitError } = await elements.submit();
     if (submitError) {
@@ -109,7 +105,7 @@ const onSubmit = handleSubmit(async (values) => {
 
     const { error } = await stripe.confirmPayment({
       elements,
-      clientSecret,
+      clientSecret: secret,
       confirmParams: {
         receipt_email: values.email,
         return_url: `${config.public.siteUrl}/dashboard`,

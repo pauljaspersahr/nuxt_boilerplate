@@ -1,9 +1,8 @@
 import Stripe from 'stripe';
-//https://github.com/vercel/next.js/blob/canary/examples/with-stripe-typescript/pages/api/webhooks/index.ts
 import log from '~/lib/logger';
 import { MembershipService } from '~/lib/services/membership.service';
 import { UserService } from '~/lib/services/user.service';
-import type { BasicPlan, User, Membership } from '~/lib/services/service.types';
+import type { BasicPlan, BasicMembership } from '~/lib/services/service.types';
 
 export default defineEventHandler(async (event) => {
   log.info('stripe webhook hit');
@@ -43,7 +42,7 @@ export default defineEventHandler(async (event) => {
         if (!customerEmail) {
           throw new Error('Customer does not have an email address');
         }
-        log.info('customer email:', customerEmail);
+        log.info(customerEmail, 'customer email:');
 
         const productId = paymentIntent.metadata.product_id;
         if (!productId) {
@@ -51,22 +50,29 @@ export default defineEventHandler(async (event) => {
             'Payment Intent does not have a product_id in metadata',
           );
         }
-        log.info('product_id:', productId);
+        log.info(productId, 'product_id:');
         const plan: BasicPlan =
           await MembershipService.getBasicPlanByProductId(productId);
 
-        log.info('plan:', plan);
+        log.info(plan, 'plan:');
 
         const user = await UserService.getUserByEmail(customerEmail);
-        log.info('user:', user);
+        log.info(user, 'user:');
 
-        const membership = await MembershipService.upsertMembership(
-          user.id,
-          customerId.toString(),
-          plan.id,
-        );
-
-        log.info('Updated user Membership to', membership);
+        if (!user.membership) {
+          const membership = await MembershipService.createMembership(
+            user.id,
+            customerId.toString(),
+            plan.id,
+          );
+          log.info(membership, 'Created user Membership to');
+        } else {
+          const membership = await MembershipService.updateMembership(
+            user.id,
+            plan.id,
+          );
+          log.info(membership, 'Updated user Membership to');
+        }
       } catch (err) {
         log.error(err);
       } finally {
@@ -75,29 +81,29 @@ export default defineEventHandler(async (event) => {
 
     case 'invoice.payment_succeeded':
       const invoice = hookEvent.data.object as Stripe.Invoice;
-      log.info('Subscription invoice payment succeeded:', invoice);
+      log.info(invoice, 'Subscription invoice payment succeeded:');
       // Handle successful subscription payment (e.g., extend subscription)
       break;
 
     case 'customer.subscription.created':
       const subscriptionCreated = hookEvent.data.object as Stripe.Subscription;
-      log.info('Subscription created:', subscriptionCreated);
+      log.info(subscriptionCreated, 'Subscription created:');
       // Enable access to subscription-based features
       break;
 
     case 'customer.subscription.updated':
       const subscriptionUpdated = hookEvent.data.object as Stripe.Subscription;
-      log.info('Subscription updated:', subscriptionUpdated);
+      log.info(subscriptionUpdated, 'Subscription updated:');
       // Handle subscription updates (e.g., plan changes)
       break;
 
     case 'customer.subscription.deleted':
       const subscriptionDeleted = hookEvent.data.object as Stripe.Subscription;
-      log.info('Subscription canceled:', subscriptionDeleted);
+      log.info(subscriptionDeleted, 'Subscription canceled:');
       // Revoke access to subscription-based features
       break;
 
     default:
-      log.trace(`Unhandled event type: ${hookEvent.type}`);
+      log.trace(hookEvent.type, 'Unhandled event type:');
   }
 });
