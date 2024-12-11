@@ -58,6 +58,7 @@ export const basicPlan = Prisma.validator<Prisma.PlanDefaultArgs>()({
     not_features: true,
     featured: true,
     stripe_product_id: true,
+    stripe_payment_url: true,
     tier: true,
     subtext: true,
   },

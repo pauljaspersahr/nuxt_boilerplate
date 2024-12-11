@@ -1,6 +1,14 @@
 import prisma_app_client from '~/prisma/app.client';
-import { basicUser, type BasicUser, user, type User } from './service.types';
+import {
+  basicUser,
+  type BasicUser,
+  user,
+  type User,
+  type Membership,
+  type BasicMembership,
+} from './service.types';
 import { UtilService } from './utils.service';
+import { MembershipService } from './membership.service';
 
 export namespace UserService {
   export async function getBasicUserById(user_id: string): Promise<BasicUser> {
@@ -42,6 +50,19 @@ export namespace UserService {
   export async function getUserByAuthId(auth_id: string): Promise<User> {
     return prisma_app_client.user.findFirstOrThrow({
       where: { auth_id: auth_id },
+      ...user,
+    });
+  }
+
+  export async function updateBasicUser(
+    user_id: string,
+    data: Partial<BasicUser>,
+  ): Promise<BasicUser> {
+    return prisma_app_client.user.update({
+      where: { id: user_id },
+      data: {
+        ...data,
+      },
       ...user,
     });
   }

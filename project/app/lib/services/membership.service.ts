@@ -1,4 +1,4 @@
-import prisma_app_client from "~/prisma/app.client";
+import prisma_app_client from '~/prisma/app.client';
 import {
   basicMembership,
   type BasicMembership,
@@ -8,11 +8,11 @@ import {
   type BasicPlan,
   plan,
   type Plan,
-} from "./service.types";
+} from './service.types';
 
 export namespace MembershipService {
   export async function getBasicMembershipById(
-    membership_id: string
+    membership_id: string,
   ): Promise<BasicMembership> {
     return prisma_app_client.membership.findFirstOrThrow({
       where: { id: membership_id },
@@ -21,7 +21,7 @@ export namespace MembershipService {
   }
 
   export async function getMembershipById(
-    membership_id: string
+    membership_id: string,
   ): Promise<Membership> {
     return prisma_app_client.membership.findFirstOrThrow({
       where: { id: membership_id },
@@ -30,7 +30,7 @@ export namespace MembershipService {
   }
 
   export async function getMembershipByUserId(
-    user_id: string
+    user_id: string,
   ): Promise<Membership> {
     return prisma_app_client.membership.findFirstOrThrow({
       where: { user_id: user_id },
@@ -44,14 +44,48 @@ export namespace MembershipService {
     });
   }
 
+  export async function getPlanByProductId(product_id: string): Promise<Plan> {
+    return prisma_app_client.plan.findFirstOrThrow({
+      where: { stripe_product_id: product_id },
+      ...plan,
+    });
+  }
+  export async function getBasicPlanByProductId(
+    product_id: string,
+  ): Promise<BasicPlan> {
+    return prisma_app_client.plan.findFirstOrThrow({
+      where: { stripe_product_id: product_id },
+      ...basicPlan,
+    });
+  }
+
   export async function getPlanById(plan_id: string): Promise<Plan> {
     return prisma_app_client.plan.findFirstOrThrow({
       where: { id: plan_id },
       ...plan,
     });
   }
-
   export async function getBasicPlans(): Promise<BasicPlan[]> {
     return prisma_app_client.plan.findMany();
+  }
+
+  export async function upsertMembership(
+    user_id: string,
+    plan_id: string,
+  ): Promise<BasicMembership> {
+    return await prisma_app_client.membership.upsert({
+      where: {
+        user_id: user_id,
+      },
+      create: {
+        user_id: user_id,
+        plan_id: plan_id,
+        current_period_ends: new Date(), // Default or calculated value
+      },
+      update: {
+        plan_id: plan_id,
+        current_period_ends: new Date(), // Update the period
+      },
+    });
   }
 }
