@@ -6,7 +6,7 @@ definePageMeta({
   },
 });
 const { $client } = useNuxtApp();
-const user = await $client.user.getUser.query();
+const { user } = await $client.user.getUser.query();
 </script>
 
 <template>

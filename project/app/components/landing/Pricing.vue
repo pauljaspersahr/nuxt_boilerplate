@@ -3,7 +3,7 @@
     <div
       class="mx-auto flex max-w-[58rem] flex-col items-center justify-center text-center mb-16"
     >
-      <div class="text-primary mb-4 font-semibold">{{ sectionTitle }}</div>
+      <!-- <div class="text-primary mb-4 font-semibold">{{ sectionTitle }}</div> -->
       <h2
         class="text-3xl max-w-[40rem] font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl lg:text-5xl mb-6"
       >
@@ -16,7 +16,7 @@
       </p>
     </div>
     <div
-      :class="`container flex flex-col max-w-4xl md:grid md:grid-cols-3 w-full justify-center items-center gap-8`"
+      :class="`container flex flex-col max-w-5xl md:grid md:grid-cols-3 w-full justify-center items-center gap-8`"
     >
       <PricingPlan
         v-for="(plan, index) in PRICING_PLANS"

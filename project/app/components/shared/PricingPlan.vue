@@ -1,19 +1,28 @@
 <template>
   <Card
     :class="[
-      plan.featured ? 'scale-[1.0] border-black dark:border-white' : '',
+      plan.featured ? 'scale-[1.1] border-black dark:border-white' : '',
       'rounded-xl',
+      'relative',
     ]"
   >
     <CardHeader>
       <CardTitle>{{ plan.name }}</CardTitle>
       <CardDescription>{{ plan.description }}</CardDescription>
+      <span
+        v-if="plan.money_saved"
+        class="absolute top-0 -translate-y-1/2 rounded-full bg-primary px-3 py-0.5 text-sm font-sans font-semibold tracking-wide text-primary-foreground shadow-md"
+      >
+        Save {{ plan.money_saved }}€
+      </span>
     </CardHeader>
     <CardContent>
       <div class="flex text-left font-semibold leading-6 items-end mb-6">
-        <span class="mr-2 text-muted-foreground/80 line-through text-xl">{{
-          `${plan.old_price}€`
-        }}</span>
+        <span
+          v-if="!!plan.old_price"
+          class="mr-2 text-muted-foreground/80 line-through text-xl"
+          >{{ `${plan.old_price}€` }}</span
+        >
         <span class="text-4xl">{{ `${plan.price}€` }}</span>
       </div>
       <div class="flex flex-col gap-3">

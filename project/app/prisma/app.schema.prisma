@@ -16,14 +16,14 @@ enum USER_STATUS {
 }
 
 model User {
-    id              String      @id @default(uuid())
-    auth_id         String      @unique
-    email           String      @unique
-    email_confirmed Boolean     @default(false)
-    created_at      DateTime    @default(now())
-    display_name    String?
-    status          USER_STATUS @default(INACTIVE)
-    membership      Membership?
+    id           String      @id @default(uuid())
+    auth_id      String      @unique
+    email        String      @unique
+    created_at   DateTime    @default(now())
+    display_name String?
+    status       USER_STATUS @default(INACTIVE)
+    membership   Membership?
+    projects     Project[]
 }
 
 model Membership {
@@ -31,33 +31,45 @@ model Membership {
     user_id String @unique
     user    User   @relation(fields: [user_id], references: [id])
 
-    current_period_ends    DateTime @default(now())
-    stripe_subscription_id String?
-    stripe_customer_id     String?
+    stripe_customer_id  String
+    current_period_ends DateTime?
 
     plan_id String
     plan    Plan   @relation(fields: [plan_id], references: [id])
+
+    max_project_token Int @default(0)
+    project_tokens    Int @default(0)
 }
 
 enum PLAN_TIER {
-    BASIC
-    PREMIUM
+    OTP
+    SUBSCRIPTION
 }
 
 model Plan {
-    id                 String    @id @default(uuid())
-    name               String    @unique
-    description        String
-    duration_days      Int
-    price              Float
-    old_price          Float
-    features           String[]
-    not_features       String[]
-    featured           Boolean   @default(false)
-    stripe_product_id  String
-    stripe_payment_url String
-    tier               PLAN_TIER @default(BASIC)
-    subtext            String
+    id           String   @id @default(uuid())
+    name         String
+    description  String
+    price        Float
+    old_price    Float
+    features     String[]
+    not_features String[]
+    featured     Boolean  @default(false)
+    subtext      String
+    money_saved  Float    @default(0)
+
+    stripe_product_id String    @unique
+    tier              PLAN_TIER
+    gen_token         Int
+    project_token     Int
 
     memberships Membership[]
+}
+
+model Project {
+    id            String  @id @default(uuid())
+    max_gen_token Int
+    gen_token     Int     @default(0)
+    user          User?   @relation(fields: [user_id], references: [id])
+    user_id       String?
 }

@@ -71,6 +71,7 @@ export namespace MembershipService {
 
   export async function upsertMembership(
     user_id: string,
+    stripe_customer_id: string,
     plan_id: string,
   ): Promise<BasicMembership> {
     return await prisma_app_client.membership.upsert({
@@ -79,12 +80,11 @@ export namespace MembershipService {
       },
       create: {
         user_id: user_id,
+        stripe_customer_id: stripe_customer_id,
         plan_id: plan_id,
-        current_period_ends: new Date(), // Default or calculated value
       },
       update: {
         plan_id: plan_id,
-        current_period_ends: new Date(), // Update the period
       },
     });
   }

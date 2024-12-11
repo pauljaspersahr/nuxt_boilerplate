@@ -62,6 +62,7 @@ export default defineEventHandler(async (event) => {
 
         const membership = await MembershipService.upsertMembership(
           user.id,
+          customerId.toString(),
           plan.id,
         );
 
