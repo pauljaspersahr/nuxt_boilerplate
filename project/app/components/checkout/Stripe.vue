@@ -87,7 +87,10 @@ const onSubmit = handleSubmit(async (values) => {
   try {
     const { data: response } = await useFetch('/api/stripe/payment', {
       method: 'POST',
-      body: { productID: selectedPlan.value?.stripe_product_id },
+      body: {
+        product_id: selectedPlan.value?.stripe_product_id,
+        mail: user.value?.email,
+      },
     });
     log.info('response', response);
     const { secret: clientSecret } = response.value;
