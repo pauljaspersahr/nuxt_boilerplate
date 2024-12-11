@@ -5,8 +5,8 @@
 ## server
 
 - [x] finalize server middleware when attempting to fetch usedata. check for app user, create if not existing
-- [ ] how to secure stripe endpoint? trpc routes are secured through trpc middleware on proteced procedures
-- [ ] finalize user procedures
+- [ ] create stripe router with proteced procedure. solves input validation and auth
+- [ ] rate limiting
 
 ## email
 
@@ -25,17 +25,16 @@
 
 ## stripe
 
-- [ ] create stripe account and create products
-- [ ] stripe backend: add checkout session for immediate client input handling, create webhook for stripe events and database updates
+- [x] create stripe account and create products
+- [x] stripe backend: add checkout session for immediate client input handling, create webhook for stripe events and database updates
 
 ### checkout flow
 
-- [ ] email to store for persistency when comming back. dont render step1 after succesfull sign in. show "already signed in"
-- [ ] step2: product select step
-- [ ] step3: embedded stripe checkout page
+- [x] email to store for persistency when comming back. dont render step1 after succesfull sign in. show "already signed in"
+- [x] step2: product select step
+- [x] step3: embedded stripe checkout page
 
 - [Get Access] -> [redirect to /checkout] -> [From with mail] -> [Send pin] -> [verify email] -> [next checkout page (animate to right)] -> [select plan (prefill with product from landingpage)] -> [redirect to stripe checkout] -> [ on webhook payment success] -> [set has_access to true] -> [ close dialog and redirect to /dashboard]
-- if signed in but !has_access -> [redirect to /checkout], show user management sidebar
 
 ## cookies
 
