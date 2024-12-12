@@ -46,3 +46,4 @@
 - [ ] SEO with [nuxt-seo](https://nuxtseo.com/)
 - [ ] [nuxt-security](https://github.com/nuxt-modules/security)
 - [ ] posthog
+- [ ] for blogpost with good SEO and image for Hero section https://blog.beehiiv.com/p/blog-post-seo-checklist
