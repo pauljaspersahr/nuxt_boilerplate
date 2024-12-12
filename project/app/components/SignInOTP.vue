@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import LoadingButton from '~/components/shared/LoadingButton.vue';
 import {
   Card,
   CardContent,
@@ -26,6 +25,8 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import { vAutoAnimate } from '@formkit/auto-animate/vue';
 import * as z from 'zod';
+import { Github } from 'lucide-vue-next';
+import { Loader2 } from 'lucide-vue-next';
 
 const { toast } = useToast();
 
@@ -121,6 +122,24 @@ const handleVerifyOtp = async () => {
     },
   );
 };
+
+const signupWithGithub = async () => {
+  // await authClient.({
+  //   onSuccess: () => {
+  //     toast({
+  //       title: `Welcome!`,
+  //     });
+  //     navigateTo('/dashboard');
+  //   },
+  //   onError: (ctx) => {
+  //     toast({
+  //       title: 'Uh oh! Something went wrong.',
+  //       description: ctx.error.message,
+  //       variant: 'destructive',
+  //     });
+  //   },
+  // });
+};
 </script>
 
 <template>
@@ -147,14 +166,45 @@ const handleVerifyOtp = async () => {
           </FormItem>
         </FormField>
 
-        <LoadingButton
-          :loading="loading"
-          :enableOn="meta.valid"
-          :onClick="onSubmit"
-          :buttonText="otpSent ? 'Send code again' : 'Send Login Code'"
-          loadingText="Sending login code..."
-        />
+        <Button
+          v-if="!loading"
+          @click="onSubmit"
+          type="button"
+          class="w-full"
+          :disabled="!meta.valid"
+        >
+          {{ otpSent ? 'Send code again' : 'Send Login Code' }}
+        </Button>
+        <Button v-else disabled class="w-full">
+          <Loader2 class="w-4 h-4 mr-2 animate-spin" />
+          Sending login code...
+        </Button>
       </form>
+
+      <div class="my-4 relative">
+        <div class="absolute inset-0 flex items-center">
+          <span class="w-full border-t" />
+        </div>
+        <div class="relative flex justify-center text-xs uppercase">
+          <span class="bg-background px-2 text-muted-foreground">
+            Or continue with
+          </span>
+        </div>
+      </div>
+
+      <Button
+        v-if="!loading"
+        @click="signupWithGithub"
+        type="button"
+        class="w-full"
+        variant="outline"
+      >
+        <Github class="mr-2" /> Github
+      </Button>
+      <Button v-else disabled class="w-full" variant="outline">
+        <Loader2 class="w-4 h-4 mr-2 animate-spin" />
+        Signing you in...
+      </Button>
 
       <div v-if="otpSent" class="grid gap-2 mt-4 text-center">
         <Label for="pin-input">Code sent to your email</Label>

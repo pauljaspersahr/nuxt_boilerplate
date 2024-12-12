@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import LoadingButton from '~/components/shared/LoadingButton.vue';
 import {
   Card,
   CardContent,
@@ -9,6 +8,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Loader2 } from 'lucide-vue-next';
 
 import { z } from 'zod';
 // const auth = useAuth();
@@ -102,13 +102,19 @@ const handleSignIn = async () => {
             {{ formErrors.password }}
           </p>
         </div>
-        <LoadingButton
-          :loading="loading"
-          :enableOn="isValid"
-          buttonText="Login"
-          loadingText="Signing you in..."
-          :onClick="handleSignIn"
-        />
+        <Button
+          v-if="!loading"
+          @click="handleSignIn"
+          type="button"
+          class="w-full"
+          :disabled="!isValid"
+        >
+          Login
+        </Button>
+        <Button v-else disabled class="w-full">
+          <Loader2 class="w-4 h-4 mr-2 animate-spin" />
+          Signing you in...
+        </Button>
         <!-- <Button variant="outline" class="w-full"> Login with Google </Button> -->
       </div>
       <div class="mt-4 text-center text-sm">

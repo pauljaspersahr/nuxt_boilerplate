@@ -6,13 +6,13 @@ import {
   type StripeElements,
   loadStripe,
 } from '@stripe/stripe-js';
-import LoadingButton from '~/components/shared/LoadingButton.vue';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import { vAutoAnimate } from '@formkit/auto-animate/vue';
 import * as z from 'zod';
 import { VisuallyHidden } from 'radix-vue';
 import log from '~/lib/logger';
+import { Loader2 } from 'lucide-vue-next';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -185,13 +185,19 @@ const onSubmit = handleSubmit(async (values) => {
           <div class="mt-4" id="payment-element" />
         </CardContent>
         <CardFooter>
-          <LoadingButton
-            :loading="loading"
-            :enableOn="!loading"
-            :onClick="onSubmit"
-            buttonText="Pay now"
-            loadingText="Processing payment..."
-          />
+          <Button
+            v-if="!loading"
+            @click="onSubmit"
+            type="button"
+            class="w-full"
+            :disabled="!meta.valid"
+          >
+            Pay now
+          </Button>
+          <Button v-else disabled class="w-full">
+            <Loader2 class="w-4 h-4 mr-2 animate-spin" />
+            Processing payment...
+          </Button>
         </CardFooter>
       </Card>
     </div>

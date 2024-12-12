@@ -1,16 +1,22 @@
 <template>
-  <LoadingButton
-    :loading="loading"
-    :enableOn="true"
-    buttonText="Sign Out"
-    loadingText="Signing out..."
-    :onClick="handleSignOut"
-  />
+  <Button
+    v-if="!loading"
+    @click="handleSignOut"
+    type="button"
+    class="w-full"
+    :disabled="loading"
+  >
+    Sign Out
+  </Button>
+  <Button v-else disabled class="w-full">
+    <Loader2 class="w-4 h-4 mr-2 animate-spin" />
+    Signing out...
+  </Button>
 </template>
 
 <script lang="ts" setup>
-import LoadingButton from '~/components/shared/LoadingButton.vue';
 import { authClient } from '~/lib/auth.client';
+import { Loader2 } from 'lucide-vue-next';
 
 const loading = ref(false);
 const { toast } = useToast();

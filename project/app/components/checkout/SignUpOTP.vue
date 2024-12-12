@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import LoadingButton from '~/components/shared/LoadingButton.vue';
 import {
   Card,
   CardContent,
@@ -27,6 +26,7 @@ import { useForm } from 'vee-validate';
 import * as z from 'zod';
 import { vAutoAnimate } from '@formkit/auto-animate/vue';
 import log from '~/lib/logger';
+import { Loader2 } from 'lucide-vue-next';
 
 const { toast } = useToast();
 
@@ -209,13 +209,19 @@ const handleVerifyOtp = async () => {
           </FormItem>
         </FormField>
 
-        <LoadingButton
-          :loading="loading"
-          :enableOn="meta.valid"
-          :onClick="onSubmit"
-          :buttonText="otpSent ? 'Send code again' : 'Send Verification Code'"
-          loadingText="Sending verification code..."
-        />
+        <Button
+          v-if="!loading"
+          @click="onSubmit"
+          type="button"
+          class="w-full"
+          :disabled="!meta.valid"
+        >
+          {{ otpSent ? 'Send code again' : 'Send Verification Code' }}
+        </Button>
+        <Button v-else disabled class="w-full">
+          <Loader2 class="w-4 h-4 mr-2 animate-spin" />
+          Sending verification code...
+        </Button>
       </form>
 
       <div v-if="otpSent" class="grid gap-2 mt-4 text-center">
