@@ -43,7 +43,7 @@
 ## misc
 
 - [ ] clean up site config runtime config with site urls etc.
-- [ ] SEO with [nuxt-seo](https://nuxtseo.com/)
+- [ ] SEO with [nuxt-seo](https://nuxtseo.com/), fix og image
 - [ ] [nuxt-security](https://github.com/nuxt-modules/security)
 - [ ] posthog
 - [ ] for blogpost with good SEO and image for Hero section https://blog.beehiiv.com/p/blog-post-seo-checklist

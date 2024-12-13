@@ -40,6 +40,7 @@
     "nuxt-aos": "^1.2.5",
     "nuxt-gtag": "^3.0.2",
     "nuxt-og-image": "3.0.8",
+    "nuxt-security": "2.1.5",
     "nuxt-vercel-analytics": "^1.0.3",
     "pinia": "^2.3.0",
     "pino": "^9.5.0",

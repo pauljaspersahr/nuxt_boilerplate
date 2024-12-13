@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     'nuxt-aos',
     '@pinia/nuxt',
     '@formkit/auto-animate/nuxt',
+    'nuxt-security',
   ],
   ssr: false,
   routeRules: {
@@ -110,5 +111,9 @@ export default defineNuxtConfig({
   vue: {
     propsDestructure: true,
   },
+  security: {
+    strict: true,
+  },
+
   compatibilityDate: '2024-10-21',
 });
