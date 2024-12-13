@@ -29,8 +29,10 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "nuxtr.nuxt-vscode-extentions",
+                "Vue.volar@1.8.27",
+                "nuxt.mdc",
                 "esbenp.prettier-vscode",
+                "hollowtree.vue-snippets",
                 "bradlc.vscode-tailwindcss",
                 "rangav.vscode-thunder-client",
                 "dbaeumer.vscode-eslint",
