@@ -25,7 +25,7 @@ export default defineNuxtConfig({
     ...publicRoutes.reduce(
       (acc, route) => ({
         ...acc,
-        [route]: { prerender: true },
+        [route]: { prerender: true, ssr: true },
       }),
       {},
     ),
@@ -112,7 +112,7 @@ export default defineNuxtConfig({
     propsDestructure: true,
   },
   security: {
-    strict: true,
+    enabled: false,
   },
 
   compatibilityDate: '2024-10-21',
