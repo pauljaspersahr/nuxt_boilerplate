@@ -14,9 +14,13 @@ export const buttonVariants = cva(
           'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
         outline:
           'border-2 border-primary bg-background shadow-sm hover:bg-primary hover:text-primary-foreground',
+        outlineTransparent:
+          'border-2 border-primary shadow-sm hover:bg-primary hover:text-primary-foreground',
         secondary:
           'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        ghost: 'hover:bg-primary-foreground hover:text-primary ',
+        ghostOutline:
+          'hover:text-primary border-2 border-transparent hover:border-2 hover:border-primary',
         link: 'text-primary underline-offset-4 hover:underline',
       },
       size: {

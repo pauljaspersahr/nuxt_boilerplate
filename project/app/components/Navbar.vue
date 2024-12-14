@@ -4,13 +4,15 @@
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuLink
-            :class="navigationMenuTriggerStyle()"
             v-for="navigationItem in navigationItems"
             :key="navigationItem.title"
             :title="navigationItem.title"
             :href="navigationItem.href"
+            as-child
           >
-            {{ navigationItem.title }}
+            <Button class="mx-0.5" variant="ghostOutline" size="lg">{{
+              navigationItem.title
+            }}</Button>
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
@@ -26,5 +28,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
+import { cn } from '@/lib/utils';
+import { buttonVariants } from '@/components/ui/button';
 import { navigationItems } from '~/config/navigation';
 </script>
