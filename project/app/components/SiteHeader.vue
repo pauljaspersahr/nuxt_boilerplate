@@ -1,7 +1,5 @@
 <template>
-  <header
-    class="sticky top-0 z-50 w-full border-b border-border/40 bg-background"
-  >
+  <header class="sticky top-0 z-50 w-full border-b border-none bg-transparent">
     <div class="container flex h-14 items-center justify-between">
       <NuxtLink :to="homeLink" class="mr-6 flex items-center space-x-2">
         <IconsLogo />
@@ -13,7 +11,7 @@
       <div class="flex items-center space-x-2">
         <ModeToggle />
         <NuxtLink :to="signInLink">
-          <div :class="buttonVariants({ variant: 'ghost' })">
+          <div :class="buttonVariants({ variant: 'outline' })">
             {{ signInText }}
           </div>
         </NuxtLink>

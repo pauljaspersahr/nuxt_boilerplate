@@ -22,19 +22,21 @@
           {{ text }}
         </p>
         <div class="mt-6 flex justify-center space-x-2 md:space-x-4">
-          <NuxtLink
-            :to="primaryButtonLink"
-            :class="cn(buttonVariants({ size: 'lg' }))"
-          >
-            {{ primaryButtonText }}
-            <Icon :icon="primaryButtonIcon" class="ml-2 size-4" />
-          </NuxtLink>
-          <NuxtLink
-            :to="secondaryButtonLink"
-            :class="cn(buttonVariants({ variant: 'outline', size: 'lg' }))"
-          >
-            {{ secondaryButtonText }}
-          </NuxtLink>
+          <Glow>
+            <Button as-child variant="default" size="lg">
+              <NuxtLink :to="primaryButtonLink">
+                {{ primaryButtonText }}
+                <Icon :icon="primaryButtonIcon" class="ml-2 size-4" />
+              </NuxtLink>
+            </Button>
+          </Glow>
+          <Glow>
+            <Button as-child variant="outline" size="lg">
+              <NuxtLink :to="secondaryButtonLink">
+                {{ secondaryButtonText }}
+              </NuxtLink>
+            </Button>
+          </Glow>
         </div>
         <div class="flex flex-col items-center gap-2 md:flex-row md:gap-4 mt-4">
           <div class="inline-flex flex-row-reverse justify-end">
@@ -84,6 +86,7 @@
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '~/components/ui/button';
 import { Icon } from '@iconify/vue';
+import Glow from '~/components/shared/Glow.vue';
 
 const props = defineProps({
   sectionClass: {

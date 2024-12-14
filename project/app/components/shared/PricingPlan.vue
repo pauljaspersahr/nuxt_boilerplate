@@ -11,7 +11,7 @@
       <CardDescription>{{ plan.description }}</CardDescription>
       <span
         v-if="plan.money_saved"
-        class="absolute top-0 -translate-y-1/2 rounded-full bg-primary px-3 py-0.5 text-sm font-sans font-semibold tracking-wide text-primary-foreground shadow-md"
+        class="absolute top-0 -translate-y-1/2 rounded-full bg-accent border-border border px-3 py-0.5 text-sm font-sans font-semibold tracking-wide text-secondary-foreground shadow-md"
       >
         Save {{ plan.money_saved }}€
       </span>
@@ -31,7 +31,7 @@
           :key="index"
           class="flex text-muted-foreground text-sm"
         >
-          <Icon icon="radix-icons:check" class="size-5 text-primary mr-2" />
+          <Icon icon="radix-icons:check" class="size-5 text-secondary mr-2" />
           <span class="truncate">{{ feature }}</span>
         </div>
         <div

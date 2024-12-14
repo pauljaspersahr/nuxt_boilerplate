@@ -4,11 +4,12 @@
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuLink
-              :class="navigationMenuTriggerStyle()"
-              v-for="navigationItem in navigationItems"
-              :key="navigationItem.title"
-              :title="navigationItem.title"
-              :href="navigationItem.href">
+            :class="navigationMenuTriggerStyle()"
+            v-for="navigationItem in navigationItems"
+            :key="navigationItem.title"
+            :title="navigationItem.title"
+            :href="navigationItem.href"
+          >
             {{ navigationItem.title }}
           </NavigationMenuLink>
         </NavigationMenuItem>
@@ -24,6 +25,6 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu'
-import {navigationItems} from "~/config/navigation";
+} from '@/components/ui/navigation-menu';
+import { navigationItems } from '~/config/navigation';
 </script>

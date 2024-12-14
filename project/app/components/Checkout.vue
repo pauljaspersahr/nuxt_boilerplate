@@ -5,6 +5,7 @@ import StripeEmbed from '~/components/checkout/Stripe.vue';
 import SignUp from '~/components/checkout/SignUp.vue';
 import type { Step } from '~/stores/checkout';
 import type { BasicPlanNoId } from '@/lib/services/service.types';
+import Glow from '~/components/shared/Glow.vue';
 
 const props = defineProps<{ plan: BasicPlanNoId }>();
 
@@ -32,14 +33,16 @@ const component = computed(() => {
 <template>
   <Dialog>
     <DialogTrigger as-child>
-      <Button
-        @click="onSelect"
-        :variant="props.plan.featured ? 'default' : 'secondary'"
-        size="lg"
-        class="w-full"
-      >
-        Get Access
-      </Button>
+      <Glow>
+        <Button
+          @click="onSelect"
+          :variant="props.plan.featured ? 'default' : 'outline'"
+          size="lg"
+          class="w-full"
+        >
+          Get Access
+        </Button>
+      </Glow>
     </DialogTrigger>
     <DialogContent
       class="sm:max-w-[95%] sm:w-[1000px] sm:max-h-[95hv] sm:h-[min(1000px,95vh)] h-full"
