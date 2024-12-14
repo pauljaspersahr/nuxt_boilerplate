@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: 'Nuxt 3 Boilerplate',
+  name: 'Fern',
   url: 'https://boilerplate.pauljasper.dev',
   ogImage: 'https://nuxt-shadcn-landing-pro.vercel.app/og.jpg',
   description:

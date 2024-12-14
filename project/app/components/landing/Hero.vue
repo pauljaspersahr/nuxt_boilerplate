@@ -83,8 +83,6 @@
 </template>
 
 <script setup lang="ts">
-import { cn } from '@/lib/utils';
-import { buttonVariants } from '~/components/ui/button';
 import { Icon } from '@iconify/vue';
 import Glow from '~/components/shared/Glow.vue';
 
@@ -157,7 +155,7 @@ const props = defineProps({
   },
   imageSrc: {
     type: String,
-    default: 'images/hero.png',
+    default: 'images/Hero2.png',
   },
 });
 </script>
