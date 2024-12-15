@@ -72,10 +72,14 @@
       <div
         data-aos="fade-up"
         data-aos-delay="300"
-        class="flex mx-auto max-w-[100%] sm:max-w-[60%] lg:max-w-[90%]"
+        class="w-[90vw] lg:w-[40vw] lg:-mr-[50vw] lg:ml-0"
       >
-        <div class="aspect-w-16 aspect-h-9 relative rounded-xl">
-          <NuxtImg class="rounded-xl" :src="imageSrc" alt="Hero" />
+        <div class="relative w-full">
+          <NuxtImg
+            class="rounded-xl w-full h-auto"
+            :src="imageSrc"
+            alt="Hero"
+          />
         </div>
       </div>
     </div>
